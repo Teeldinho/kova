@@ -1,61 +1,51 @@
 import { act, renderHook } from '@testing-library/react'
-import type { ChangeEvent, FormEvent } from 'react'
-import { describe, expect, test } from 'vitest'
+import type { FormEvent } from 'react'
+import { describe, expect, test, vi } from 'vitest'
 
 import { useCheckoutForm } from './useCheckoutForm'
 
 const createMockEvent = () =>
 	({
-		preventDefault: () => undefined,
+		preventDefault: vi.fn(),
 	}) as unknown as FormEvent<HTMLFormElement>
 
 describe('useCheckoutForm', () => {
-	test('validates and returns null for empty submission', () => {
-		const { result } = renderHook(() => useCheckoutForm())
+	test('does not submit checkout when form values are invalid', async () => {
+		const handleCheckoutSubmit = vi.fn().mockResolvedValue(undefined)
+		const { result } = renderHook(() =>
+			useCheckoutForm({ handleCheckoutSubmit }),
+		)
 
-		let submission: ReturnType<typeof result.current.handleCheckoutFormSubmit> =
-			null
+		const event = createMockEvent()
 
-		act(() => {
-			submission = result.current.handleCheckoutFormSubmit(createMockEvent())
+		await act(async () => {
+			await result.current.handleCheckoutFormSubmit(event)
 		})
 
-		expect(submission).toBeNull()
-		expect(result.current.errors.fullName).toBeDefined()
+		expect(event.preventDefault).toHaveBeenCalled()
+		expect(handleCheckoutSubmit).not.toHaveBeenCalled()
 	})
 
-	test('returns customer data for valid submission', () => {
-		const { result } = renderHook(() => useCheckoutForm())
+	test('submits checkout when customer fields are valid', async () => {
+		const handleCheckoutSubmit = vi.fn().mockResolvedValue(undefined)
+		const { result } = renderHook(() =>
+			useCheckoutForm({ handleCheckoutSubmit }),
+		)
 
 		act(() => {
-			result.current.handleCheckoutFullNameChange({
-				currentTarget: { value: 'Jane Doe' },
-			} as ChangeEvent<HTMLInputElement>)
-			result.current.handleCheckoutEmailChange({
-				currentTarget: { value: 'jane@example.com' },
-			} as ChangeEvent<HTMLInputElement>)
-			result.current.handleCheckoutAddressChange({
-				currentTarget: { value: '1 Main Street' },
-			} as ChangeEvent<HTMLInputElement>)
-			result.current.handleCheckoutCityChange({
-				currentTarget: { value: 'Johannesburg' },
-			} as ChangeEvent<HTMLInputElement>)
-			result.current.handleCheckoutCountryChange({
-				currentTarget: { value: 'South Africa' },
-			} as ChangeEvent<HTMLInputElement>)
-			result.current.handleCheckoutPostalCodeChange({
-				currentTarget: { value: '2000' },
-			} as ChangeEvent<HTMLInputElement>)
+			result.current.form.setFieldValue('fullName', 'Jane Doe')
+			result.current.form.setFieldValue('email', 'jane@example.com')
+			result.current.form.setFieldValue('address', '1 Main Street')
+			result.current.form.setFieldValue('city', 'Johannesburg')
+			result.current.form.setFieldValue('country', 'South Africa')
+			result.current.form.setFieldValue('postalCode', '2000')
 		})
 
-		let submission: ReturnType<typeof result.current.handleCheckoutFormSubmit> =
-			null
-
-		act(() => {
-			submission = result.current.handleCheckoutFormSubmit(createMockEvent())
+		await act(async () => {
+			await result.current.handleCheckoutFormSubmit(createMockEvent())
 		})
 
-		expect(submission).toEqual({
+		expect(handleCheckoutSubmit).toHaveBeenCalledWith({
 			address: '1 Main Street',
 			city: 'Johannesburg',
 			country: 'South Africa',

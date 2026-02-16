@@ -2,6 +2,8 @@ import { act, renderHook } from '@testing-library/react'
 import type { FormEvent } from 'react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
+import type { CheckoutCustomer } from '@/entities/order'
+
 const {
 	buildCheckoutLineItemsMock,
 	handleCheckoutFormSubmitMock,
@@ -45,7 +47,12 @@ vi.mock('@tanstack/react-router', () => ({
 import { useCheckoutPage } from './useCheckoutPage'
 
 describe('useCheckoutPage', () => {
+	let capturedCheckoutSubmit:
+		| ((customer: CheckoutCustomer) => Promise<void>)
+		| undefined
+
 	beforeEach(() => {
+		capturedCheckoutSubmit = undefined
 		buildCheckoutLineItemsMock.mockReset()
 		handleCheckoutFormSubmitMock.mockReset()
 		handleStripeCheckoutStartMock.mockReset()
@@ -59,24 +66,20 @@ describe('useCheckoutPage', () => {
 			tax: 0,
 			total: 10,
 		})
-		useCheckoutFormMock.mockReturnValue({
-			customer: {
-				address: '',
-				city: '',
-				country: '',
-				email: '',
-				fullName: '',
-				postalCode: '',
+		useCheckoutFormMock.mockImplementation(
+			({
+				handleCheckoutSubmit,
+			}: {
+				handleCheckoutSubmit: (customer: CheckoutCustomer) => Promise<void>
+			}) => {
+				capturedCheckoutSubmit = handleCheckoutSubmit
+
+				return {
+					form: { state: { values: {} } },
+					handleCheckoutFormSubmit: handleCheckoutFormSubmitMock,
+				}
 			},
-			errors: {},
-			handleCheckoutAddressChange: vi.fn(),
-			handleCheckoutCityChange: vi.fn(),
-			handleCheckoutCountryChange: vi.fn(),
-			handleCheckoutEmailChange: vi.fn(),
-			handleCheckoutFormSubmit: handleCheckoutFormSubmitMock,
-			handleCheckoutFullNameChange: vi.fn(),
-			handleCheckoutPostalCodeChange: vi.fn(),
-		})
+		)
 		useStripeCheckoutMock.mockReturnValue({
 			handleStripeCheckoutStart: handleStripeCheckoutStartMock,
 			isStripeCheckoutPending: false,
@@ -85,18 +88,39 @@ describe('useCheckoutPage', () => {
 	})
 
 	test('submits checkout payload to stripe flow', async () => {
-		handleCheckoutFormSubmitMock.mockReturnValue({
-			address: '1 Main Street',
-			city: 'Johannesburg',
-			country: 'South Africa',
-			email: 'user@example.com',
-			fullName: 'Jane Doe',
-			postalCode: '2000',
-		})
 		buildCheckoutLineItemsMock.mockReturnValue([
 			{ name: 'Item', quantity: 1, unitAmountInCents: 1000 },
 		])
 
+		renderHook(() => useCheckoutPage())
+
+		await act(async () => {
+			await capturedCheckoutSubmit?.({
+				address: '1 Main Street',
+				city: 'Johannesburg',
+				country: 'South Africa',
+				email: 'user@example.com',
+				fullName: 'Jane Doe',
+				postalCode: '2000',
+			})
+		})
+
+		expect(buildCheckoutLineItemsMock).toHaveBeenCalledWith([{ id: 1 }])
+		expect(handleStripeCheckoutStartMock).toHaveBeenCalledWith({
+			customer: {
+				address: '1 Main Street',
+				city: 'Johannesburg',
+				country: 'South Africa',
+				email: 'user@example.com',
+				fullName: 'Jane Doe',
+				postalCode: '2000',
+			},
+			items: [{ name: 'Item', quantity: 1, unitAmountInCents: 1000 }],
+			origin: window.location.origin,
+		})
+	})
+
+	test('delegates form submit handling when cart has items', async () => {
 		const { result } = renderHook(() => useCheckoutPage())
 
 		await act(async () => {
@@ -105,8 +129,8 @@ describe('useCheckoutPage', () => {
 			} as unknown as FormEvent<HTMLFormElement>)
 		})
 
-		expect(buildCheckoutLineItemsMock).toHaveBeenCalledWith([{ id: 1 }])
-		expect(handleStripeCheckoutStartMock).toHaveBeenCalled()
+		expect(handleCheckoutFormSubmitMock).toHaveBeenCalled()
+		expect(navigateMock).not.toHaveBeenCalled()
 	})
 
 	test('navigates back to cart when cart is empty', async () => {
@@ -127,5 +151,6 @@ describe('useCheckoutPage', () => {
 		})
 
 		expect(navigateMock).toHaveBeenCalledWith({ to: '/cart' })
+		expect(handleCheckoutFormSubmitMock).not.toHaveBeenCalled()
 	})
 })
