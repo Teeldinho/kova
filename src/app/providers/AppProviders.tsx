@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 import { queryClient } from '@/shared/api'
 import { useLenis } from '@/shared/model'
-import { CustomCursor } from '@/shared/ui/custom-cursor'
+import { CustomCursor } from '@/shared/ui'
 
 interface AppProvidersProps {
 	children: ReactNode
