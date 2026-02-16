@@ -9,21 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CheckoutSuccessRouteImport } from './routes/checkout-success'
-import { Route as CheckoutErrorRouteImport } from './routes/checkout-error'
+import { Route as CheckoutSuccessLegacyRouteImport } from './routes/checkout-success-legacy'
+import { Route as CheckoutErrorLegacyRouteImport } from './routes/checkout-error-legacy'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsProductIdRouteImport } from './routes/products/$productId'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
+import { Route as CheckoutErrorRouteImport } from './routes/checkout.error'
 
-const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
-  id: '/checkout-success',
-  path: '/checkout-success',
+const CheckoutSuccessLegacyRoute = CheckoutSuccessLegacyRouteImport.update({
+  id: '/checkout-success-legacy',
+  path: '/checkout-success-legacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CheckoutErrorRoute = CheckoutErrorRouteImport.update({
-  id: '/checkout-error',
-  path: '/checkout-error',
+const CheckoutErrorLegacyRoute = CheckoutErrorLegacyRouteImport.update({
+  id: '/checkout-error-legacy',
+  path: '/checkout-error-legacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -46,30 +48,46 @@ const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
   path: '/products/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => CheckoutRoute,
+} as any)
+const CheckoutErrorRoute = CheckoutErrorRouteImport.update({
+  id: '/error',
+  path: '/error',
+  getParentRoute: () => CheckoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/checkout-error': typeof CheckoutErrorRoute
-  '/checkout-success': typeof CheckoutSuccessRoute
+  '/checkout': typeof CheckoutRouteWithChildren
+  '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
+  '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/checkout/error': typeof CheckoutErrorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/checkout-error': typeof CheckoutErrorRoute
-  '/checkout-success': typeof CheckoutSuccessRoute
+  '/checkout': typeof CheckoutRouteWithChildren
+  '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
+  '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/checkout/error': typeof CheckoutErrorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/checkout-error': typeof CheckoutErrorRoute
-  '/checkout-success': typeof CheckoutSuccessRoute
+  '/checkout': typeof CheckoutRouteWithChildren
+  '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
+  '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/checkout/error': typeof CheckoutErrorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
 }
 export interface FileRouteTypes {
@@ -78,50 +96,56 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
-    | '/checkout-error'
-    | '/checkout-success'
+    | '/checkout-error-legacy'
+    | '/checkout-success-legacy'
+    | '/checkout/error'
+    | '/checkout/success'
     | '/products/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cart'
     | '/checkout'
-    | '/checkout-error'
-    | '/checkout-success'
+    | '/checkout-error-legacy'
+    | '/checkout-success-legacy'
+    | '/checkout/error'
+    | '/checkout/success'
     | '/products/$productId'
   id:
     | '__root__'
     | '/'
     | '/cart'
     | '/checkout'
-    | '/checkout-error'
-    | '/checkout-success'
+    | '/checkout-error-legacy'
+    | '/checkout-success-legacy'
+    | '/checkout/error'
+    | '/checkout/success'
     | '/products/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
-  CheckoutRoute: typeof CheckoutRoute
-  CheckoutErrorRoute: typeof CheckoutErrorRoute
-  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+  CheckoutRoute: typeof CheckoutRouteWithChildren
+  CheckoutErrorLegacyRoute: typeof CheckoutErrorLegacyRoute
+  CheckoutSuccessLegacyRoute: typeof CheckoutSuccessLegacyRoute
   ProductsProductIdRoute: typeof ProductsProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/checkout-success': {
-      id: '/checkout-success'
-      path: '/checkout-success'
-      fullPath: '/checkout-success'
-      preLoaderRoute: typeof CheckoutSuccessRouteImport
+    '/checkout-success-legacy': {
+      id: '/checkout-success-legacy'
+      path: '/checkout-success-legacy'
+      fullPath: '/checkout-success-legacy'
+      preLoaderRoute: typeof CheckoutSuccessLegacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/checkout-error': {
-      id: '/checkout-error'
-      path: '/checkout-error'
-      fullPath: '/checkout-error'
-      preLoaderRoute: typeof CheckoutErrorRouteImport
+    '/checkout-error-legacy': {
+      id: '/checkout-error-legacy'
+      path: '/checkout-error-legacy'
+      fullPath: '/checkout-error-legacy'
+      preLoaderRoute: typeof CheckoutErrorLegacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -152,15 +176,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof CheckoutRoute
+    }
+    '/checkout/error': {
+      id: '/checkout/error'
+      path: '/error'
+      fullPath: '/checkout/error'
+      preLoaderRoute: typeof CheckoutErrorRouteImport
+      parentRoute: typeof CheckoutRoute
+    }
   }
 }
+
+interface CheckoutRouteChildren {
+  CheckoutErrorRoute: typeof CheckoutErrorRoute
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+}
+
+const CheckoutRouteChildren: CheckoutRouteChildren = {
+  CheckoutErrorRoute: CheckoutErrorRoute,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
+}
+
+const CheckoutRouteWithChildren = CheckoutRoute._addFileChildren(
+  CheckoutRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
-  CheckoutRoute: CheckoutRoute,
-  CheckoutErrorRoute: CheckoutErrorRoute,
-  CheckoutSuccessRoute: CheckoutSuccessRoute,
+  CheckoutRoute: CheckoutRouteWithChildren,
+  CheckoutErrorLegacyRoute: CheckoutErrorLegacyRoute,
+  CheckoutSuccessLegacyRoute: CheckoutSuccessLegacyRoute,
   ProductsProductIdRoute: ProductsProductIdRoute,
 }
 export const routeTree = rootRouteImport

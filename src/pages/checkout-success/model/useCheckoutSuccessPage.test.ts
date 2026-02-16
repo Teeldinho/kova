@@ -33,7 +33,11 @@ describe('useCheckoutSuccessPage', () => {
 		result.current.handleCheckoutSuccessContinue()
 
 		expect(handleCartClearMock).toHaveBeenCalled()
-		expect(result.current.sessionReference).toBe('34567890')
+		expect(result.current.orderDetails).toEqual([
+			{ label: 'Order ID', value: 'ORD-34567890' },
+			{ label: 'Status', value: 'Confirmed' },
+			{ label: 'Estimated Delivery', value: '3-5 business days' },
+		])
 		expect(navigateMock).toHaveBeenCalledWith({ to: '/' })
 	})
 })
