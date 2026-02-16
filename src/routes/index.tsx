@@ -1,11 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/')({ component: App })
+import { productQueries } from '@/entities/product'
+import { catalogSearchSchema } from '@/features/catalog-filters'
+import { CatalogError, CatalogPage, CatalogPending } from '@/pages/catalog'
 
-function App() {
-	return (
-		<div className="flex min-h-dvh items-center justify-center">
-			<h1 className="font-mono text-4xl font-black tracking-[0.3em]">KOVA</h1>
-		</div>
-	)
-}
+export const Route = createFileRoute('/')({
+	validateSearch: catalogSearchSchema,
+	loader: async ({ context }) => {
+		await context.queryClient.ensureQueryData(productQueries.list())
+		return null
+	},
+	pendingComponent: CatalogPending,
+	errorComponent: CatalogError,
+	component: CatalogPage,
+})
