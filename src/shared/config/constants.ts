@@ -30,6 +30,12 @@ export const ANIMATION = {
 	MARQUEE_DURATION: 20,
 } as const
 
+export const CURSOR = {
+	HOVER_SCALE: 2.5,
+	OFFSET: 16,
+	INTERACTIVE_SELECTOR: 'button, a, [role="button"], input, select',
+} as const
+
 export const SORT_OPTIONS = [
 	{ label: 'Default', value: 'default' },
 	{ label: 'Price: Low to High', value: 'price-asc' },
