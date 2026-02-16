@@ -12,16 +12,9 @@ import { useCheckoutPage } from '../model/useCheckoutPage'
 
 export function CheckoutPage() {
 	const {
-		customer,
-		errors,
-		handleCheckoutAddressChange,
 		handleCheckoutBackToCart,
-		handleCheckoutCityChange,
-		handleCheckoutCountryChange,
-		handleCheckoutEmailChange,
-		handleCheckoutFullNameChange,
 		handleCheckoutPageSubmit,
-		handleCheckoutPostalCodeChange,
+		form,
 		isCartEmpty,
 		isStripeCheckoutPending,
 		isSubmitDisabled,
@@ -72,18 +65,7 @@ export function CheckoutPage() {
 			) : null}
 
 			<CheckoutForm handleCheckoutFormSubmit={handleCheckoutPageSubmit}>
-				<CheckoutFields
-					customer={customer}
-					errors={errors}
-					handlers={{
-						handleCheckoutAddressChange,
-						handleCheckoutCityChange,
-						handleCheckoutCountryChange,
-						handleCheckoutEmailChange,
-						handleCheckoutFullNameChange,
-						handleCheckoutPostalCodeChange,
-					}}
-				/>
+				<CheckoutFields form={form} />
 
 				<aside className="space-y-4">
 					<h2 className="font-mono text-xs font-bold uppercase tracking-widest">
