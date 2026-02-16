@@ -5,5 +5,6 @@ export {
 	APP_TAGLINE,
 	CURRENCY,
 	PAGINATION,
+	ROUTES,
 	SORT_OPTIONS,
 } from './constants'

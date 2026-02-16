@@ -1,6 +1,14 @@
 export const APP_NAME = 'KOVA' as const
 export const APP_TAGLINE = 'Every detail, considered.' as const
 
+export const ROUTES = {
+	CART: '/cart',
+	CHECKOUT: '/checkout',
+	CHECKOUT_ERROR: '/checkout-error',
+	CHECKOUT_SUCCESS: '/checkout-success',
+	HOME: '/',
+} as const
+
 export const CURRENCY = {
 	CODE: 'ZAR',
 	SYMBOL: 'R',
