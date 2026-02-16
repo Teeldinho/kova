@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: Fake Store API
+  description: Augmented OpenAPI spec for FakeStoreAPI with rating field and category endpoints
+  version: 1.0.0
+servers:
+  - url: https://fakestoreapi.com
+
+paths:
+  /products:
+    get:
+      operationId: getAllProducts
+      summary: Get all products
+      tags:
+        - products
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        "200":
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      operationId: getProductById
+      summary: Get a single product by ID
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A single product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/categories:
+    get:
+      operationId: getAllCategories
+      summary: Get all product categories
+      tags:
+        - products
+      responses:
+        "200":
+          description: A list of category strings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /products/category/{category}:
+    get:
+      operationId: getProductsByCategory
+      summary: Get products by category
+      tags:
+        - products
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Products in the specified category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+components:
+  schemas:
+    Rating:
+      type: object
+      required:
+        - rate
+        - count
+      properties:
+        rate:
+          type: number
+          format: float
+        count:
+          type: integer
+
+    Product:
+      type: object
+      required:
+        - id
+        - title
+        - price
+        - description
+        - category
+        - image
+        - rating
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        category:
+          type: string
+        image:
+          type: string
+          format: uri
+        rating:
+          $ref: "#/components/schemas/Rating"
