@@ -14,16 +14,20 @@ export function ProductRating({
 	count,
 	className = '',
 }: ProductRatingProps) {
+	const ratingSteps = [1, 2, 3, 4, 5]
+
 	return (
 		<div className={`flex items-center gap-1.5 ${className}`}>
 			<div className="flex items-center gap-0.5">
-				{Array.from({ length: PRODUCT.MAX_RATING }).map((_, i) => (
+				{ratingSteps.slice(0, PRODUCT.MAX_RATING).map((step) => (
 					<Star
-						key={`star-${rate}-${i}`}
+						key={`star-${step}`}
 						size={12}
-						weight={i < Math.round(rate) ? 'fill' : 'regular'}
+						weight={step <= Math.round(rate) ? 'fill' : 'regular'}
 						className={
-							i < Math.round(rate) ? 'text-primary' : 'text-muted-foreground/40'
+							step <= Math.round(rate)
+								? 'text-primary'
+								: 'text-muted-foreground/40'
 						}
 					/>
 				))}

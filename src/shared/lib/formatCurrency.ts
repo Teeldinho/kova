@@ -1,8 +1,8 @@
-import { CURRENCY } from "@/shared/config/constants";
+import { CURRENCY } from '@/shared/config'
 
 export const formatPrice = (priceUsd: number): string =>
-  new Intl.NumberFormat(CURRENCY.LOCALE, {
-    style: "currency",
-    currency: CURRENCY.CODE,
-    currencyDisplay: "narrowSymbol",
-  }).format(priceUsd * CURRENCY.EXCHANGE_RATE);
+	new Intl.NumberFormat(CURRENCY.LOCALE, {
+		style: 'currency',
+		currency: CURRENCY.CODE,
+		currencyDisplay: 'narrowSymbol',
+	}).format(priceUsd * CURRENCY.EXCHANGE_RATE)

@@ -1,6 +1,6 @@
 import { useStore } from '@tanstack/react-store'
 
-import type { Product } from '@/entities/product'
+import type { Product } from '@/entities/product/@x/cart'
 
 import {
 	calculateSubtotal,

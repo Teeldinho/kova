@@ -1,6 +1,6 @@
 import { Store } from '@tanstack/store'
 
-import type { Product } from '@/entities/product'
+import type { Product } from '@/entities/product/@x/cart'
 
 import { CART } from '../config/constants'
 import type { CartItem, CartState } from './types'

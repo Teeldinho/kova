@@ -1,4 +1,4 @@
-import { formatPrice } from '@/shared/lib/formatCurrency'
+import { formatPrice } from '@/shared/lib'
 import { Button } from '@/shared/ui/button'
 
 import { CART } from '../config/constants'
