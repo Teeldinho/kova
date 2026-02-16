@@ -1,21 +1,10 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
-import {
-	createRootRouteWithContext,
-	HeadContent,
-	Outlet,
-	Scripts,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { createRootRouteWithContext } from '@tanstack/react-router'
 
-import { AppProviders } from '@/app/providers'
 import { GlobalErrorPage, NotFoundPage } from '@/pages/not-found'
-import { CartSheet } from '@/widgets/cart-sheet'
-import { Footer } from '@/widgets/footer'
-import { Header } from '@/widgets/header'
-
 import appCss from '../styles.css?url'
+import { RootDocument } from './-RootDocument'
+import { RootLayout } from './-RootLayout'
 
 interface RouterAppContext {
 	queryClient: QueryClient
@@ -57,47 +46,3 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	notFoundComponent: NotFoundPage,
 	shellComponent: RootDocument,
 })
-
-function RootLayout() {
-	return (
-		<AppProviders>
-			<div className="flex min-h-dvh flex-col bg-background">
-				<Header />
-				<main className="flex-1">
-					<Outlet />
-				</main>
-				<Footer />
-				<CartSheet />
-			</div>
-			<TanStackDevtools
-				config={{
-					position: 'bottom-right',
-				}}
-				plugins={[
-					{
-						name: 'TanStack Router',
-						render: <TanStackRouterDevtoolsPanel />,
-					},
-					{
-						name: 'TanStack Query',
-						render: <ReactQueryDevtoolsPanel />,
-					},
-				]}
-			/>
-		</AppProviders>
-	)
-}
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="en">
-			<head>
-				<HeadContent />
-			</head>
-			<body>
-				{children}
-				<Scripts />
-			</body>
-		</html>
-	)
-}
