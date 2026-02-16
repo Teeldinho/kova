@@ -1,76 +1,9 @@
-import type { CheckoutCustomer } from '@/entities/order'
-import { Input, Label } from '@/shared/ui'
-
 import { CHECKOUT_FORM } from '../config/constants'
 import type { CheckoutFormApi } from '../model/useCheckoutForm'
+import { CheckoutField } from './CheckoutField'
 
 interface CheckoutFieldsProps {
 	form: CheckoutFormApi
-}
-
-interface CheckoutFieldProps {
-	className?: string
-	form: CheckoutFormApi
-	id: string
-	label: string
-	name: keyof CheckoutCustomer
-	placeholder: string
-	type?: 'email' | 'text'
-}
-
-const getErrorId = (fieldId: string) => `${fieldId}-error`
-
-const getFieldErrorMessage = (errors: unknown[] | undefined) => {
-	if (!errors || errors.length === 0) {
-		return undefined
-	}
-
-	const firstError = errors[0]
-	return typeof firstError === 'string' ? firstError : undefined
-}
-
-function CheckoutField({
-	className,
-	form,
-	id,
-	label,
-	name,
-	placeholder,
-	type = 'text',
-}: CheckoutFieldProps) {
-	const errorId = getErrorId(id)
-
-	return (
-		<form.Field name={name}>
-			{(field) => {
-				const errorMessage = getFieldErrorMessage(field.state.meta.errors)
-
-				return (
-					<div className={className ?? 'space-y-1.5'}>
-						<Label htmlFor={id}>{label}</Label>
-						<Input
-							id={id}
-							type={type}
-							value={field.state.value}
-							onBlur={field.handleBlur}
-							onChange={(event) =>
-								field.handleChange(event.currentTarget.value)
-							}
-							placeholder={placeholder}
-							aria-required
-							aria-invalid={Boolean(errorMessage)}
-							aria-describedby={errorMessage ? errorId : undefined}
-						/>
-						{errorMessage ? (
-							<p id={errorId} role="alert" className="text-xs text-destructive">
-								{errorMessage}
-							</p>
-						) : null}
-					</div>
-				)
-			}}
-		</form.Field>
-	)
 }
 
 export function CheckoutFields({ form }: CheckoutFieldsProps) {
