@@ -1,10 +1,10 @@
-import type { Product } from "@/entities/product";
+import type { Product } from '@/entities/product'
 
 export interface CartItem {
-  product: Product;
-  quantity: number;
+	product: Product
+	quantity: number
 }
 
 export interface CartState {
-  items: CartItem[];
+	items: CartItem[]
 }
