@@ -5,7 +5,7 @@ import {
 	getGetAllProductsQueryKey,
 	getGetProductByIdQueryKey,
 	getProductById,
-} from '@/shared/api/generated/fakestore'
+} from '@/shared/api'
 import type { Product } from '../model/types'
 
 type ProductsResponse = { data: Product[]; status: number; headers: Headers }

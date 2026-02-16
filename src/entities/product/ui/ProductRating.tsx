@@ -1,7 +1,6 @@
 import { Star } from '@phosphor-icons/react'
 
-import { PRODUCT } from '../config/constants'
-import { formatRating } from '../lib/formatProduct'
+import { useProductRating } from '../model/useProductRating'
 
 interface ProductRatingProps {
 	rate: number
@@ -14,18 +13,18 @@ export function ProductRating({
 	count,
 	className = '',
 }: ProductRatingProps) {
-	const ratingSteps = [1, 2, 3, 4, 5]
+	const { displayRating, ratingRounded, ratingSteps } = useProductRating(rate)
 
 	return (
 		<div className={`flex items-center gap-1.5 ${className}`}>
 			<div className="flex items-center gap-0.5">
-				{ratingSteps.slice(0, PRODUCT.MAX_RATING).map((step) => (
+				{ratingSteps.map((step) => (
 					<Star
 						key={`star-${step}`}
 						size={12}
-						weight={step <= Math.round(rate) ? 'fill' : 'regular'}
+						weight={step <= ratingRounded ? 'fill' : 'regular'}
 						className={
-							step <= Math.round(rate)
+							step <= ratingRounded
 								? 'text-primary'
 								: 'text-muted-foreground/40'
 						}
@@ -33,7 +32,7 @@ export function ProductRating({
 				))}
 			</div>
 			<span className="font-mono text-[10px] text-muted-foreground">
-				{formatRating(rate)} ({count})
+				{displayRating} ({count})
 			</span>
 		</div>
 	)

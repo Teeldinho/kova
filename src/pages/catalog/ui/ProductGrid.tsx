@@ -1,5 +1,5 @@
 import type { Product } from '@/entities/product'
-import { ProductCard } from '@/entities/product'
+import { PRODUCT, ProductCard } from '@/entities/product'
 
 interface ProductGridProps {
 	products: Product[]
@@ -23,7 +23,7 @@ export function ProductGrid({ products }: ProductGridProps) {
 					key={product.id}
 					product={product}
 					index={index}
-					featured={index === 0}
+					featured={index === PRODUCT.FEATURED_INDEX}
 				/>
 			))}
 		</div>

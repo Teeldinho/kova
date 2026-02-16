@@ -11,5 +11,7 @@ export type {
 	ProductCategory,
 	ProductRating as ProductRatingData,
 } from './model/types'
+export { useProductCard } from './model/useProductCard'
+export { useProductRating } from './model/useProductRating'
 export { ProductCard } from './ui/ProductCard'
 export { ProductRating } from './ui/ProductRating'

@@ -1,4 +1,4 @@
-import { DecryptText } from '@/shared/ui/decrypt-text'
+import { DecryptText } from '@/shared/ui'
 
 import { CATALOG_HERO } from '../config/constants'
 

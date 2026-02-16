@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { PAGINATION } from '@/shared/config'
 
+import { CATALOG_FILTER } from './constants'
+
 export const CATALOG_SORT_VALUES = [
 	'default',
 	'price-asc',
@@ -18,9 +20,9 @@ export const catalogSearchSchema = z.object({
 		.min(1)
 		.max(PAGINATION.MAX_LIMIT)
 		.catch(PAGINATION.DEFAULT_LIMIT),
-	q: z.string().catch(''),
-	category: z.string().catch('all'),
-	sort: z.enum(CATALOG_SORT_VALUES).catch('default'),
+	q: z.string().catch(CATALOG_FILTER.DEFAULT_QUERY),
+	category: z.string().catch(CATALOG_FILTER.DEFAULT_CATEGORY),
+	sort: z.enum(CATALOG_SORT_VALUES).catch(CATALOG_FILTER.DEFAULT_SORT),
 })
 
 export type CatalogSearch = z.infer<typeof catalogSearchSchema>
