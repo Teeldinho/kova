@@ -1,5 +1,5 @@
 import { Minus, Plus, Trash } from '@phosphor-icons/react'
-import { formatPrice } from '@/shared/lib/formatCurrency'
+import { formatPrice } from '@/shared/lib'
 import { Button } from '@/shared/ui/button'
 
 import type { CartItem as CartItemType } from '../model/types'

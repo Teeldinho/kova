@@ -1,7 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 
-import { formatPrice } from '@/shared/lib/formatCurrency'
+import { formatPrice } from '@/shared/lib'
 
 import { getCategoryLabel, truncateDescription } from '../lib/formatProduct'
 import type { Product } from '../model/types'
@@ -25,11 +24,7 @@ export function ProductCard({
 			transition={{ duration: 0.6, delay: index * 0.04 }}
 			className={`group relative ${featured ? 'col-span-2 row-span-2' : ''}`}
 		>
-			<Link
-				to="/products/$productId"
-				params={{ productId: String(product.id) }}
-				className="block"
-			>
+			<a href={`/products/${product.id}`} className="block">
 				{/* Image container with corner markers */}
 				<div className="relative aspect-square overflow-hidden border border-border bg-card">
 					{/* Corner markers */}
@@ -66,7 +61,7 @@ export function ProductCard({
 						{formatPrice(product.price)}
 					</p>
 				</div>
-			</Link>
+			</a>
 		</motion.div>
 	)
 }
