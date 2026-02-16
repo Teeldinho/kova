@@ -2,10 +2,9 @@ import { Minus, Plus, ShoppingBag } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import type { Product } from '@/entities/product'
 import { ProductRating } from '@/entities/product'
-import { formatPrice } from '@/shared/lib'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@/shared/ui'
 
-import { PRODUCT_DETAIL } from '../config/constants'
+import { useProductDetailInfo } from '../model/useProductDetailInfo'
 
 interface ProductDetailInfoProps {
 	product: Product
@@ -22,10 +21,22 @@ export function ProductDetailInfo({
 	handleProductQuantityDecrease,
 	handleProductAddToCart,
 }: ProductDetailInfoProps) {
+	const {
+		addToCartLabel,
+		categoryLabel,
+		decreaseQuantityLabel,
+		descriptionLabel,
+		displayPrice,
+		estimatedDelivery,
+		estimatedDeliveryPrefix,
+		increaseQuantityLabel,
+		quantityLabel,
+	} = useProductDetailInfo(product)
+
 	return (
 		<section className="space-y-5 border border-border bg-card p-6 md:sticky md:top-24 md:p-8">
 			<span className="inline-flex border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-				{product.category}
+				{categoryLabel}
 			</span>
 
 			<h1 className="font-mono text-2xl leading-tight font-black tracking-tight md:text-3xl">
@@ -34,13 +45,11 @@ export function ProductDetailInfo({
 
 			<ProductRating rate={product.rating.rate} count={product.rating.count} />
 
-			<p className="font-mono text-2xl font-bold">
-				{formatPrice(product.price)}
-			</p>
+			<p className="font-mono text-2xl font-bold">{displayPrice}</p>
 
 			<div className="space-y-2 border-y border-border py-4">
 				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-					{PRODUCT_DETAIL.QUANTITY_LABEL}
+					{quantityLabel}
 				</p>
 				<div className="inline-flex items-center border border-border">
 					<Button
@@ -49,7 +58,7 @@ export function ProductDetailInfo({
 						size="icon"
 						className="h-10 w-10 rounded-none"
 						onClick={handleProductQuantityDecrease}
-						aria-label="Decrease quantity"
+						aria-label={decreaseQuantityLabel}
 					>
 						<Minus size={16} />
 					</Button>
@@ -62,7 +71,7 @@ export function ProductDetailInfo({
 						size="icon"
 						className="h-10 w-10 rounded-none"
 						onClick={handleProductQuantityIncrease}
-						aria-label="Increase quantity"
+						aria-label={increaseQuantityLabel}
 					>
 						<Plus size={16} />
 					</Button>
@@ -76,13 +85,13 @@ export function ProductDetailInfo({
 					onClick={handleProductAddToCart}
 				>
 					<ShoppingBag size={14} className="mr-2" />
-					{PRODUCT_DETAIL.ADD_TO_CART_LABEL}
+					{addToCartLabel}
 				</Button>
 			</motion.div>
 
 			<div className="space-y-2">
 				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-					{PRODUCT_DETAIL.DESCRIPTION_LABEL}
+					{descriptionLabel}
 				</p>
 				<p className="text-sm leading-relaxed text-muted-foreground">
 					{product.description}
@@ -90,7 +99,7 @@ export function ProductDetailInfo({
 			</div>
 
 			<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-				Estimated delivery: {PRODUCT_DETAIL.ESTIMATED_DELIVERY}
+				{estimatedDeliveryPrefix} {estimatedDelivery}
 			</p>
 		</section>
 	)

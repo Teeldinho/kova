@@ -1,32 +1,31 @@
 import { Link } from '@tanstack/react-router'
 
-import { CartItem, CartSummary, useCart } from '@/entities/cart'
-import { cn } from '@/shared/lib/cn'
-import { useCartSheet } from '@/shared/model'
-import { buttonVariants } from '@/shared/ui/button'
+import { CART, CartItem, CartSummary } from '@/entities/cart'
+import { ROUTES } from '@/shared/config'
+import { cn } from '@/shared/lib'
 import {
+	buttonVariants,
 	Sheet,
 	SheetContent,
 	SheetDescription,
 	SheetHeader,
 	SheetTitle,
-} from '@/shared/ui/sheet'
+} from '@/shared/ui'
+
+import { useCartSheetWidget } from '../model/useCartSheetWidget'
 
 export function CartSheet() {
 	const {
+		cartItems,
+		handleCartCheckoutNavigate,
+		handleCartStartShopping,
+		handleCartSheetOpenChange,
+		isOpen,
 		items,
 		subtotal,
 		tax,
 		total,
-		handleCartItemQuantityUpdate,
-		handleCartItemRemove,
-	} = useCart()
-	const { isOpen, handleCartSheetOpenChange, handleCartSheetClose } =
-		useCartSheet()
-
-	const handleStartShopping = () => {
-		handleCartSheetClose()
-	}
+	} = useCartSheetWidget()
 
 	return (
 		<Sheet open={isOpen} onOpenChange={handleCartSheetOpenChange}>
@@ -45,39 +44,27 @@ export function CartSheet() {
 					{items.length === 0 ? (
 						<div className="flex h-full flex-col items-center justify-center gap-4 text-center">
 							<p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-								Your cart is empty
+								{CART.EMPTY_LABEL}
 							</p>
 							<Link
-								to="/"
-								onClick={handleStartShopping}
+								to={ROUTES.HOME}
+								onClick={handleCartStartShopping}
 								className={cn(
 									buttonVariants({ variant: 'default' }),
 									'rounded-none font-mono text-[10px] uppercase tracking-widest',
 								)}
 							>
-								Start Shopping
+								{CART.START_SHOPPING_LABEL}
 							</Link>
 						</div>
 					) : (
-						items.map((item) => (
+						cartItems.map((cartItem) => (
 							<CartItem
-								key={`cart-item-${item.product.id}`}
-								item={item}
-								handleCartItemIncrease={() =>
-									handleCartItemQuantityUpdate(
-										item.product.id,
-										item.quantity + 1,
-									)
-								}
-								handleCartItemDecrease={() =>
-									handleCartItemQuantityUpdate(
-										item.product.id,
-										item.quantity - 1,
-									)
-								}
-								handleCartItemRemove={() =>
-									handleCartItemRemove(item.product.id)
-								}
+								key={`cart-item-${cartItem.item.product.id}`}
+								item={cartItem.item}
+								handleCartItemIncrease={cartItem.handleCartItemIncrease}
+								handleCartItemDecrease={cartItem.handleCartItemDecrease}
+								handleCartItemRemove={cartItem.handleCartItemRemove}
 							/>
 						))
 					)}
@@ -88,7 +75,8 @@ export function CartSheet() {
 						subtotal={subtotal}
 						tax={tax}
 						total={total}
-						checkoutLabel="Go To Checkout"
+						handleCheckoutStart={handleCartCheckoutNavigate}
+						checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
 					/>
 				</div>
 			</SheetContent>

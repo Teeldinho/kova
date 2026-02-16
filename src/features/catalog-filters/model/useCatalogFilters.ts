@@ -1,4 +1,7 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import type { ChangeEvent } from 'react'
+
+import { PAGINATION } from '@/shared/config'
 
 import type { CatalogSearch } from '../config/searchSchema'
 
@@ -11,9 +14,15 @@ export function useCatalogFilters() {
 			search: (previous) => ({
 				...previous,
 				q: value,
-				page: 1,
+				page: PAGINATION.DEFAULT_PAGE,
 			}),
 		})
+	}
+
+	const handleCatalogSearchInputChange = (
+		event: ChangeEvent<HTMLInputElement>,
+	) => {
+		handleCatalogSearchChange(event.currentTarget.value)
 	}
 
 	const handleCatalogCategoryChange = (value: string | null) => {
@@ -23,7 +32,7 @@ export function useCatalogFilters() {
 			search: (previous) => ({
 				...previous,
 				category: value,
-				page: 1,
+				page: PAGINATION.DEFAULT_PAGE,
 			}),
 		})
 	}
@@ -35,7 +44,7 @@ export function useCatalogFilters() {
 			search: (previous) => ({
 				...previous,
 				sort: value,
-				page: 1,
+				page: PAGINATION.DEFAULT_PAGE,
 			}),
 		})
 	}
@@ -51,6 +60,7 @@ export function useCatalogFilters() {
 
 	return {
 		search,
+		handleCatalogSearchInputChange,
 		handleCatalogSearchChange,
 		handleCatalogCategoryChange,
 		handleCatalogSortChange,

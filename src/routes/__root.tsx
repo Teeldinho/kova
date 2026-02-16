@@ -10,6 +10,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { AppProviders } from '@/app/providers'
+import { GlobalErrorPage, NotFoundPage } from '@/pages/not-found'
 import { CartSheet } from '@/widgets/cart-sheet'
 import { Footer } from '@/widgets/footer'
 import { Header } from '@/widgets/header'
@@ -52,6 +53,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 		],
 	}),
 	component: RootLayout,
+	errorComponent: GlobalErrorPage,
+	notFoundComponent: NotFoundPage,
 	shellComponent: RootDocument,
 })
 

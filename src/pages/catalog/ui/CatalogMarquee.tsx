@@ -1,4 +1,4 @@
-import { Marquee } from '@/shared/ui/marquee'
+import { Marquee } from '@/shared/ui'
 
 import { CATALOG_MARQUEE_ITEMS } from '../config/constants'
 

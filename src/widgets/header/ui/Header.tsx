@@ -2,7 +2,7 @@ import { ShoppingBag } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
 import { APP_NAME } from '@/shared/config'
-import { Button } from '@/shared/ui/button'
+import { Button } from '@/shared/ui'
 
 import { useHeader } from '../model/useHeader'
 
@@ -24,13 +24,13 @@ export function Header() {
 					aria-label="Main navigation"
 				>
 					{navigation.map((item) => (
-						<a
+						<Link
 							key={item.label}
-							href={item.href}
+							to={item.href}
 							className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
 						>
 							{item.label}
-						</a>
+						</Link>
 					))}
 
 					<Button
