@@ -1,61 +1,55 @@
-import { Button } from "@/shared/ui/button";
+import { ShoppingBag } from '@phosphor-icons/react'
+import { Link } from '@tanstack/react-router'
 
-import { useHeader } from "../model/useHeader";
+import { APP_NAME } from '@/shared/config'
+import { Button } from '@/shared/ui/button'
 
-interface HeaderProps {
-  handleCartSheetOpen: () => void;
-}
+import { useHeader } from '../model/useHeader'
 
-export function Header({ handleCartSheetOpen }: HeaderProps) {
-  const {
-    appName,
-    navItems,
-    itemCount,
-    handleHeaderCartClick,
-    cartIcon: CartIcon,
-  } = useHeader({ handleCartSheetOpen });
+export function Header() {
+	const { navigation, itemCount, handleHeaderCartOpen } = useHeader()
 
-  return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a
-          href="/"
-          className="font-mono text-sm font-black tracking-[0.3em] sm:text-base"
-        >
-          {appName}
-        </a>
+	return (
+		<header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
+			<div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+				<Link
+					to="/"
+					className="font-mono text-xs font-black tracking-[0.3em] md:text-sm"
+				>
+					{APP_NAME}
+				</Link>
 
-        <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-2">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground sm:px-3"
-            >
-              {item.label}
-            </a>
-          ))}
+				<nav
+					className="flex items-center gap-4 md:gap-6"
+					aria-label="Main navigation"
+				>
+					{navigation.map((item) => (
+						<a
+							key={item.label}
+							href={item.href}
+							className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+						>
+							{item.label}
+						</a>
+					))}
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleHeaderCartClick}
-            className="relative h-8 rounded-none border-border px-2 sm:px-3"
-            aria-label="Open cart"
-          >
-            <CartIcon size={14} />
-            <span className="hidden font-mono text-[10px] uppercase tracking-widest sm:inline">
-              Cart
-            </span>
-            {itemCount > 0 ? (
-              <span className="absolute -top-1.5 -right-1.5 inline-flex min-w-4 items-center justify-center border border-background bg-primary px-1 text-[9px] leading-4 font-bold text-primary-foreground">
-                {itemCount}
-              </span>
-            ) : null}
-          </Button>
-        </nav>
-      </div>
-    </header>
-  );
+					<Button
+						type="button"
+						variant="outline"
+						size="icon"
+						className="relative h-9 w-9 rounded-none"
+						onClick={handleHeaderCartOpen}
+						aria-label="Open cart"
+					>
+						<ShoppingBag size={16} />
+						{itemCount > 0 ? (
+							<span className="absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-none border border-background bg-primary px-1 font-mono text-[9px] font-bold text-primary-foreground">
+								{itemCount}
+							</span>
+						) : null}
+					</Button>
+				</nav>
+			</div>
+		</header>
+	)
 }

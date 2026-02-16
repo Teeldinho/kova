@@ -1,18 +1,14 @@
-import { APP_NAME, APP_TAGLINE } from "@/shared/config/constants";
+import { APP_NAME, APP_TAGLINE } from '@/shared/config'
 
-const FOOTER_LINKS = [
-  { label: "Terms", href: "/terms" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Contact", href: "/contact" },
-] as const;
+import { FOOTER_LINKS } from '../config/constants'
 
 export function useFooter() {
-  const currentYear = new Date().getFullYear();
+	const currentYear = new Date().getFullYear()
 
-  return {
-    appName: APP_NAME,
-    tagline: APP_TAGLINE,
-    currentYear,
-    links: FOOTER_LINKS,
-  };
+	return {
+		appName: APP_NAME,
+		tagline: APP_TAGLINE,
+		currentYear,
+		links: FOOTER_LINKS,
+	}
 }
