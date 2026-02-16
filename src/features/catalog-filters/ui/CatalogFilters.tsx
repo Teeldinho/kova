@@ -1,22 +1,22 @@
 import { PRODUCT_CATEGORIES } from '@/entities/product'
 import { SORT_OPTIONS } from '@/shared/config'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
 import {
+	Input,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/shared/ui/select'
-
+} from '@/shared/ui'
+import { CATALOG_FILTER } from '../config/constants'
 import { useCatalogFilters } from '../model/useCatalogFilters'
 
 export function CatalogFilters() {
 	const {
 		search,
 		handleCatalogCategoryChange,
-		handleCatalogSearchChange,
+		handleCatalogSearchInputChange,
 		handleCatalogSortChange,
 	} = useCatalogFilters()
 
@@ -25,32 +25,37 @@ export function CatalogFilters() {
 			<div className="grid gap-4 md:grid-cols-3">
 				<div className="space-y-1.5">
 					<Label
-						htmlFor="catalog-search"
+						htmlFor={CATALOG_FILTER.IDS.SEARCH}
 						className="font-mono text-[10px] uppercase tracking-widest"
 					>
-						Search
+						{CATALOG_FILTER.SEARCH_LABEL}
 					</Label>
 					<Input
-						id="catalog-search"
+						id={CATALOG_FILTER.IDS.SEARCH}
 						value={search.q}
-						onChange={(event) =>
-							handleCatalogSearchChange(event.currentTarget.value)
-						}
-						placeholder="Search products"
+						onChange={handleCatalogSearchInputChange}
+						placeholder={CATALOG_FILTER.SEARCH_PLACEHOLDER}
 						className="font-mono text-xs"
+						aria-required={false}
 					/>
 				</div>
 
 				<div className="space-y-1.5">
-					<Label className="font-mono text-[10px] uppercase tracking-widest">
-						Category
+					<Label
+						htmlFor={CATALOG_FILTER.IDS.CATEGORY}
+						className="font-mono text-[10px] uppercase tracking-widest"
+					>
+						{CATALOG_FILTER.CATEGORY_LABEL}
 					</Label>
 					<Select
 						value={search.category}
 						onValueChange={handleCatalogCategoryChange}
 					>
-						<SelectTrigger className="w-full font-mono text-xs">
-							<SelectValue placeholder="Category" />
+						<SelectTrigger
+							id={CATALOG_FILTER.IDS.CATEGORY}
+							className="w-full font-mono text-xs"
+						>
+							<SelectValue placeholder={CATALOG_FILTER.CATEGORY_PLACEHOLDER} />
 						</SelectTrigger>
 						<SelectContent>
 							{PRODUCT_CATEGORIES.map((category) => (
@@ -63,12 +68,18 @@ export function CatalogFilters() {
 				</div>
 
 				<div className="space-y-1.5">
-					<Label className="font-mono text-[10px] uppercase tracking-widest">
-						Sort
+					<Label
+						htmlFor={CATALOG_FILTER.IDS.SORT}
+						className="font-mono text-[10px] uppercase tracking-widest"
+					>
+						{CATALOG_FILTER.SORT_LABEL}
 					</Label>
 					<Select value={search.sort} onValueChange={handleCatalogSortChange}>
-						<SelectTrigger className="w-full font-mono text-xs">
-							<SelectValue placeholder="Sort by" />
+						<SelectTrigger
+							id={CATALOG_FILTER.IDS.SORT}
+							className="w-full font-mono text-xs"
+						>
+							<SelectValue placeholder={CATALOG_FILTER.SORT_PLACEHOLDER} />
 						</SelectTrigger>
 						<SelectContent>
 							{SORT_OPTIONS.map((option) => (
