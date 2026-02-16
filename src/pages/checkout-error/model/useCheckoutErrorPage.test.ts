@@ -13,13 +13,32 @@ vi.mock('@tanstack/react-router', () => ({
 import { useCheckoutErrorPage } from './useCheckoutErrorPage'
 
 describe('useCheckoutErrorPage', () => {
-	test('navigates back to cart', () => {
+	test('exposes retry and home navigation handlers', () => {
 		useNavigateMock.mockReturnValue(navigateMock)
 
-		const { result } = renderHook(() => useCheckoutErrorPage())
+		const { result } = renderHook(() =>
+			useCheckoutErrorPage({ reason: 'payment_canceled' }),
+		)
 
-		result.current.handleCheckoutErrorBack()
+		result.current.handleCheckoutErrorRetry()
+		result.current.handleCheckoutErrorHome()
 
-		expect(navigateMock).toHaveBeenCalledWith({ to: '/cart' })
+		expect(result.current.errorReason).toBe(
+			'Payment was canceled before completion.',
+		)
+		expect(navigateMock).toHaveBeenNthCalledWith(1, { to: '/checkout' })
+		expect(navigateMock).toHaveBeenNthCalledWith(2, { to: '/' })
+	})
+
+	test('falls back to unknown reason when reason is not recognized', () => {
+		useNavigateMock.mockReturnValue(navigateMock)
+
+		const { result } = renderHook(() =>
+			useCheckoutErrorPage({ reason: 'gateway_down' }),
+		)
+
+		expect(result.current.errorReason).toBe(
+			'No reason provided by the payment provider.',
+		)
 	})
 })
