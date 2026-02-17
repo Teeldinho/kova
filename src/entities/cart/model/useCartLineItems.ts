@@ -1,4 +1,7 @@
 import { useMemo } from 'react'
+import { toast } from 'sonner'
+
+import { CART } from '../config/constants'
 
 import type { CartItem } from './types'
 
@@ -24,11 +27,23 @@ export function useCartLineItems({
 		() =>
 			items.map((item) => ({
 				item,
-				handleCartItemDecrease: () =>
-					handleCartItemQuantityUpdate(item.product.id, item.quantity - 1),
+				handleCartItemDecrease: () => {
+					handleCartItemQuantityUpdate(item.product.id, item.quantity - 1)
+
+					if (item.quantity === CART.MIN_ITEM_QUANTITY) {
+						toast.info(CART.TOAST.REMOVED_TITLE, {
+							description: item.product.title,
+						})
+					}
+				},
 				handleCartItemIncrease: () =>
 					handleCartItemQuantityUpdate(item.product.id, item.quantity + 1),
-				handleCartItemRemove: () => handleCartItemRemove(item.product.id),
+				handleCartItemRemove: () => {
+					handleCartItemRemove(item.product.id)
+					toast.info(CART.TOAST.REMOVED_TITLE, {
+						description: item.product.title,
+					})
+				},
 			})),
 		[handleCartItemQuantityUpdate, handleCartItemRemove, items],
 	)

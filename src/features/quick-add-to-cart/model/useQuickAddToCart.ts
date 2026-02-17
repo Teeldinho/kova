@@ -1,4 +1,6 @@
+import type { MouseEvent } from 'react'
 import { toast } from 'sonner'
+
 import { useCart } from '@/entities/cart'
 import type { Product } from '@/entities/product'
 import { formatPrice } from '@/shared/lib'
@@ -22,5 +24,12 @@ export function useQuickAddToCart() {
 		})
 	}
 
-	return { handleProductQuickAdd }
+	const handleProductQuickAddButtonClick =
+		(product: Product) => (event: MouseEvent<HTMLButtonElement>) => {
+			event.preventDefault()
+			event.stopPropagation()
+			handleProductQuickAdd(product)
+		}
+
+	return { handleProductQuickAdd, handleProductQuickAddButtonClick }
 }

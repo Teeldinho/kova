@@ -7,6 +7,9 @@ export const CHECKOUT_SUCCESS = {
 	FALLBACK_ORDER_ID: 'ORD-PENDING',
 	ORDER_ID_LABEL: 'Order ID',
 	ORDER_ID_PREFIX: 'ORD',
+	TOAST: {
+		TITLE: 'Order confirmed',
+	},
 	STATUS_LABEL: 'Status',
 	STATUS_VALUE: 'Confirmed',
 	TITLE: 'Order Confirmed',

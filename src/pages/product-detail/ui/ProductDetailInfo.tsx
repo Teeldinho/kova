@@ -4,8 +4,6 @@ import { motion } from 'framer-motion'
 import type { CartRewardSnapshot } from '@/entities/cart'
 import type { Product } from '@/entities/product'
 import { ProductRating } from '@/entities/product'
-import { CURRENCY } from '@/shared/config'
-import { formatPrice } from '@/shared/lib'
 import { Button } from '@/shared/ui'
 
 import { useProductDetailInfo } from '../model/useProductDetailInfo'
@@ -37,17 +35,13 @@ export function ProductDetailInfo({
 		estimatedDeliveryPrefix,
 		increaseQuantityLabel,
 		quantityLabel,
-	} = useProductDetailInfo(product)
-
-	const rewardProgressPercentage = Math.round(
-		projectedRewardSnapshot.progressToNextTier * 100,
-	)
-
-	const amountToNextReward =
-		projectedRewardSnapshot.amountToNextTierInZar / CURRENCY.EXCHANGE_RATE
-
-	const formattedAmountToNextReward =
-		amountToNextReward > 0 ? formatPrice(amountToNextReward) : null
+		rewardProgressPercentage,
+		rewardStatusLabel,
+		rewardUnlockHintLabel,
+	} = useProductDetailInfo({
+		product,
+		projectedRewardSnapshot,
+	})
 
 	return (
 		<section className="space-y-5 border border-border bg-card p-6 md:sticky md:top-24 md:p-8">
@@ -107,15 +101,12 @@ export function ProductDetailInfo({
 
 			<div className="space-y-2 border border-border bg-muted/40 p-3">
 				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-					{projectedRewardSnapshot.hasUnlockedReward
-						? `Reward unlocked: ${projectedRewardSnapshot.activeTier?.label}`
-						: `Next reward: ${projectedRewardSnapshot.nextTier?.label}`}
+					{rewardStatusLabel}
 				</p>
 
-				{formattedAmountToNextReward ? (
+				{rewardUnlockHintLabel ? (
 					<p className="font-mono text-[10px] uppercase tracking-widest text-foreground">
-						Add {formattedAmountToNextReward} to unlock{' '}
-						{projectedRewardSnapshot.nextTier?.label}
+						{rewardUnlockHintLabel}
 					</p>
 				) : null}
 

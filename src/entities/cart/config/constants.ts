@@ -10,6 +10,10 @@ export const CART = {
 	MIN_ITEM_QUANTITY: 1,
 	REMOVE_LABEL: 'Remove',
 	VIEW_CART_LABEL: 'View Cart',
+	TOAST: {
+		REMOVED_TITLE: 'Removed from bag',
+		CLEARED_TITLE: 'Bag cleared',
+	},
 	SUMMARY: {
 		ORDER_LABEL: 'Order Summary',
 		REWARD_LABEL: 'Reward',

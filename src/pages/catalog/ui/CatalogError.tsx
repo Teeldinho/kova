@@ -10,7 +10,7 @@ export function CatalogError({ reset }: ErrorComponentProps) {
 			<h2 className="font-mono text-lg font-bold uppercase tracking-widest">
 				{CATALOG_ERROR.TITLE}
 			</h2>
-			<p className="font-sans text-sm text-muted-foreground">
+			<p className="font-mono text-sm text-muted-foreground">
 				{CATALOG_ERROR.DESCRIPTION}
 			</p>
 			<Button

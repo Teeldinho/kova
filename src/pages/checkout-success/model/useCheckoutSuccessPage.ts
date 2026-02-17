@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 
 import { useCart } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'
@@ -22,6 +23,7 @@ export function useCheckoutSuccessPage({
 		}
 
 		handleCartClear()
+		toast.success(CHECKOUT_SUCCESS.TOAST.TITLE)
 	}, [handleCartClear, sessionId])
 
 	const handleCheckoutSuccessContinue = () => {
