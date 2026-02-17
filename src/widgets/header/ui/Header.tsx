@@ -1,6 +1,7 @@
 import { ShoppingBag } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
+import { ThemeToggle } from '@/features/theme'
 import { APP_NAME } from '@/shared/config'
 import { Button } from '@/shared/ui'
 
@@ -22,7 +23,7 @@ export function Header() {
 				</Link>
 
 				<nav
-					className="flex items-center gap-4 md:gap-6"
+					className="flex items-center gap-3 md:gap-5"
 					aria-label="Main navigation"
 				>
 					{navigation.map((item) => (
@@ -34,6 +35,8 @@ export function Header() {
 							{item.label}
 						</Link>
 					))}
+
+					<ThemeToggle />
 
 					<Button
 						type="button"
