@@ -1,22 +1,58 @@
-import { DecryptText } from '@/shared/ui'
+import { ArrowDown } from '@phosphor-icons/react'
+import { motion } from 'framer-motion'
 
 import { CATALOG_HERO } from '../config/constants'
 
-export function CatalogHero() {
+interface CatalogHeroProps {
+	totalItems: number
+}
+
+export function CatalogHero({ totalItems }: CatalogHeroProps) {
 	return (
-		<section className="dot-grid relative overflow-hidden border border-border bg-card px-6 py-16 md:px-10 md:py-24">
-			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.64_0.17_54.17_/_0.16),transparent_58%)]" />
-			<div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-primary/50" />
-			<div className="relative z-10 mx-auto max-w-4xl space-y-5 text-center">
-				<p className="font-mono text-[10px] uppercase tracking-[0.28em] text-primary/75">
-					KOVA COLLECTION
-				</p>
-				<h1 className="font-mono text-4xl leading-none font-black tracking-[0.22em] md:text-6xl">
-					<DecryptText text={CATALOG_HERO.TITLE} />
-				</h1>
-				<p className="mx-auto max-w-2xl font-sans text-sm leading-relaxed text-muted-foreground md:text-base">
-					{CATALOG_HERO.DESCRIPTION}
-				</p>
+		<section className="relative overflow-hidden border-b border-border bg-card/60">
+			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,oklch(0.64_0.17_54.17_/_0.12),transparent_52%)]" />
+
+			<div className="relative mx-auto grid max-w-7xl gap-6 px-4 py-10 md:grid-cols-[1fr_auto] md:items-end md:gap-10 md:px-6 md:py-14">
+				<motion.div
+					initial={{ opacity: 0, y: 16 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+					className="space-y-4"
+				>
+					<p className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
+						{CATALOG_HERO.EYEBROW}
+					</p>
+
+					<h1 className="max-w-2xl font-sans text-3xl leading-tight font-light tracking-tight text-foreground md:text-4xl">
+						{CATALOG_HERO.TITLE}
+					</h1>
+
+					<p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+						{CATALOG_HERO.DESCRIPTION}
+					</p>
+
+					<a
+						href="#products"
+						className="inline-flex items-center gap-2 border-b border-primary/70 pb-1 font-mono text-[10px] uppercase tracking-widest text-foreground transition-colors hover:text-primary"
+					>
+						{CATALOG_HERO.ACTION_LABEL}
+						<ArrowDown size={12} />
+					</a>
+				</motion.div>
+
+				<div className="w-fit border border-border bg-background/80 px-4 py-3">
+					<p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+						{CATALOG_HERO.EYEBROW}
+					</p>
+
+					<p className="mt-2 font-mono text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+						{totalItems}
+					</p>
+
+					<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+						{CATALOG_HERO.TOTAL_ITEMS_SUFFIX}
+					</p>
+				</div>
 			</div>
 		</section>
 	)
