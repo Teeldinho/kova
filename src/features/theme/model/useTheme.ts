@@ -5,14 +5,30 @@ import { THEME, type Theme } from '../config/constants'
 const isValidTheme = (value: string | null): value is Theme =>
 	value === THEME.LIGHT || value === THEME.DARK
 
-export function getInitialTheme(): Theme {
-	if (typeof window === 'undefined') return THEME.LIGHT
+const getStoredTheme = (): Theme | null => {
+	if (typeof window === 'undefined') {
+		return null
+	}
 
-	const stored = localStorage.getItem(THEME.STORAGE_KEY)
-	if (isValidTheme(stored)) return stored
+	const storedTheme = localStorage.getItem(THEME.STORAGE_KEY)
 
-	const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+	return isValidTheme(storedTheme) ? storedTheme : null
+}
+
+const getSystemTheme = (): Theme => {
+	if (typeof window === 'undefined') {
+		return THEME.LIGHT
+	}
+
+	const prefersDark = window.matchMedia(THEME.MEDIA_QUERY).matches
+
 	return prefersDark ? THEME.DARK : THEME.LIGHT
+}
+
+const resolveTheme = (): Theme => getStoredTheme() ?? getSystemTheme()
+
+export function getInitialTheme(): Theme {
+	return resolveTheme()
 }
 
 const getThemeFromDocument = (): Theme => {
@@ -23,13 +39,19 @@ const getThemeFromDocument = (): Theme => {
 		: THEME.LIGHT
 }
 
-const applyTheme = (theme: Theme) => {
+const applyThemeClass = (theme: Theme) => {
 	if (typeof document === 'undefined') return
 
 	document.documentElement.classList.toggle(
 		THEME.DARK_CLASS,
 		theme === THEME.DARK,
 	)
+}
+
+const persistTheme = (theme: Theme) => {
+	if (typeof window === 'undefined') {
+		return
+	}
 
 	localStorage.setItem(THEME.STORAGE_KEY, theme)
 }
@@ -38,16 +60,51 @@ export function useTheme() {
 	const [theme, setTheme] = useState<Theme>(getThemeFromDocument)
 
 	useEffect(() => {
-		const initialTheme = getInitialTheme()
-		applyTheme(initialTheme)
-		setTheme(initialTheme)
+		const syncTheme = (nextTheme: Theme) => {
+			applyThemeClass(nextTheme)
+			setTheme(nextTheme)
+		}
+
+		syncTheme(resolveTheme())
+
+		const mediaQuery = window.matchMedia(THEME.MEDIA_QUERY)
+
+		const handleSystemThemeChange = (event: MediaQueryListEvent) => {
+			if (getStoredTheme()) {
+				return
+			}
+
+			syncTheme(event.matches ? THEME.DARK : THEME.LIGHT)
+		}
+
+		const handleStorageChange = (event: StorageEvent) => {
+			if (event.key !== THEME.STORAGE_KEY) {
+				return
+			}
+
+			if (isValidTheme(event.newValue)) {
+				syncTheme(event.newValue)
+				return
+			}
+
+			syncTheme(getSystemTheme())
+		}
+
+		mediaQuery.addEventListener('change', handleSystemThemeChange)
+		window.addEventListener('storage', handleStorageChange)
+
+		return () => {
+			mediaQuery.removeEventListener('change', handleSystemThemeChange)
+			window.removeEventListener('storage', handleStorageChange)
+		}
 	}, [])
 
 	const handleThemeToggle = () => {
 		setTheme((currentTheme) => {
 			const nextTheme = currentTheme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT
 
-			applyTheme(nextTheme)
+			applyThemeClass(nextTheme)
+			persistTheme(nextTheme)
 			return nextTheme
 		})
 	}
