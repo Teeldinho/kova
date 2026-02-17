@@ -2,7 +2,6 @@ import { CatalogFilters, Pagination } from '@/features/catalog-filters'
 
 import { useCatalogPage } from '../model/useCatalogPage'
 import { CatalogHero } from './CatalogHero'
-import { CatalogMarquee } from './CatalogMarquee'
 import { ProductGrid } from './ProductGrid'
 
 export function CatalogPage() {
@@ -15,11 +14,13 @@ export function CatalogPage() {
 	} = useCatalogPage()
 
 	return (
-		<div className="space-y-8 pb-12 md:space-y-10 md:pb-16">
-			<CatalogHero />
-			<CatalogMarquee />
+		<div className="space-y-6 pb-12 md:space-y-8 md:pb-16">
+			<CatalogHero totalItems={totalItems} />
 
-			<section className="mx-auto max-w-7xl space-y-5 px-4 md:space-y-6 md:px-6">
+			<section
+				id="products"
+				className="mx-auto max-w-7xl space-y-5 px-4 md:space-y-6 md:px-6"
+			>
 				<CatalogFilters />
 
 				<div className="flex items-center justify-between gap-3">
