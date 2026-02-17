@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { CART, getCartRewardSnapshot, useCart } from '@/entities/cart'
 import { useProduct } from '@/entities/product'
+import { formatPrice } from '@/shared/lib'
+import { useCartSheet } from '@/shared/model'
 
+import { PRODUCT_DETAIL } from '../config/constants'
 import {
 	decreaseProductQuantity,
 	increaseProductQuantity,
@@ -11,6 +15,7 @@ import {
 export function useProductDetail(productId: number) {
 	const { data: product } = useProduct(productId)
 	const { handleCartItemAdd, subtotal } = useCart()
+	const { handleCartSheetOpen } = useCartSheet()
 	const [quantity, setQuantity] = useState<number>(CART.MIN_ITEM_QUANTITY)
 	const projectedSubtotal = product
 		? subtotal + product.price * quantity
@@ -26,7 +31,20 @@ export function useProductDetail(productId: number) {
 	}
 
 	const handleProductAddToCart = () => {
+		if (!product) {
+			return
+		}
+
 		handleCartItemAdd(product, quantity)
+
+		toast.success(PRODUCT_DETAIL.TOAST.TITLE, {
+			description: `${product.title} · ${formatPrice(product.price)}`,
+			action: {
+				label: PRODUCT_DETAIL.TOAST.ACTION_LABEL,
+				onClick: handleCartSheetOpen,
+			},
+		})
+
 		setQuantity(CART.MIN_ITEM_QUANTITY)
 	}
 

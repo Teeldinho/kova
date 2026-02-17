@@ -5,8 +5,18 @@ const { createCheckoutSessionMock } = vi.hoisted(() => ({
 	createCheckoutSessionMock: vi.fn(),
 }))
 
+const { toastErrorMock } = vi.hoisted(() => ({
+	toastErrorMock: vi.fn(),
+}))
+
 vi.mock('../api/createCheckoutSession', () => ({
 	createCheckoutSession: createCheckoutSessionMock,
+}))
+
+vi.mock('sonner', () => ({
+	toast: {
+		error: toastErrorMock,
+	},
 }))
 
 import { useStripeCheckout } from './useStripeCheckout'
@@ -14,6 +24,7 @@ import { useStripeCheckout } from './useStripeCheckout'
 describe('useStripeCheckout', () => {
 	beforeEach(() => {
 		createCheckoutSessionMock.mockReset()
+		toastErrorMock.mockReset()
 	})
 
 	test('redirects to stripe checkout URL on success', async () => {
@@ -61,6 +72,7 @@ describe('useStripeCheckout', () => {
 			'https://checkout.stripe.com/test-session',
 		)
 		expect(result.current.stripeCheckoutError).toBeNull()
+		expect(toastErrorMock).not.toHaveBeenCalled()
 
 		Object.defineProperty(window, 'location', {
 			configurable: true,
@@ -99,6 +111,9 @@ describe('useStripeCheckout', () => {
 		expect(result.current.stripeCheckoutError).toBe(
 			'Unable to start secure checkout. Please retry.',
 		)
+		expect(toastErrorMock).toHaveBeenCalledWith('Checkout failed', {
+			description: 'Unable to start secure checkout. Please retry.',
+		})
 	})
 
 	test('sets configuration error when secret key is unavailable', async () => {
@@ -134,5 +149,9 @@ describe('useStripeCheckout', () => {
 		expect(result.current.stripeCheckoutError).toBe(
 			'Secure checkout is currently unavailable. Please contact support.',
 		)
+		expect(toastErrorMock).toHaveBeenCalledWith('Checkout failed', {
+			description:
+				'Secure checkout is currently unavailable. Please contact support.',
+		})
 	})
 })

@@ -12,6 +12,10 @@ export const PRODUCT_DETAIL = {
 		UNLOCK_HINT_PREFIX: 'Add',
 		UNLOCK_HINT_INFIX: 'to unlock',
 	},
+	TOAST: {
+		TITLE: 'Added to bag',
+		ACTION_LABEL: 'Open Cart',
+	},
 } as const
 
 export const PRODUCT_DETAIL_ERROR = {

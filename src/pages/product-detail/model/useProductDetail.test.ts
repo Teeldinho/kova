@@ -4,11 +4,15 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 const {
 	getCartRewardSnapshotMock,
 	handleCartItemAddMock,
+	handleCartSheetOpenMock,
+	toastSuccessMock,
 	useCartMock,
 	useProductMock,
 } = vi.hoisted(() => ({
 	getCartRewardSnapshotMock: vi.fn(),
 	handleCartItemAddMock: vi.fn(),
+	handleCartSheetOpenMock: vi.fn(),
+	toastSuccessMock: vi.fn(),
 	useCartMock: vi.fn(),
 	useProductMock: vi.fn(),
 }))
@@ -26,6 +30,18 @@ vi.mock('@/entities/cart', () => ({
 	useCart: useCartMock,
 }))
 
+vi.mock('@/shared/model', () => ({
+	useCartSheet: () => ({
+		handleCartSheetOpen: handleCartSheetOpenMock,
+	}),
+}))
+
+vi.mock('sonner', () => ({
+	toast: {
+		success: toastSuccessMock,
+	},
+}))
+
 import { useProductDetail } from './useProductDetail'
 
 describe('useProductDetail', () => {
@@ -41,6 +57,8 @@ describe('useProductDetail', () => {
 
 	beforeEach(() => {
 		handleCartItemAddMock.mockReset()
+		handleCartSheetOpenMock.mockReset()
+		toastSuccessMock.mockReset()
 		getCartRewardSnapshotMock.mockReset()
 		getCartRewardSnapshotMock.mockReturnValue({
 			activeTier: null,
@@ -106,6 +124,16 @@ describe('useProductDetail', () => {
 		})
 
 		expect(handleCartItemAddMock).toHaveBeenCalledWith(mockProduct, 3)
+		expect(toastSuccessMock).toHaveBeenCalledWith(
+			'Added to bag',
+			expect.objectContaining({
+				description: expect.stringContaining('Test Product'),
+				action: {
+					label: 'Open Cart',
+					onClick: handleCartSheetOpenMock,
+				},
+			}),
+		)
 		expect(result.current.quantity).toBe(1)
 	})
 })

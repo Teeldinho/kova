@@ -15,4 +15,7 @@ export const STRIPE_CHECKOUT = {
 		MISSING_SECRET_KEY:
 			'Secure checkout is currently unavailable. Please contact support.',
 	},
+	TOAST: {
+		ERROR_TITLE: 'Checkout failed',
+	},
 } as const

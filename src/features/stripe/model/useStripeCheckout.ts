@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import type { CheckoutPayload } from '@/entities/order'
 
 import { createCheckoutSession } from '../api/createCheckoutSession'
+import { STRIPE_CHECKOUT } from '../config/constants'
 import { mapStripeCheckoutError } from '../lib/mapStripeCheckoutError'
 
 export function useStripeCheckout() {
@@ -22,10 +24,16 @@ export function useStripeCheckout() {
 				window.location.assign(checkoutUrl)
 			}
 		} catch (error) {
+			const mappedError = mapStripeCheckoutError(error)
+
 			console.error('[stripe-checkout] unable to start checkout', {
 				errorMessage: error instanceof Error ? error.message : 'unknown',
 			})
-			setStripeCheckoutError(mapStripeCheckoutError(error))
+
+			setStripeCheckoutError(mappedError)
+			toast.error(STRIPE_CHECKOUT.TOAST.ERROR_TITLE, {
+				description: mappedError,
+			})
 		} finally {
 			setIsStripeCheckoutPending(false)
 		}
