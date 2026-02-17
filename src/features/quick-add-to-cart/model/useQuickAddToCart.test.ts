@@ -1,4 +1,11 @@
-import { describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
+
+const { mockHandleCartItemAdd, mockHandleCartSheetOpen, mockToastSuccess } =
+	vi.hoisted(() => ({
+		mockHandleCartItemAdd: vi.fn(),
+		mockHandleCartSheetOpen: vi.fn(),
+		mockToastSuccess: vi.fn(),
+	}))
 
 import { useQuickAddToCart } from './useQuickAddToCart'
 
@@ -14,8 +21,15 @@ vi.mock('@/shared/model', () => ({
 	}),
 }))
 
-const mockHandleCartItemAdd = vi.fn()
-const mockHandleCartSheetOpen = vi.fn()
+vi.mock('@/shared/lib', () => ({
+	formatPrice: (value: number) => `R ${value}`,
+}))
+
+vi.mock('sonner', () => ({
+	toast: {
+		success: mockToastSuccess,
+	},
+}))
 
 const MOCK_PRODUCT = {
 	id: 1,
@@ -28,6 +42,12 @@ const MOCK_PRODUCT = {
 }
 
 describe('useQuickAddToCart', () => {
+	beforeEach(() => {
+		mockHandleCartItemAdd.mockReset()
+		mockHandleCartSheetOpen.mockReset()
+		mockToastSuccess.mockReset()
+	})
+
 	test('returns a quick add handler', () => {
 		const result = useQuickAddToCart()
 		expect(result.handleProductQuickAdd).toBeTypeOf('function')
@@ -38,18 +58,19 @@ describe('useQuickAddToCart', () => {
 		handleProductQuickAdd(MOCK_PRODUCT)
 
 		expect(mockHandleCartItemAdd).toHaveBeenCalledWith(MOCK_PRODUCT, 1)
-		expect(mockHandleCartSheetOpen).toHaveBeenCalledOnce()
+		expect(mockToastSuccess).toHaveBeenCalledWith('Added to bag', {
+			description: 'Test Product · R 29.99',
+			action: {
+				label: 'Open Cart',
+				onClick: mockHandleCartSheetOpen,
+			},
+		})
 	})
 
-	test('opens cart sheet after adding item', () => {
+	test('does not open cart sheet automatically after quick add', () => {
 		const { handleProductQuickAdd } = useQuickAddToCart()
 		handleProductQuickAdd(MOCK_PRODUCT)
 
-		const addCallOrder = mockHandleCartItemAdd.mock.invocationCallOrder[0]
-		const openCallOrder = mockHandleCartSheetOpen.mock.invocationCallOrder[0]
-
-		if (addCallOrder !== undefined && openCallOrder !== undefined) {
-			expect(addCallOrder).toBeLessThan(openCallOrder)
-		}
+		expect(mockHandleCartSheetOpen).not.toHaveBeenCalled()
 	})
 })
