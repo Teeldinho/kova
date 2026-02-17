@@ -4,6 +4,7 @@ import { Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { AppProviders } from '@/app/providers'
+import { Toaster } from '@/shared/ui'
 import { CartSheet } from '@/widgets/cart-sheet'
 import { Footer } from '@/widgets/footer'
 import { Header } from '@/widgets/header'
@@ -18,6 +19,7 @@ export function RootLayout() {
 				</main>
 				<Footer />
 				<CartSheet />
+				<Toaster position="top-right" closeButton />
 			</div>
 			<TanStackDevtools
 				config={{
