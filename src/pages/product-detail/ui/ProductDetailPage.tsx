@@ -1,3 +1,5 @@
+import { RelatedProducts } from '@/features/related-products'
+
 import { useProductDetail } from '../model/useProductDetail'
 import { ProductDetailImage } from './ProductDetailImage'
 import { ProductDetailInfo } from './ProductDetailInfo'
@@ -16,7 +18,7 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 	} = useProductDetail(productId)
 
 	return (
-		<div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10">
+		<div className="mx-auto max-w-7xl space-y-8 px-4 py-8 md:space-y-10 md:px-6 md:py-10">
 			<div className="grid gap-6 md:grid-cols-2 md:gap-8">
 				<ProductDetailImage product={product} />
 				<ProductDetailInfo
@@ -27,6 +29,11 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 					handleProductAddToCart={handleProductAddToCart}
 				/>
 			</div>
+
+			<RelatedProducts
+				currentProductId={product.id}
+				currentProductCategory={product.category}
+			/>
 		</div>
 	)
 }
