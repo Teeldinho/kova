@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { THEME, type Theme } from '../config/constants'
 
@@ -15,25 +15,41 @@ export function getInitialTheme(): Theme {
 	return prefersDark ? THEME.DARK : THEME.LIGHT
 }
 
+const getThemeFromDocument = (): Theme => {
+	if (typeof document === 'undefined') return THEME.LIGHT
+
+	return document.documentElement.classList.contains(THEME.DARK_CLASS)
+		? THEME.DARK
+		: THEME.LIGHT
+}
+
 const applyTheme = (theme: Theme) => {
 	if (typeof document === 'undefined') return
 
-	if (theme === THEME.DARK) {
-		document.documentElement.classList.add(THEME.DARK_CLASS)
-	} else {
-		document.documentElement.classList.remove(THEME.DARK_CLASS)
-	}
+	document.documentElement.classList.toggle(
+		THEME.DARK_CLASS,
+		theme === THEME.DARK,
+	)
 
 	localStorage.setItem(THEME.STORAGE_KEY, theme)
 }
 
 export function useTheme() {
-	const [theme, setTheme] = useState<Theme>(getInitialTheme)
+	const [theme, setTheme] = useState<Theme>(getThemeFromDocument)
+
+	useEffect(() => {
+		const initialTheme = getInitialTheme()
+		applyTheme(initialTheme)
+		setTheme(initialTheme)
+	}, [])
 
 	const handleThemeToggle = () => {
-		const nextTheme = theme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT
-		setTheme(nextTheme)
-		applyTheme(nextTheme)
+		setTheme((currentTheme) => {
+			const nextTheme = currentTheme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT
+
+			applyTheme(nextTheme)
+			return nextTheme
+		})
 	}
 
 	return {
