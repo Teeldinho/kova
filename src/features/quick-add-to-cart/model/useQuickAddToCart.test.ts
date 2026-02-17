@@ -1,3 +1,4 @@
+import type { MouseEvent } from 'react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 const { mockHandleCartItemAdd, mockHandleCartSheetOpen, mockToastSuccess } =
@@ -51,6 +52,7 @@ describe('useQuickAddToCart', () => {
 	test('returns a quick add handler', () => {
 		const result = useQuickAddToCart()
 		expect(result.handleProductQuickAdd).toBeTypeOf('function')
+		expect(result.handleProductQuickAddButtonClick).toBeTypeOf('function')
 	})
 
 	test('adds product to cart with quantity 1 and opens cart sheet', () => {
@@ -72,5 +74,20 @@ describe('useQuickAddToCart', () => {
 		handleProductQuickAdd(MOCK_PRODUCT)
 
 		expect(mockHandleCartSheetOpen).not.toHaveBeenCalled()
+	})
+
+	test('prevents card navigation when quick add button is clicked', () => {
+		const { handleProductQuickAddButtonClick } = useQuickAddToCart()
+		const preventDefault = vi.fn()
+		const stopPropagation = vi.fn()
+
+		handleProductQuickAddButtonClick(MOCK_PRODUCT)({
+			preventDefault,
+			stopPropagation,
+		} as unknown as MouseEvent<HTMLButtonElement>)
+
+		expect(preventDefault).toHaveBeenCalled()
+		expect(stopPropagation).toHaveBeenCalled()
+		expect(mockHandleCartItemAdd).toHaveBeenCalledWith(MOCK_PRODUCT, 1)
 	})
 })
