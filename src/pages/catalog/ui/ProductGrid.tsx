@@ -1,9 +1,14 @@
 import type { Product } from '@/entities/product'
 import { PRODUCT, ProductCard } from '@/entities/product'
+import { QuickAddToCartButton } from '@/features/quick-add-to-cart'
 
 interface ProductGridProps {
 	products: Product[]
 }
+
+const renderQuickAddAction = (product: Product) => (
+	<QuickAddToCartButton product={product} />
+)
 
 export function ProductGrid({ products }: ProductGridProps) {
 	if (products.length === 0) {
@@ -24,6 +29,7 @@ export function ProductGrid({ products }: ProductGridProps) {
 					product={product}
 					index={index}
 					featured={index === PRODUCT.FEATURED_INDEX}
+					renderActions={renderQuickAddAction}
 				/>
 			))}
 		</div>

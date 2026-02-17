@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 
 import { PRODUCT } from '../config/constants'
 import type { Product } from '../model/types'
@@ -11,12 +12,14 @@ interface ProductCardProps {
 	product: Product
 	index?: number
 	featured?: boolean
+	renderActions?: (product: Product) => ReactNode
 }
 
 export function ProductCard({
 	product,
 	index = 0,
 	featured = false,
+	renderActions,
 }: ProductCardProps) {
 	const {
 		categoryLabel,
@@ -60,6 +63,7 @@ export function ProductCard({
 						loading="lazy"
 					/>
 					<div className="grain-overlay pointer-events-none absolute inset-0" />
+					{renderActions?.(product)}
 				</div>
 				<div className="mt-3 space-y-1.5">
 					<span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
