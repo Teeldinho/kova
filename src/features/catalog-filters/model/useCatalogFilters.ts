@@ -4,10 +4,16 @@ import type { ChangeEvent } from 'react'
 import { PAGINATION } from '@/shared/config'
 
 import type { CatalogSearch } from '../config/searchSchema'
+import {
+	getCategoryLabelByValue,
+	getSortLabelByValue,
+} from '../lib/catalogFilterLabels'
 
 export function useCatalogFilters() {
 	const search = useSearch({ from: '/' }) as CatalogSearch
 	const navigate = useNavigate({ from: '/' })
+	const selectedCategoryLabel = getCategoryLabelByValue(search.category)
+	const selectedSortLabel = getSortLabelByValue(search.sort)
 
 	const handleCatalogSearchChange = (value: string) => {
 		navigate({
@@ -60,6 +66,8 @@ export function useCatalogFilters() {
 
 	return {
 		search,
+		selectedCategoryLabel,
+		selectedSortLabel,
 		handleCatalogSearchInputChange,
 		handleCatalogSearchChange,
 		handleCatalogCategoryChange,

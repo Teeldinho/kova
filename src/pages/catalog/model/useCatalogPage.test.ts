@@ -6,9 +6,17 @@ const { useCatalogFiltersMock, useProductsMock } = vi.hoisted(() => ({
 	useProductsMock: vi.fn(),
 }))
 
-vi.mock('@/entities/product', () => ({
-	useProducts: useProductsMock,
-}))
+vi.mock('@/entities/product', async () => {
+	const actual =
+		await vi.importActual<typeof import('@/entities/product')>(
+			'@/entities/product',
+		)
+
+	return {
+		...actual,
+		useProducts: useProductsMock,
+	}
+})
 
 vi.mock('@/features/catalog-filters', async () => {
 	const actual = await vi.importActual<
