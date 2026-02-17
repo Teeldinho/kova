@@ -1,13 +1,18 @@
 import { Minus, Plus, ShoppingBag } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
+
+import type { CartRewardSnapshot } from '@/entities/cart'
 import type { Product } from '@/entities/product'
 import { ProductRating } from '@/entities/product'
+import { CURRENCY } from '@/shared/config'
+import { formatPrice } from '@/shared/lib'
 import { Button } from '@/shared/ui'
 
 import { useProductDetailInfo } from '../model/useProductDetailInfo'
 
 interface ProductDetailInfoProps {
 	product: Product
+	projectedRewardSnapshot: CartRewardSnapshot
 	quantity: number
 	handleProductQuantityIncrease: () => void
 	handleProductQuantityDecrease: () => void
@@ -16,6 +21,7 @@ interface ProductDetailInfoProps {
 
 export function ProductDetailInfo({
 	product,
+	projectedRewardSnapshot,
 	quantity,
 	handleProductQuantityIncrease,
 	handleProductQuantityDecrease,
@@ -32,6 +38,16 @@ export function ProductDetailInfo({
 		increaseQuantityLabel,
 		quantityLabel,
 	} = useProductDetailInfo(product)
+
+	const rewardProgressPercentage = Math.round(
+		projectedRewardSnapshot.progressToNextTier * 100,
+	)
+
+	const amountToNextReward =
+		projectedRewardSnapshot.amountToNextTierInZar / CURRENCY.EXCHANGE_RATE
+
+	const formattedAmountToNextReward =
+		amountToNextReward > 0 ? formatPrice(amountToNextReward) : null
 
 	return (
 		<section className="space-y-5 border border-border bg-card p-6 md:sticky md:top-24 md:p-8">
@@ -88,6 +104,28 @@ export function ProductDetailInfo({
 					{addToCartLabel}
 				</Button>
 			</motion.div>
+
+			<div className="space-y-2 border border-border bg-muted/40 p-3">
+				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+					{projectedRewardSnapshot.hasUnlockedReward
+						? `Reward unlocked: ${projectedRewardSnapshot.activeTier?.label}`
+						: `Next reward: ${projectedRewardSnapshot.nextTier?.label}`}
+				</p>
+
+				{formattedAmountToNextReward ? (
+					<p className="font-mono text-[10px] uppercase tracking-widest text-foreground">
+						Add {formattedAmountToNextReward} to unlock{' '}
+						{projectedRewardSnapshot.nextTier?.label}
+					</p>
+				) : null}
+
+				<div className="h-1.5 w-full bg-border">
+					<div
+						className="h-full bg-primary transition-all duration-300"
+						style={{ width: `${rewardProgressPercentage}%` }}
+					/>
+				</div>
+			</div>
 
 			<div className="space-y-2">
 				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">

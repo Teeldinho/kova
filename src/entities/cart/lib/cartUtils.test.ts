@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest'
 
 import type { CartItem } from '../model/types'
 import {
+	calculateDiscount,
 	calculateSubtotal,
 	calculateTax,
 	calculateTotal,
@@ -57,9 +58,24 @@ describe('calculateTotal', () => {
 		expect(calculateTotal([])).toBe(0)
 	})
 
-	test('returns subtotal when tax is 0', () => {
+	test('returns subtotal when tax and rewards are 0', () => {
 		const items = [mockItem(1, 10, 1)]
 		expect(calculateTotal(items)).toBe(10)
+	})
+
+	test('applies unlocked reward discount to total', () => {
+		const items = [mockItem(1, 100, 1)]
+		expect(calculateTotal(items)).toBe(95)
+	})
+})
+
+describe('calculateDiscount', () => {
+	test('returns zero before reward threshold', () => {
+		expect(calculateDiscount(10)).toBe(0)
+	})
+
+	test('returns reward discount after threshold unlock', () => {
+		expect(calculateDiscount(100)).toBe(5)
 	})
 })
 

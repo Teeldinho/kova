@@ -4,6 +4,7 @@ import { CART, CartItem, CartSummary } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'
 import { cn } from '@/shared/lib'
 import {
+	Button,
 	buttonVariants,
 	Sheet,
 	SheetContent,
@@ -17,11 +18,14 @@ import { useCartSheetWidget } from '../model/useCartSheetWidget'
 export function CartSheet() {
 	const {
 		cartItems,
+		discount,
 		handleCartCheckoutNavigate,
 		handleCartStartShopping,
+		handleCartViewNavigate,
 		handleCartSheetOpenChange,
 		isOpen,
 		items,
+		rewardSnapshot,
 		subtotal,
 		tax,
 		total,
@@ -72,12 +76,25 @@ export function CartSheet() {
 
 				<div className="border-t border-border p-6">
 					<CartSummary
+						discount={discount}
+						rewardSnapshot={rewardSnapshot}
 						subtotal={subtotal}
 						tax={tax}
 						total={total}
 						handleCheckoutStart={handleCartCheckoutNavigate}
 						checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
 					/>
+
+					{items.length > 0 ? (
+						<Button
+							type="button"
+							variant="outline"
+							onClick={handleCartViewNavigate}
+							className="mt-3 h-11 w-full rounded-none font-mono text-[10px] uppercase tracking-widest"
+						>
+							{CART.VIEW_CART_LABEL}
+						</Button>
+					) : null}
 				</div>
 			</SheetContent>
 		</Sheet>

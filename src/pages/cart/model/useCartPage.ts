@@ -5,10 +5,12 @@ import { ROUTES } from '@/shared/config'
 
 export function useCartPage() {
 	const {
+		discount,
 		handleCartItemQuantityUpdate,
 		handleCartItemRemove,
 		isCartEmpty,
 		items,
+		rewardSnapshot,
 		subtotal,
 		tax,
 		total,
@@ -31,7 +33,9 @@ export function useCartPage() {
 
 	return {
 		cartItems,
+		discount,
 		isCartEmpty,
+		rewardSnapshot,
 		handleCartCheckoutNavigate,
 		handleCartContinueShopping,
 		subtotal,

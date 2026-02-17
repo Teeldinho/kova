@@ -7,9 +7,11 @@ import { useCartPage } from '../model/useCartPage'
 export function CartPage() {
 	const {
 		cartItems,
+		discount,
 		handleCartCheckoutNavigate,
 		handleCartContinueShopping,
 		isCartEmpty,
+		rewardSnapshot,
 		subtotal,
 		tax,
 		total,
@@ -55,6 +57,8 @@ export function CartPage() {
 				</section>
 
 				<CartSummary
+					discount={discount}
+					rewardSnapshot={rewardSnapshot}
 					subtotal={subtotal}
 					tax={tax}
 					total={total}

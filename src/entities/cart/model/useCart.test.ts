@@ -30,6 +30,7 @@ describe('useCart', () => {
 		expect(result.current.itemCount).toBe(0)
 		expect(result.current.subtotal).toBe(0)
 		expect(result.current.tax).toBe(0)
+		expect(result.current.discount).toBe(0)
 		expect(result.current.total).toBe(0)
 		expect(result.current.isCartEmpty).toBe(true)
 	})
@@ -45,6 +46,7 @@ describe('useCart', () => {
 		expect(result.current.items).toHaveLength(1)
 		expect(result.current.itemCount).toBe(1)
 		expect(result.current.subtotal).toBe(10)
+		expect(result.current.discount).toBe(0)
 		expect(result.current.total).toBe(10)
 		expect(result.current.isCartEmpty).toBe(false)
 	})
@@ -131,5 +133,18 @@ describe('useCart', () => {
 		expect(result.current.items).toEqual([])
 		expect(result.current.itemCount).toBe(0)
 		expect(result.current.total).toBe(0)
+	})
+
+	test('applies reward discount when threshold is reached', () => {
+		const product = createMockProduct(1, 100)
+		const { result } = renderHook(() => useCart())
+
+		act(() => {
+			result.current.handleCartItemAdd(product)
+		})
+
+		expect(result.current.discount).toBe(5)
+		expect(result.current.total).toBe(95)
+		expect(result.current.rewardSnapshot.activeTier?.discountRate).toBe(0.05)
 	})
 })

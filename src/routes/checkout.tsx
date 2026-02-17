@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-
-import { CheckoutPage } from '@/pages/checkout'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/checkout')({
-	component: CheckoutPage,
+	component: CheckoutRoute,
 })
+
+function CheckoutRoute() {
+	return <Outlet />
+}

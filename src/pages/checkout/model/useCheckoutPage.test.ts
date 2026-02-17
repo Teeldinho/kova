@@ -60,8 +60,17 @@ describe('useCheckoutPage', () => {
 
 		useNavigateMock.mockReturnValue(navigateMock)
 		useCartMock.mockReturnValue({
+			discount: 5,
 			isCartEmpty: false,
 			items: [{ id: 1 }],
+			rewardSnapshot: {
+				activeTier: null,
+				nextTier: null,
+				amountToNextTierInZar: 0,
+				progressToNextTier: 1,
+				discountRate: 0,
+				hasUnlockedReward: false,
+			},
 			subtotal: 10,
 			tax: 0,
 			total: 10,
@@ -105,7 +114,7 @@ describe('useCheckoutPage', () => {
 			})
 		})
 
-		expect(buildCheckoutLineItemsMock).toHaveBeenCalledWith([{ id: 1 }])
+		expect(buildCheckoutLineItemsMock).toHaveBeenCalledWith([{ id: 1 }], 5)
 		expect(handleStripeCheckoutStartMock).toHaveBeenCalledWith({
 			customer: {
 				address: '1 Main Street',
@@ -135,8 +144,17 @@ describe('useCheckoutPage', () => {
 
 	test('navigates back to cart when cart is empty', async () => {
 		useCartMock.mockReturnValue({
+			discount: 0,
 			isCartEmpty: true,
 			items: [],
+			rewardSnapshot: {
+				activeTier: null,
+				nextTier: null,
+				amountToNextTierInZar: 0,
+				progressToNextTier: 1,
+				discountRate: 0,
+				hasUnlockedReward: false,
+			},
 			subtotal: 0,
 			tax: 0,
 			total: 0,

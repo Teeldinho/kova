@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { CART, useCart } from '@/entities/cart'
+import { CART, getCartRewardSnapshot, useCart } from '@/entities/cart'
 import { useProduct } from '@/entities/product'
 
 import {
@@ -10,8 +10,12 @@ import {
 
 export function useProductDetail(productId: number) {
 	const { data: product } = useProduct(productId)
-	const { handleCartItemAdd } = useCart()
+	const { handleCartItemAdd, subtotal } = useCart()
 	const [quantity, setQuantity] = useState<number>(CART.MIN_ITEM_QUANTITY)
+	const projectedSubtotal = product
+		? subtotal + product.price * quantity
+		: subtotal
+	const projectedRewardSnapshot = getCartRewardSnapshot(projectedSubtotal)
 
 	const handleProductQuantityIncrease = () => {
 		setQuantity((current) => increaseProductQuantity(current))
@@ -28,6 +32,7 @@ export function useProductDetail(productId: number) {
 
 	return {
 		product,
+		projectedRewardSnapshot,
 		quantity,
 		handleProductQuantityIncrease,
 		handleProductQuantityDecrease,

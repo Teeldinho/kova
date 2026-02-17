@@ -1,8 +1,9 @@
 import { useStore } from '@tanstack/react-store'
 
 import type { Product } from '@/entities/product/@x/cart'
-
+import { getCartRewardSnapshot } from '../lib/cartRewards'
 import {
+	calculateDiscount,
 	calculateSubtotal,
 	calculateTax,
 	calculateTotal,
@@ -22,7 +23,9 @@ export function useCart() {
 	const itemCount = getCartItemCount(items)
 	const subtotal = calculateSubtotal(items)
 	const tax = calculateTax(subtotal)
+	const discount = calculateDiscount(subtotal)
 	const total = calculateTotal(items)
+	const rewardSnapshot = getCartRewardSnapshot(subtotal)
 
 	const handleCartItemAdd = (product: Product, quantity = 1) => {
 		addItem(product, quantity)
@@ -48,7 +51,9 @@ export function useCart() {
 		itemCount,
 		subtotal,
 		tax,
+		discount,
 		total,
+		rewardSnapshot,
 		isCartEmpty: items.length === 0,
 		handleCartItemAdd,
 		handleCartItemRemove,
