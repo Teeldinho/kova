@@ -6,6 +6,12 @@ export const PRODUCT_DETAIL = {
 	ESTIMATED_DELIVERY: '2-5 business days',
 	ESTIMATED_DELIVERY_PREFIX: 'Estimated delivery:',
 	INCREASE_QUANTITY_LABEL: 'Increase quantity',
+	REWARD: {
+		UNLOCKED_PREFIX: 'Reward unlocked:',
+		NEXT_PREFIX: 'Next reward:',
+		UNLOCK_HINT_PREFIX: 'Add',
+		UNLOCK_HINT_INFIX: 'to unlock',
+	},
 } as const
 
 export const PRODUCT_DETAIL_ERROR = {
