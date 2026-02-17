@@ -9,9 +9,9 @@ const THEME_INIT_SCRIPT = `
 (function(){
   try {
     var t = localStorage.getItem('kova-theme');
-    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    }
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var isDark = t === 'dark' || (!t && prefersDark);
+    document.documentElement.classList.toggle('dark', isDark);
   } catch(e) {}
 })();
 `
@@ -20,11 +20,11 @@ export function RootDocument({ children }: RootDocumentProps) {
 	return (
 		<html lang="en">
 			<head>
+				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: inline script prevents theme FOUC before hydration */}
+				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 				<HeadContent />
 			</head>
 			<body>
-				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: inline script prevents dark-mode FOUC during SSR hydration */}
-				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 				{children}
 				<Scripts />
 			</body>

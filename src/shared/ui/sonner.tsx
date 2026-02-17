@@ -9,14 +9,20 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { type CSSProperties, useEffect, useState } from 'react'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
 
+const getToasterTheme = (): 'light' | 'dark' => {
+	if (typeof document === 'undefined') {
+		return 'light'
+	}
+
+	return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+}
+
 function Toaster(props: ToasterProps) {
-	const [theme, setTheme] = useState<'light' | 'dark'>('light')
+	const [theme, setTheme] = useState<'light' | 'dark'>(getToasterTheme)
 
 	useEffect(() => {
 		const updateTheme = () => {
-			const isDarkModeEnabled =
-				document.documentElement.classList.contains('dark')
-			setTheme(isDarkModeEnabled ? 'dark' : 'light')
+			setTheme(getToasterTheme())
 		}
 
 		updateTheme()

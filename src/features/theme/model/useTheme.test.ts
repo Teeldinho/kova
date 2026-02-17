@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { THEME } from '../config/constants'
@@ -54,6 +54,21 @@ describe('getInitialTheme', () => {
 })
 
 describe('useTheme', () => {
+	test('syncs state with stored dark theme on mount', async () => {
+		localStorage.setItem(THEME.STORAGE_KEY, THEME.DARK)
+		document.documentElement.classList.remove(THEME.DARK_CLASS)
+
+		const { result } = renderHook(() => useTheme())
+
+		await waitFor(() => {
+			expect(result.current.theme).toBe(THEME.DARK)
+		})
+
+		expect(document.documentElement.classList.contains(THEME.DARK_CLASS)).toBe(
+			true,
+		)
+	})
+
 	test('returns current theme and toggle handler', () => {
 		const { result } = renderHook(() => useTheme())
 
