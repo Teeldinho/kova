@@ -1,6 +1,8 @@
 import type { Product } from '@/entities/product'
-import { PRODUCT, ProductCard } from '@/entities/product'
+import { ProductCard } from '@/entities/product'
 import { QuickAddToCartButton } from '@/features/quick-add-to-cart'
+
+import { getCatalogGridItemClass } from '../lib/catalogGrid'
 
 interface ProductGridProps {
 	products: Product[]
@@ -22,13 +24,13 @@ export function ProductGrid({ products }: ProductGridProps) {
 	}
 
 	return (
-		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<div className="grid grid-cols-2 gap-4 lg:grid-cols-12 lg:gap-x-6 lg:gap-y-10">
 			{products.map((product, index) => (
 				<ProductCard
 					key={product.id}
 					product={product}
 					index={index}
-					featured={index === PRODUCT.FEATURED_INDEX}
+					layoutClassName={getCatalogGridItemClass(index)}
 					renderActions={renderQuickAddAction}
 				/>
 			))}

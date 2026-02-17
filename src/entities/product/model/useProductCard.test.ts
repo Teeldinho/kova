@@ -18,9 +18,8 @@ const MOCK_PRODUCT: Product = {
 }
 
 describe('useProductCard', () => {
-	test('returns derived values for non-featured cards', () => {
+	test('returns derived values for catalog cards', () => {
 		const result = useProductCard({
-			featured: false,
 			index: 2,
 			product: MOCK_PRODUCT,
 		})
@@ -30,17 +29,5 @@ describe('useProductCard', () => {
 		expect(result.displayTitle).toContain('...')
 		expect(result.displayPrice).toContain('R')
 		expect(result.motionDelay).toBeGreaterThan(0)
-		expect(result.featuredClassName).toBe('')
-	})
-
-	test('returns full title and featured class for featured cards', () => {
-		const result = useProductCard({
-			featured: true,
-			index: 0,
-			product: MOCK_PRODUCT,
-		})
-
-		expect(result.displayTitle).toBe(MOCK_PRODUCT.title)
-		expect(result.featuredClassName).toBe('col-span-2 row-span-2')
 	})
 })
