@@ -7,3 +7,9 @@ export const PRODUCT_DETAIL = {
 	ESTIMATED_DELIVERY_PREFIX: 'Estimated delivery:',
 	INCREASE_QUANTITY_LABEL: 'Increase quantity',
 } as const
+
+export const PRODUCT_DETAIL_ERROR = {
+	DESCRIPTION: "We couldn't load this product right now. Please retry.",
+	RETRY_LABEL: 'Retry',
+	TITLE: 'Product unavailable',
+} as const
