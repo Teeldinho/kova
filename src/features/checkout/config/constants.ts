@@ -1,14 +1,6 @@
 export const CHECKOUT_FORM = {
 	DESCRIPTION:
 		'Complete your shipping details to continue to secure Stripe checkout.',
-	IDS: {
-		ADDRESS: 'checkout-address',
-		CITY: 'checkout-city',
-		COUNTRY: 'checkout-country',
-		EMAIL: 'checkout-email',
-		FULL_NAME: 'checkout-full-name',
-		POSTAL_CODE: 'checkout-postal-code',
-	},
 	LABELS: {
 		ADDRESS: 'Address',
 		CITY: 'City',

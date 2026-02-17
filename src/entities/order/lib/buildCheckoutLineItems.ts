@@ -1,4 +1,5 @@
 import type { CartItem } from '@/entities/cart/@x/order'
+import { CURRENCY } from '@/shared/config'
 
 import { ORDER } from '../config/constants'
 import type { CheckoutLineItem } from '../model/types'
@@ -12,7 +13,7 @@ export const buildCheckoutLineItems = (
 		name: item.product.title,
 		quantity: item.quantity,
 		unitAmountInCents: Math.max(
-			Math.round(item.product.price * 100),
+			Math.round(item.product.price * CURRENCY.EXCHANGE_RATE * 100),
 			ORDER.MIN_UNIT_AMOUNT,
 		),
 	}))

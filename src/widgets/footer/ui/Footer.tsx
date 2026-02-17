@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+
 import { useFooter } from '../model/useFooter'
 
 export function Footer() {
@@ -21,13 +23,13 @@ export function Footer() {
 						aria-label="Footer links"
 					>
 						{links.map((link) => (
-							<a
+							<Link
 								key={link.label}
-								href={link.href}
+								to={link.href}
 								className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
 							>
 								{link.label}
-							</a>
+							</Link>
 						))}
 					</nav>
 					<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">

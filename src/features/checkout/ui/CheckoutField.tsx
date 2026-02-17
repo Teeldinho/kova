@@ -1,16 +1,11 @@
 import type { CheckoutCustomer } from '@/entities/order'
-import { Input, Label } from '@/shared/ui'
+import { Field, FieldError, FieldLabel, Input } from '@/shared/ui'
 
-import {
-	getCheckoutFieldErrorId,
-	getCheckoutFieldErrorMessage,
-} from '../lib/checkoutField'
 import type { CheckoutFormApi } from '../model/useCheckoutForm'
 
 interface CheckoutFieldProps {
 	className?: string
 	form: CheckoutFormApi
-	id: string
 	label: string
 	name: keyof CheckoutCustomer
 	placeholder: string
@@ -20,26 +15,23 @@ interface CheckoutFieldProps {
 export function CheckoutField({
 	className,
 	form,
-	id,
 	label,
 	name,
 	placeholder,
 	type = 'text',
 }: CheckoutFieldProps) {
-	const errorId = getCheckoutFieldErrorId(id)
-
 	return (
 		<form.Field name={name}>
 			{(field) => {
-				const errorMessage = getCheckoutFieldErrorMessage(
-					field.state.meta.errors,
-				)
+				const isInvalid =
+					field.state.meta.isTouched && !field.state.meta.isValid
 
 				return (
-					<div className={className ?? 'space-y-1.5'}>
-						<Label htmlFor={id}>{label}</Label>
+					<Field data-invalid={isInvalid} className={className}>
+						<FieldLabel htmlFor={field.name}>{label}</FieldLabel>
 						<Input
-							id={id}
+							id={field.name}
+							name={field.name}
 							type={type}
 							value={field.state.value}
 							onBlur={field.handleBlur}
@@ -48,15 +40,11 @@ export function CheckoutField({
 							}
 							placeholder={placeholder}
 							aria-required
-							aria-invalid={Boolean(errorMessage)}
-							aria-describedby={errorMessage ? errorId : undefined}
+							aria-invalid={isInvalid}
+							autoComplete="off"
 						/>
-						{errorMessage ? (
-							<p id={errorId} role="alert" className="text-xs text-destructive">
-								{errorMessage}
-							</p>
-						) : null}
-					</div>
+						{isInvalid && <FieldError errors={field.state.meta.errors} />}
+					</Field>
 				)
 			}}
 		</form.Field>
