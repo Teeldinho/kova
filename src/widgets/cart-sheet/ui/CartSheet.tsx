@@ -17,11 +17,13 @@ import { useCartSheetWidget } from '../model/useCartSheetWidget'
 export function CartSheet() {
 	const {
 		cartItems,
+		discount,
 		handleCartCheckoutNavigate,
 		handleCartStartShopping,
 		handleCartSheetOpenChange,
 		isOpen,
 		items,
+		rewardSnapshot,
 		subtotal,
 		tax,
 		total,
@@ -72,6 +74,8 @@ export function CartSheet() {
 
 				<div className="border-t border-border p-6">
 					<CartSummary
+						discount={discount}
+						rewardSnapshot={rewardSnapshot}
 						subtotal={subtotal}
 						tax={tax}
 						total={total}

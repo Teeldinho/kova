@@ -56,6 +56,7 @@ describe('useCartSheetWidget', () => {
 		]
 
 		useCartMock.mockReturnValue({
+			discount: 1,
 			items: [
 				{
 					product: {
@@ -73,6 +74,14 @@ describe('useCartSheetWidget', () => {
 			subtotal: 20,
 			tax: 0,
 			total: 20,
+			rewardSnapshot: {
+				activeTier: null,
+				nextTier: null,
+				amountToNextTierInZar: 0,
+				progressToNextTier: 1,
+				discountRate: 0,
+				hasUnlockedReward: false,
+			},
 			handleCartItemQuantityUpdate,
 			handleCartItemRemove,
 		})
@@ -88,6 +97,7 @@ describe('useCartSheetWidget', () => {
 		const { result } = renderHook(() => useCartSheetWidget())
 
 		expect(result.current.cartItems).toHaveLength(1)
+		expect(result.current.discount).toBe(1)
 		result.current.cartItems[0]?.handleCartItemIncrease()
 		result.current.cartItems[0]?.handleCartItemDecrease()
 		result.current.cartItems[0]?.handleCartItemRemove()

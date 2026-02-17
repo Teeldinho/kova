@@ -6,7 +6,9 @@ import { useCartSheet } from '@/shared/model'
 
 export function useCartSheetWidget() {
 	const {
+		discount,
 		items,
+		rewardSnapshot,
 		subtotal,
 		tax,
 		total,
@@ -33,8 +35,10 @@ export function useCartSheetWidget() {
 	}
 
 	return {
+		discount,
 		isOpen,
 		items,
+		rewardSnapshot,
 		cartItems,
 		handleCartCheckoutNavigate,
 		subtotal,

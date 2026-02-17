@@ -23,10 +23,19 @@ import { useCartPage } from './useCartPage'
 describe('useCartPage', () => {
 	test('returns cart state and navigation handlers', () => {
 		useCartMock.mockReturnValue({
+			discount: 0,
 			handleCartItemQuantityUpdate: vi.fn(),
 			handleCartItemRemove: vi.fn(),
 			isCartEmpty: false,
 			items: [],
+			rewardSnapshot: {
+				activeTier: null,
+				nextTier: null,
+				amountToNextTierInZar: 0,
+				progressToNextTier: 1,
+				discountRate: 0,
+				hasUnlockedReward: false,
+			},
 			subtotal: 10,
 			tax: 0,
 			total: 10,
