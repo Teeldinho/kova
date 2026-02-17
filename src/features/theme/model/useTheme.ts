@@ -1,59 +1,20 @@
 import { useEffect, useState } from 'react'
 
 import { THEME, type Theme } from '../config/constants'
-
-const isValidTheme = (value: string | null): value is Theme =>
-	value === THEME.LIGHT || value === THEME.DARK
-
-const getStoredTheme = (): Theme | null => {
-	if (typeof window === 'undefined') {
-		return null
-	}
-
-	const storedTheme = localStorage.getItem(THEME.STORAGE_KEY)
-
-	return isValidTheme(storedTheme) ? storedTheme : null
-}
-
-const getSystemTheme = (): Theme => {
-	if (typeof window === 'undefined') {
-		return THEME.LIGHT
-	}
-
-	const prefersDark = window.matchMedia(THEME.MEDIA_QUERY).matches
-
-	return prefersDark ? THEME.DARK : THEME.LIGHT
-}
-
-const resolveTheme = (): Theme => getStoredTheme() ?? getSystemTheme()
+import {
+	applyThemeClass,
+	getStoredTheme,
+	getSystemTheme,
+	getThemeFromDocument,
+	isValidTheme,
+	persistTheme,
+	resolveNextTheme,
+	resolveTheme,
+	resolveThemeFromMediaMatch,
+} from '../lib/themeState'
 
 export function getInitialTheme(): Theme {
 	return resolveTheme()
-}
-
-const getThemeFromDocument = (): Theme => {
-	if (typeof document === 'undefined') return THEME.LIGHT
-
-	return document.documentElement.classList.contains(THEME.DARK_CLASS)
-		? THEME.DARK
-		: THEME.LIGHT
-}
-
-const applyThemeClass = (theme: Theme) => {
-	if (typeof document === 'undefined') return
-
-	document.documentElement.classList.toggle(
-		THEME.DARK_CLASS,
-		theme === THEME.DARK,
-	)
-}
-
-const persistTheme = (theme: Theme) => {
-	if (typeof window === 'undefined') {
-		return
-	}
-
-	localStorage.setItem(THEME.STORAGE_KEY, theme)
 }
 
 export function useTheme() {
@@ -74,7 +35,7 @@ export function useTheme() {
 				return
 			}
 
-			syncTheme(event.matches ? THEME.DARK : THEME.LIGHT)
+			syncTheme(resolveThemeFromMediaMatch(event.matches))
 		}
 
 		const handleStorageChange = (event: StorageEvent) => {
@@ -101,7 +62,7 @@ export function useTheme() {
 
 	const handleThemeToggle = () => {
 		setTheme((currentTheme) => {
-			const nextTheme = currentTheme === THEME.LIGHT ? THEME.DARK : THEME.LIGHT
+			const nextTheme = resolveNextTheme(currentTheme)
 
 			applyThemeClass(nextTheme)
 			persistTheme(nextTheme)

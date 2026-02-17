@@ -1,8 +1,6 @@
-import { CURRENCY } from '@/shared/config'
-import { formatPrice } from '@/shared/lib'
-
 import { CART } from '../config/constants'
 import type { CartRewardSnapshot } from '../lib/cartRewards'
+import { formatCartSummary } from '../lib/formatCartSummary'
 
 interface UseCartSummaryParams {
 	checkoutLabel?: string
@@ -21,23 +19,17 @@ export function useCartSummary({
 	tax,
 	total,
 }: UseCartSummaryParams) {
-	const amountToNextRewardInUsd =
-		rewardSnapshot.amountToNextTierInZar / CURRENCY.EXCHANGE_RATE
+	const summaryDisplay = formatCartSummary({
+		discount,
+		rewardSnapshot,
+		subtotal,
+		tax,
+		total,
+	})
 
 	return {
 		checkoutLabel: checkoutLabel ?? CART.CHECKOUT_LABEL,
-		displayAmountToNextReward: formatPrice(amountToNextRewardInUsd),
-		displayDiscount: formatPrice(discount),
-		displaySubtotal: formatPrice(subtotal),
-		displayTax: formatPrice(tax),
-		displayTotal: formatPrice(total),
-		hasDiscount: discount > 0,
-		hasUnlockedReward: rewardSnapshot.hasUnlockedReward,
-		nextRewardLabel: rewardSnapshot.nextTier?.label ?? null,
-		activeRewardLabel: rewardSnapshot.activeTier?.label ?? null,
-		rewardProgressPercentage: Math.round(
-			rewardSnapshot.progressToNextTier * 100,
-		),
+		...summaryDisplay,
 		shippingPlaceholder: CART.SHIPPING_PLACEHOLDER,
 		rewardLabels: CART.REWARDS,
 		summaryLabels: CART.SUMMARY,
