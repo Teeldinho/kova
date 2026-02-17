@@ -102,6 +102,7 @@ describe('useCartSheetWidget', () => {
 		result.current.cartItems[0]?.handleCartItemDecrease()
 		result.current.cartItems[0]?.handleCartItemRemove()
 		result.current.handleCartStartShopping()
+		result.current.handleCartViewNavigate()
 		result.current.handleCartCheckoutNavigate()
 
 		expect(useCartLineItemsMock).toHaveBeenCalledWith({
@@ -123,6 +124,7 @@ describe('useCartSheetWidget', () => {
 			],
 		})
 		expect(handleCartSheetClose).toHaveBeenCalled()
-		expect(navigateMock).toHaveBeenCalledWith({ to: '/checkout' })
+		expect(navigateMock).toHaveBeenNthCalledWith(1, { to: '/cart' })
+		expect(navigateMock).toHaveBeenNthCalledWith(2, { to: '/checkout' })
 	})
 })

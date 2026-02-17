@@ -4,6 +4,7 @@ import { CART, CartItem, CartSummary } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'
 import { cn } from '@/shared/lib'
 import {
+	Button,
 	buttonVariants,
 	Sheet,
 	SheetContent,
@@ -20,6 +21,7 @@ export function CartSheet() {
 		discount,
 		handleCartCheckoutNavigate,
 		handleCartStartShopping,
+		handleCartViewNavigate,
 		handleCartSheetOpenChange,
 		isOpen,
 		items,
@@ -82,6 +84,17 @@ export function CartSheet() {
 						handleCheckoutStart={handleCartCheckoutNavigate}
 						checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
 					/>
+
+					{items.length > 0 ? (
+						<Button
+							type="button"
+							variant="outline"
+							onClick={handleCartViewNavigate}
+							className="mt-3 h-11 w-full rounded-none font-mono text-[10px] uppercase tracking-widest"
+						>
+							{CART.VIEW_CART_LABEL}
+						</Button>
+					) : null}
 				</div>
 			</SheetContent>
 		</Sheet>

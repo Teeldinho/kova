@@ -34,6 +34,11 @@ export function useCartSheetWidget() {
 		navigate({ to: ROUTES.CHECKOUT })
 	}
 
+	const handleCartViewNavigate = () => {
+		handleCartSheetClose()
+		navigate({ to: ROUTES.CART })
+	}
+
 	return {
 		discount,
 		isOpen,
@@ -41,6 +46,7 @@ export function useCartSheetWidget() {
 		rewardSnapshot,
 		cartItems,
 		handleCartCheckoutNavigate,
+		handleCartViewNavigate,
 		subtotal,
 		tax,
 		total,

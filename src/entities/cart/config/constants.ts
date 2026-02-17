@@ -9,6 +9,7 @@ export const CART = {
 	MAX_ITEM_QUANTITY: 10,
 	MIN_ITEM_QUANTITY: 1,
 	REMOVE_LABEL: 'Remove',
+	VIEW_CART_LABEL: 'View Cart',
 	SUMMARY: {
 		ORDER_LABEL: 'Order Summary',
 		REWARD_LABEL: 'Reward',
