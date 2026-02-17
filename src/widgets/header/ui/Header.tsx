@@ -11,12 +11,14 @@ export function Header() {
 
 	return (
 		<header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
+			<div className="absolute inset-x-0 top-0 h-px bg-primary/50" />
 			<div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
 				<Link
 					to="/"
-					className="font-mono text-xs font-black tracking-[0.3em] md:text-sm"
+					className="group inline-flex items-center gap-2 font-mono text-xs font-black tracking-[0.3em] md:text-sm"
 				>
 					{APP_NAME}
+					<span className="h-1.5 w-1.5 bg-primary transition-transform group-hover:scale-125" />
 				</Link>
 
 				<nav
@@ -27,7 +29,7 @@ export function Header() {
 						<Link
 							key={item.label}
 							to={item.href}
-							className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+							className="font-mono text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary"
 						>
 							{item.label}
 						</Link>

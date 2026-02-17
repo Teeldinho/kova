@@ -15,13 +15,16 @@ import { useCatalogFilters } from '../model/useCatalogFilters'
 export function CatalogFilters() {
 	const {
 		search,
+		selectedCategoryLabel,
+		selectedSortLabel,
 		handleCatalogCategoryChange,
 		handleCatalogSearchInputChange,
 		handleCatalogSortChange,
 	} = useCatalogFilters()
 
 	return (
-		<section className="border border-border bg-card p-4 md:p-5">
+		<section className="relative border border-border bg-card p-4 md:p-5">
+			<div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-primary/40" />
 			<div className="grid gap-4 md:grid-cols-3">
 				<div className="space-y-1.5">
 					<Label
@@ -55,7 +58,9 @@ export function CatalogFilters() {
 							id={CATALOG_FILTER.IDS.CATEGORY}
 							className="w-full font-mono text-xs"
 						>
-							<SelectValue placeholder={CATALOG_FILTER.CATEGORY_PLACEHOLDER} />
+							<SelectValue placeholder={CATALOG_FILTER.CATEGORY_PLACEHOLDER}>
+								{selectedCategoryLabel}
+							</SelectValue>
 						</SelectTrigger>
 						<SelectContent>
 							{PRODUCT_CATEGORIES.map((category) => (
@@ -79,7 +84,9 @@ export function CatalogFilters() {
 							id={CATALOG_FILTER.IDS.SORT}
 							className="w-full font-mono text-xs"
 						>
-							<SelectValue placeholder={CATALOG_FILTER.SORT_PLACEHOLDER} />
+							<SelectValue placeholder={CATALOG_FILTER.SORT_PLACEHOLDER}>
+								{selectedSortLabel}
+							</SelectValue>
 						</SelectTrigger>
 						<SelectContent>
 							{SORT_OPTIONS.map((option) => (

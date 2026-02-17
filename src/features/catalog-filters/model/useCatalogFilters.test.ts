@@ -35,5 +35,22 @@ describe('useCatalogFilters', () => {
 		})
 
 		expect(navigateMock).toHaveBeenCalledTimes(4)
+		expect(result.current.selectedCategoryLabel).toBe('All')
+		expect(result.current.selectedSortLabel).toBe('Default')
+	})
+
+	test('returns placeholders when selected values are unknown', () => {
+		useSearchMock.mockReturnValue({
+			category: 'unknown',
+			limit: 12,
+			page: 1,
+			q: '',
+			sort: 'default',
+		})
+		useNavigateMock.mockReturnValue(navigateMock)
+
+		const { result } = renderHook(() => useCatalogFilters())
+
+		expect(result.current.selectedCategoryLabel).toBe('Category')
 	})
 })

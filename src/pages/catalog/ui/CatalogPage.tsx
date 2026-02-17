@@ -23,10 +23,12 @@ export function CatalogPage() {
 				<CatalogFilters />
 
 				<div className="flex items-center justify-between gap-3">
-					<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+					<p className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+						<span className="h-1 w-1 bg-primary" />
 						{totalItems} items
 					</p>
-					<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+					<p className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+						<span className="h-1 w-1 bg-primary" />
 						Page {currentPage} of {totalPages}
 					</p>
 				</div>
