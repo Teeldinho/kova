@@ -4,17 +4,50 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { THEME } from '../config/constants'
 import { getInitialTheme, useTheme } from './useTheme'
 
+let mediaQueryMatches = false
+let mediaQueryChangeHandler: ((event: MediaQueryListEvent) => void) | null =
+	null
+
+const emitSystemThemeChange = () => {
+	mediaQueryChangeHandler?.({
+		matches: mediaQueryMatches,
+	} as MediaQueryListEvent)
+}
+
 const mockMatchMedia = (matches: boolean) => {
+	mediaQueryMatches = matches
+	mediaQueryChangeHandler = null
+
 	Object.defineProperty(window, 'matchMedia', {
 		writable: true,
 		value: vi.fn().mockImplementation((query: string) => ({
-			matches,
+			get matches() {
+				return mediaQueryMatches
+			},
 			media: query,
 			onchange: null,
 			addListener: vi.fn(),
 			removeListener: vi.fn(),
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
+			addEventListener: vi.fn(
+				(eventName: string, handler: (event: MediaQueryListEvent) => void) => {
+					if (eventName !== 'change') {
+						return
+					}
+
+					mediaQueryChangeHandler = handler
+				},
+			),
+			removeEventListener: vi.fn(
+				(eventName: string, handler: (event: MediaQueryListEvent) => void) => {
+					if (eventName !== 'change') {
+						return
+					}
+
+					if (mediaQueryChangeHandler === handler) {
+						mediaQueryChangeHandler = null
+					}
+				},
+			),
 			dispatchEvent: vi.fn(),
 		})),
 	})
@@ -104,5 +137,51 @@ describe('useTheme', () => {
 			false,
 		)
 		expect(localStorage.getItem(THEME.STORAGE_KEY)).toBe(THEME.LIGHT)
+	})
+
+	test('syncs theme across tabs when storage changes', () => {
+		const { result } = renderHook(() => useTheme())
+
+		act(() => {
+			window.dispatchEvent(
+				new StorageEvent('storage', {
+					key: THEME.STORAGE_KEY,
+					newValue: THEME.DARK,
+				}),
+			)
+		})
+
+		expect(result.current.theme).toBe(THEME.DARK)
+		expect(document.documentElement.classList.contains(THEME.DARK_CLASS)).toBe(
+			true,
+		)
+	})
+
+	test('follows system theme changes when no stored preference exists', () => {
+		const { result } = renderHook(() => useTheme())
+
+		act(() => {
+			mediaQueryMatches = true
+			emitSystemThemeChange()
+		})
+
+		expect(result.current.theme).toBe(THEME.DARK)
+		expect(localStorage.getItem(THEME.STORAGE_KEY)).toBeNull()
+	})
+
+	test('ignores system theme changes when preference is stored', () => {
+		localStorage.setItem(THEME.STORAGE_KEY, THEME.LIGHT)
+
+		const { result } = renderHook(() => useTheme())
+
+		act(() => {
+			mediaQueryMatches = true
+			emitSystemThemeChange()
+		})
+
+		expect(result.current.theme).toBe(THEME.LIGHT)
+		expect(document.documentElement.classList.contains(THEME.DARK_CLASS)).toBe(
+			false,
+		)
 	})
 })
