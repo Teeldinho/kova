@@ -12,12 +12,14 @@ import { useCheckoutPage } from '../model/useCheckoutPage'
 
 export function CheckoutPage() {
 	const {
+		discount,
 		handleCheckoutBackToCart,
 		handleCheckoutPageSubmit,
 		form,
 		isCartEmpty,
 		isStripeCheckoutPending,
 		isSubmitDisabled,
+		rewardSnapshot,
 		stripeCheckoutError,
 		subtotal,
 		tax,
@@ -71,7 +73,13 @@ export function CheckoutPage() {
 					<h2 className="font-mono text-xs font-bold uppercase tracking-widest">
 						{CHECKOUT_FORM.SUMMARY_TITLE}
 					</h2>
-					<CartSummary subtotal={subtotal} tax={tax} total={total} />
+					<CartSummary
+						discount={discount}
+						rewardSnapshot={rewardSnapshot}
+						subtotal={subtotal}
+						tax={tax}
+						total={total}
+					/>
 					<CheckoutSubmitButton
 						disabled={isSubmitDisabled}
 						isPending={isStripeCheckoutPending}

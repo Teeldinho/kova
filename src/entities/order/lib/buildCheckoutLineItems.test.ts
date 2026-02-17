@@ -20,6 +20,14 @@ const CART_ITEMS: CartItem[] = [
 	},
 ]
 
+const sumLineItemsInCents = (
+	lineItems: ReturnType<typeof buildCheckoutLineItems>,
+) =>
+	lineItems.reduce(
+		(total, item) => total + item.unitAmountInCents * item.quantity,
+		0,
+	)
+
 describe('buildCheckoutLineItems', () => {
 	test('converts USD price to ZAR cents using exchange rate', () => {
 		const result = buildCheckoutLineItems(CART_ITEMS)
@@ -57,5 +65,39 @@ describe('buildCheckoutLineItems', () => {
 
 	test('returns empty array for empty cart', () => {
 		expect(buildCheckoutLineItems([])).toEqual([])
+	})
+
+	test('applies checkout discount and preserves exact cents total', () => {
+		const result = buildCheckoutLineItems(CART_ITEMS, 5)
+		const undiscountedTotalInCents = Math.round(
+			120.49 * CURRENCY.EXCHANGE_RATE * 100,
+		)
+		const discountInCents = Math.round(5 * CURRENCY.EXCHANGE_RATE * 100)
+
+		expect(sumLineItemsInCents(result)).toBe(
+			undiscountedTotalInCents * 2 - discountInCents,
+		)
+	})
+
+	test('caps discount so line items never go below minimum amount', () => {
+		const result = buildCheckoutLineItems(
+			[
+				{
+					product: {
+						id: 3,
+						title: 'Budget item',
+						price: 0.01,
+						description: 'Almost free item',
+						category: 'electronics',
+						image: '/budget.jpg',
+						rating: { rate: 4.1, count: 10 },
+					},
+					quantity: 1,
+				},
+			],
+			10,
+		)
+
+		expect(result[0]?.unitAmountInCents).toBe(50)
 	})
 })

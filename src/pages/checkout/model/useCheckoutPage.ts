@@ -8,7 +8,8 @@ import { useStripeCheckout } from '@/features/stripe'
 import { ROUTES } from '@/shared/config'
 
 export function useCheckoutPage() {
-	const { isCartEmpty, items, subtotal, tax, total } = useCart()
+	const { isCartEmpty, items, subtotal, tax, discount, rewardSnapshot, total } =
+		useCart()
 	const navigate = useNavigate()
 	const {
 		handleStripeCheckoutStart,
@@ -19,7 +20,7 @@ export function useCheckoutPage() {
 		handleCheckoutSubmit: async (customer: CheckoutCustomer) => {
 			await handleStripeCheckoutStart({
 				customer,
-				items: buildCheckoutLineItems(items),
+				items: buildCheckoutLineItems(items, discount),
 				origin: window.location.origin,
 			})
 		},
@@ -51,6 +52,8 @@ export function useCheckoutPage() {
 		stripeCheckoutError,
 		subtotal,
 		tax,
+		discount,
+		rewardSnapshot,
 		total,
 	}
 }
