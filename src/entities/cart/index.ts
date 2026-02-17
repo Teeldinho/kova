@@ -1,5 +1,13 @@
 export { CART } from './config/constants'
+export type { CartRewardSnapshot } from './lib/cartRewards'
 export {
+	calculateRewardDiscount,
+	calculateRewardDiscountInCents,
+	getCartRewardSnapshot,
+	getRewardDiscountRate,
+} from './lib/cartRewards'
+export {
+	calculateDiscount,
 	calculateSubtotal,
 	calculateTax,
 	calculateTotal,
