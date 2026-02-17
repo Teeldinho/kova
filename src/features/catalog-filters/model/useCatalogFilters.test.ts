@@ -37,6 +37,25 @@ describe('useCatalogFilters', () => {
 		expect(navigateMock).toHaveBeenCalledTimes(4)
 		expect(result.current.selectedCategoryLabel).toBe('All')
 		expect(result.current.selectedSortLabel).toBe('Default')
+
+		const searchUpdater = navigateMock.mock.calls[0]?.[0]?.search
+		expect(searchUpdater).toBeTypeOf('function')
+
+		expect(
+			searchUpdater({
+				category: 'all',
+				limit: 12,
+				page: 1,
+				q: '',
+				sort: 'default',
+			}),
+		).toEqual({
+			page: undefined,
+			limit: undefined,
+			q: 'jacket',
+			category: undefined,
+			sort: undefined,
+		})
 	})
 
 	test('returns placeholders when selected values are unknown', () => {
