@@ -1,6 +1,10 @@
 export { CATALOG_FILTER, CATALOG_PAGINATION } from './config/constants'
 export type { CatalogSearch } from './config/searchSchema'
-export { CATALOG_SORT_VALUES, catalogSearchSchema } from './config/searchSchema'
+export {
+	CATALOG_SEARCH_DEFAULTS,
+	CATALOG_SORT_VALUES,
+	catalogSearchSchema,
+} from './config/searchSchema'
 export {
 	filterProducts,
 	getPageNumbers,
