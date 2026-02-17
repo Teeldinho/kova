@@ -6,6 +6,7 @@ export {
 	CURRENCY,
 	CURSOR,
 	PAGINATION,
+	ROUTER,
 	ROUTES,
 	SORT_OPTIONS,
 } from './constants'

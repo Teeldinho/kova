@@ -36,6 +36,10 @@ export const CURSOR = {
 	INTERACTIVE_SELECTOR: 'button, a, [role="button"], input, select',
 } as const
 
+export const ROUTER = {
+	PRELOAD_STALE_TIME_MS: 1000 * 60 * 2,
+} as const
+
 export const SORT_OPTIONS = [
 	{ label: 'Default', value: 'default' },
 	{ label: 'Price: Low to High', value: 'price-asc' },
