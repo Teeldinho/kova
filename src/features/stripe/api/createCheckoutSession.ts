@@ -3,9 +3,12 @@ import Stripe from 'stripe'
 import { z } from 'zod'
 
 import { ORDER } from '@/entities/order'
-import { ROUTES } from '@/shared/config'
 
 import { STRIPE_CHECKOUT } from '../config/constants'
+import {
+	buildCheckoutCancelUrl,
+	buildCheckoutSuccessUrl,
+} from '../lib/buildCheckoutRedirectUrls'
 
 const stripeServerEnvSchema = z.object({
 	STRIPE_SECRET_KEY: z.string().min(1),
@@ -54,7 +57,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
 
 		try {
 			const session = await stripe.checkout.sessions.create({
-				cancel_url: `${data.origin}${ROUTES.CHECKOUT_ERROR}`,
+				cancel_url: buildCheckoutCancelUrl(data.origin),
 				customer_email: data.customer.email,
 				line_items: data.items.map((item) => ({
 					price_data: {
@@ -76,7 +79,7 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
 					postalCode: data.customer.postalCode,
 				},
 				mode: STRIPE_CHECKOUT.MODE,
-				success_url: `${data.origin}${ROUTES.CHECKOUT_SUCCESS}?${STRIPE_CHECKOUT.SESSION_QUERY_KEY}={CHECKOUT_SESSION_ID}`,
+				success_url: buildCheckoutSuccessUrl(data.origin),
 			})
 
 			if (!session.url) {

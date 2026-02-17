@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react'
-import { describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 const { handleCartClearMock, navigateMock, useCartMock, useNavigateMock } =
 	vi.hoisted(() => ({
@@ -18,6 +18,13 @@ vi.mock('@tanstack/react-router', () => ({
 }))
 
 import { useCheckoutSuccessPage } from './useCheckoutSuccessPage'
+
+beforeEach(() => {
+	handleCartClearMock.mockReset()
+	navigateMock.mockReset()
+	useCartMock.mockReset()
+	useNavigateMock.mockReset()
+})
 
 describe('useCheckoutSuccessPage', () => {
 	test('clears cart and exposes continue handler', () => {
@@ -39,5 +46,16 @@ describe('useCheckoutSuccessPage', () => {
 			{ label: 'Estimated Delivery', value: '3-5 business days' },
 		])
 		expect(navigateMock).toHaveBeenCalledWith({ to: '/' })
+	})
+
+	test('does not clear cart when session id is missing', () => {
+		useCartMock.mockReturnValue({
+			handleCartClear: handleCartClearMock,
+		})
+		useNavigateMock.mockReturnValue(navigateMock)
+
+		renderHook(() => useCheckoutSuccessPage({ sessionId: undefined }))
+
+		expect(handleCartClearMock).not.toHaveBeenCalled()
 	})
 })
