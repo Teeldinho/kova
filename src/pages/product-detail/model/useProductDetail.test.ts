@@ -1,13 +1,17 @@
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-const { handleCartItemAddMock, useCartMock, useProductMock } = vi.hoisted(
-	() => ({
-		handleCartItemAddMock: vi.fn(),
-		useCartMock: vi.fn(),
-		useProductMock: vi.fn(),
-	}),
-)
+const {
+	getCartRewardSnapshotMock,
+	handleCartItemAddMock,
+	useCartMock,
+	useProductMock,
+} = vi.hoisted(() => ({
+	getCartRewardSnapshotMock: vi.fn(),
+	handleCartItemAddMock: vi.fn(),
+	useCartMock: vi.fn(),
+	useProductMock: vi.fn(),
+}))
 
 vi.mock('@/entities/product', () => ({
 	useProduct: useProductMock,
@@ -18,6 +22,7 @@ vi.mock('@/entities/cart', () => ({
 		MIN_ITEM_QUANTITY: 1,
 		MAX_ITEM_QUANTITY: 10,
 	},
+	getCartRewardSnapshot: getCartRewardSnapshotMock,
 	useCart: useCartMock,
 }))
 
@@ -36,8 +41,20 @@ describe('useProductDetail', () => {
 
 	beforeEach(() => {
 		handleCartItemAddMock.mockReset()
+		getCartRewardSnapshotMock.mockReset()
+		getCartRewardSnapshotMock.mockReturnValue({
+			activeTier: null,
+			nextTier: null,
+			amountToNextTierInZar: 0,
+			progressToNextTier: 0,
+			discountRate: 0,
+			hasUnlockedReward: false,
+		})
 		useProductMock.mockReturnValue({ data: mockProduct })
-		useCartMock.mockReturnValue({ handleCartItemAdd: handleCartItemAddMock })
+		useCartMock.mockReturnValue({
+			handleCartItemAdd: handleCartItemAddMock,
+			subtotal: 20,
+		})
 	})
 
 	test('returns product and default quantity', () => {
@@ -45,6 +62,15 @@ describe('useProductDetail', () => {
 
 		expect(result.current.product).toEqual(mockProduct)
 		expect(result.current.quantity).toBe(1)
+		expect(result.current.projectedRewardSnapshot).toEqual({
+			activeTier: null,
+			nextTier: null,
+			amountToNextTierInZar: 0,
+			progressToNextTier: 0,
+			discountRate: 0,
+			hasUnlockedReward: false,
+		})
+		expect(getCartRewardSnapshotMock).toHaveBeenCalledWith(120)
 	})
 
 	test('increments quantity', () => {
