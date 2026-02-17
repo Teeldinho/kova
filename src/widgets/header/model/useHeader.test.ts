@@ -30,7 +30,8 @@ describe('useHeader', () => {
 
 		result.current.handleHeaderCartOpen()
 
-		expect(result.current.navigation).toHaveLength(2)
+		expect(result.current.navigation).toHaveLength(1)
+		expect(result.current.navigation[0]?.label).toBe('Shop')
 		expect(result.current.itemCount).toBe(3)
 		expect(handleCartSheetOpenMock).toHaveBeenCalled()
 	})
