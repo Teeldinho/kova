@@ -66,7 +66,7 @@ export function ProductCard({
 						{categoryLabel}
 					</span>
 
-					<h3 className="font-sans text-sm leading-snug font-medium transition-colors group-hover:text-primary md:text-[15px]">
+					<h3 className="font-mono text-sm leading-snug font-medium transition-colors group-hover:text-primary md:text-[15px]">
 						{displayTitle}
 					</h3>
 

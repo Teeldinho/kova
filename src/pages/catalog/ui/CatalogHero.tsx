@@ -23,7 +23,7 @@ export function CatalogHero({ totalItems }: CatalogHeroProps) {
 						{CATALOG_HERO.EYEBROW}
 					</p>
 
-					<h1 className="max-w-2xl font-sans text-3xl leading-tight font-light tracking-tight text-foreground md:text-4xl">
+					<h1 className="max-w-2xl font-mono text-3xl leading-tight font-light tracking-tight text-foreground md:text-4xl">
 						{CATALOG_HERO.TITLE}
 					</h1>
 
