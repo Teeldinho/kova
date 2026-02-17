@@ -16,6 +16,7 @@ export const Route = createFileRoute('/products/$productId')({
 		}
 
 		await context.queryClient.ensureQueryData(productQueries.detail(productId))
+		await context.queryClient.ensureQueryData(productQueries.list())
 		return null
 	},
 	pendingComponent: ProductDetailPending,
