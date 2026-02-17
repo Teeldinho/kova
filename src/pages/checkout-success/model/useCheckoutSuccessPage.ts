@@ -17,8 +17,12 @@ export function useCheckoutSuccessPage({
 	const { handleCartClear } = useCart()
 
 	useEffect(() => {
+		if (!sessionId) {
+			return
+		}
+
 		handleCartClear()
-	}, [handleCartClear])
+	}, [handleCartClear, sessionId])
 
 	const handleCheckoutSuccessContinue = () => {
 		navigate({ to: ROUTES.HOME })
