@@ -35,9 +35,16 @@ const stripeCheckoutPayloadSchema = z.object({
 })
 
 const getStripeClient = () => {
-	const environment = stripeServerEnvSchema.parse(process.env)
+	try {
+		const environment = stripeServerEnvSchema.parse(process.env)
 
-	return new Stripe(environment.STRIPE_SECRET_KEY)
+		return new Stripe(environment.STRIPE_SECRET_KEY)
+	} catch {
+		console.error('[stripe-checkout] missing server configuration', {
+			hasSecretKey: Boolean(process.env.STRIPE_SECRET_KEY),
+		})
+		throw new Error(STRIPE_CHECKOUT.ERROR_CODES.MISSING_SECRET_KEY)
+	}
 }
 
 export const createCheckoutSession = createServerFn({ method: 'POST' })
@@ -45,37 +52,45 @@ export const createCheckoutSession = createServerFn({ method: 'POST' })
 	.handler(async ({ data }) => {
 		const stripe = getStripeClient()
 
-		const session = await stripe.checkout.sessions.create({
-			cancel_url: `${data.origin}${ROUTES.CHECKOUT_ERROR}`,
-			customer_email: data.customer.email,
-			line_items: data.items.map((item) => ({
-				price_data: {
-					currency: ORDER.CURRENCY,
-					product_data: {
-						description: item.description,
-						images: [item.image],
-						name: item.name,
+		try {
+			const session = await stripe.checkout.sessions.create({
+				cancel_url: `${data.origin}${ROUTES.CHECKOUT_ERROR}`,
+				customer_email: data.customer.email,
+				line_items: data.items.map((item) => ({
+					price_data: {
+						currency: ORDER.CURRENCY,
+						product_data: {
+							description: item.description,
+							images: [item.image],
+							name: item.name,
+						},
+						unit_amount: item.unitAmountInCents,
 					},
-					unit_amount: item.unitAmountInCents,
+					quantity: item.quantity,
+				})),
+				metadata: {
+					address: data.customer.address,
+					city: data.customer.city,
+					country: data.customer.country,
+					fullName: data.customer.fullName,
+					postalCode: data.customer.postalCode,
 				},
-				quantity: item.quantity,
-			})),
-			metadata: {
-				address: data.customer.address,
-				city: data.customer.city,
-				country: data.customer.country,
-				fullName: data.customer.fullName,
-				postalCode: data.customer.postalCode,
-			},
-			mode: STRIPE_CHECKOUT.MODE,
-			success_url: `${data.origin}${ROUTES.CHECKOUT_SUCCESS}?${STRIPE_CHECKOUT.SESSION_QUERY_KEY}={CHECKOUT_SESSION_ID}`,
-		})
+				mode: STRIPE_CHECKOUT.MODE,
+				success_url: `${data.origin}${ROUTES.CHECKOUT_SUCCESS}?${STRIPE_CHECKOUT.SESSION_QUERY_KEY}={CHECKOUT_SESSION_ID}`,
+			})
 
-		if (!session.url) {
-			throw new Error('Stripe session URL unavailable.')
-		}
+			if (!session.url) {
+				throw new Error(STRIPE_CHECKOUT.ERROR_CODES.SESSION_URL_UNAVAILABLE)
+			}
 
-		return {
-			checkoutUrl: session.url,
+			return {
+				checkoutUrl: session.url,
+			}
+		} catch (error) {
+			console.error('[stripe-checkout] session creation failed', {
+				itemCount: data.items.length,
+				errorMessage: error instanceof Error ? error.message : 'unknown',
+			})
+			throw new Error(STRIPE_CHECKOUT.ERROR_CODES.SESSION_CREATION_FAILED)
 		}
 	})

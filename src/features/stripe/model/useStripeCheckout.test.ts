@@ -100,4 +100,39 @@ describe('useStripeCheckout', () => {
 			'Unable to start secure checkout. Please retry.',
 		)
 	})
+
+	test('sets configuration error when secret key is unavailable', async () => {
+		createCheckoutSessionMock.mockRejectedValue(
+			new Error('STRIPE_CHECKOUT_MISSING_SECRET_KEY'),
+		)
+
+		const { result } = renderHook(() => useStripeCheckout())
+
+		await act(async () => {
+			await result.current.handleStripeCheckoutStart({
+				customer: {
+					address: '1 Main Street',
+					city: 'Johannesburg',
+					country: 'South Africa',
+					email: 'user@example.com',
+					fullName: 'Jane Doe',
+					postalCode: '2000',
+				},
+				items: [
+					{
+						description: 'Item',
+						image: 'https://example.com/item.jpg',
+						name: 'Item',
+						quantity: 1,
+						unitAmountInCents: 2000,
+					},
+				],
+				origin: 'http://localhost:3000',
+			})
+		})
+
+		expect(result.current.stripeCheckoutError).toBe(
+			'Secure checkout is currently unavailable. Please contact support.',
+		)
+	})
 })
