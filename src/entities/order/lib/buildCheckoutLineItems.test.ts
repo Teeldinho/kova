@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 
 import type { CartItem } from '@/entities/cart/@x/order'
+import { CURRENCY } from '@/shared/config'
 
 import { buildCheckoutLineItems } from './buildCheckoutLineItems'
 
@@ -20,8 +21,9 @@ const CART_ITEMS: CartItem[] = [
 ]
 
 describe('buildCheckoutLineItems', () => {
-	test('maps cart items to checkout line items', () => {
+	test('converts USD price to ZAR cents using exchange rate', () => {
 		const result = buildCheckoutLineItems(CART_ITEMS)
+		const expectedZarCents = Math.round(120.49 * CURRENCY.EXCHANGE_RATE * 100)
 
 		expect(result).toEqual([
 			{
@@ -29,18 +31,18 @@ describe('buildCheckoutLineItems', () => {
 				image: '/jacket.jpg',
 				name: 'Premium Jacket',
 				quantity: 2,
-				unitAmountInCents: 12049,
+				unitAmountInCents: expectedZarCents,
 			},
 		])
 	})
 
-	test('enforces minimum charge amount', () => {
+	test('enforces minimum charge amount for very low prices', () => {
 		const result = buildCheckoutLineItems([
 			{
 				product: {
 					id: 2,
 					title: 'Low Price Item',
-					price: 0.01,
+					price: 0.001,
 					description: 'Tiny price',
 					category: 'electronics',
 					image: '/tiny.jpg',
@@ -51,5 +53,9 @@ describe('buildCheckoutLineItems', () => {
 		])
 
 		expect(result[0]?.unitAmountInCents).toBe(50)
+	})
+
+	test('returns empty array for empty cart', () => {
+		expect(buildCheckoutLineItems([])).toEqual([])
 	})
 })
