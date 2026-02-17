@@ -1,17 +1,18 @@
-import { PAGINATION } from '@/shared/config'
-
-import { CATALOG_FILTER } from '../config/constants'
-import type { CatalogSearch } from '../config/searchSchema'
+import {
+	CATALOG_SEARCH_DEFAULTS,
+	type CatalogSearch,
+} from '../config/searchSchema'
 
 type CatalogSearchParams = Partial<CatalogSearch>
 
-const isDefaultPage = (page: number) => page === PAGINATION.DEFAULT_PAGE
-const isDefaultLimit = (limit: number) => limit === PAGINATION.DEFAULT_LIMIT
+const isDefaultPage = (page: number) => page === CATALOG_SEARCH_DEFAULTS.page
+const isDefaultLimit = (limit: number) =>
+	limit === CATALOG_SEARCH_DEFAULTS.limit
 const isDefaultQuery = (query: string) => query.length === 0
 const isDefaultCategory = (category: string) =>
-	category === CATALOG_FILTER.DEFAULT_CATEGORY
+	category === CATALOG_SEARCH_DEFAULTS.category
 const isDefaultSort = (sort: CatalogSearch['sort']) =>
-	sort === CATALOG_FILTER.DEFAULT_SORT
+	sort === CATALOG_SEARCH_DEFAULTS.sort
 
 export const compactCatalogSearch = (
 	search: CatalogSearch,

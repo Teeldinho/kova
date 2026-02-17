@@ -11,7 +11,7 @@ import {
 import { buildCatalogSearch } from '../lib/searchParams'
 
 export function useCatalogFilters() {
-	const search = useSearch({ from: '/' }) as CatalogSearch
+	const search = useSearch({ from: '/' })
 	const navigate = useNavigate({ from: '/' })
 	const selectedCategoryLabel = getCategoryLabelByValue(search.category)
 	const selectedSortLabel = getSortLabelByValue(search.sort)
@@ -19,7 +19,7 @@ export function useCatalogFilters() {
 	const handleCatalogSearchChange = (value: string) => {
 		navigate({
 			search: (previous) => ({
-				...buildCatalogSearch(previous as CatalogSearch, {
+				...buildCatalogSearch(previous, {
 					q: value,
 					page: PAGINATION.DEFAULT_PAGE,
 				}),
@@ -38,7 +38,7 @@ export function useCatalogFilters() {
 
 		navigate({
 			search: (previous) => ({
-				...buildCatalogSearch(previous as CatalogSearch, {
+				...buildCatalogSearch(previous, {
 					category: value,
 					page: PAGINATION.DEFAULT_PAGE,
 				}),
@@ -51,7 +51,7 @@ export function useCatalogFilters() {
 
 		navigate({
 			search: (previous) => ({
-				...buildCatalogSearch(previous as CatalogSearch, {
+				...buildCatalogSearch(previous, {
 					sort: value,
 					page: PAGINATION.DEFAULT_PAGE,
 				}),
@@ -62,7 +62,7 @@ export function useCatalogFilters() {
 	const handleCatalogPageChange = (page: number) => {
 		navigate({
 			search: (previous) => ({
-				...buildCatalogSearch(previous as CatalogSearch, {
+				...buildCatalogSearch(previous, {
 					page,
 				}),
 			}),
