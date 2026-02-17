@@ -8,6 +8,7 @@ import {
 	getCategoryLabelByValue,
 	getSortLabelByValue,
 } from '../lib/catalogFilterLabels'
+import { buildCatalogSearch } from '../lib/searchParams'
 
 export function useCatalogFilters() {
 	const search = useSearch({ from: '/' }) as CatalogSearch
@@ -18,9 +19,10 @@ export function useCatalogFilters() {
 	const handleCatalogSearchChange = (value: string) => {
 		navigate({
 			search: (previous) => ({
-				...previous,
-				q: value,
-				page: PAGINATION.DEFAULT_PAGE,
+				...buildCatalogSearch(previous as CatalogSearch, {
+					q: value,
+					page: PAGINATION.DEFAULT_PAGE,
+				}),
 			}),
 		})
 	}
@@ -36,9 +38,10 @@ export function useCatalogFilters() {
 
 		navigate({
 			search: (previous) => ({
-				...previous,
-				category: value,
-				page: PAGINATION.DEFAULT_PAGE,
+				...buildCatalogSearch(previous as CatalogSearch, {
+					category: value,
+					page: PAGINATION.DEFAULT_PAGE,
+				}),
 			}),
 		})
 	}
@@ -48,9 +51,10 @@ export function useCatalogFilters() {
 
 		navigate({
 			search: (previous) => ({
-				...previous,
-				sort: value,
-				page: PAGINATION.DEFAULT_PAGE,
+				...buildCatalogSearch(previous as CatalogSearch, {
+					sort: value,
+					page: PAGINATION.DEFAULT_PAGE,
+				}),
 			}),
 		})
 	}
@@ -58,8 +62,9 @@ export function useCatalogFilters() {
 	const handleCatalogPageChange = (page: number) => {
 		navigate({
 			search: (previous) => ({
-				...previous,
-				page,
+				...buildCatalogSearch(previous as CatalogSearch, {
+					page,
+				}),
 			}),
 		})
 	}
