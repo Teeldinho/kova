@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { CheckoutPayload } from '@/entities/order'
 
 import { createCheckoutSession } from '../api/createCheckoutSession'
+import { mapStripeCheckoutError } from '../lib/mapStripeCheckoutError'
 
 export function useStripeCheckout() {
 	const [isStripeCheckoutPending, setIsStripeCheckoutPending] = useState(false)
@@ -20,8 +21,11 @@ export function useStripeCheckout() {
 			if (typeof window !== 'undefined') {
 				window.location.assign(checkoutUrl)
 			}
-		} catch {
-			setStripeCheckoutError('Unable to start secure checkout. Please retry.')
+		} catch (error) {
+			console.error('[stripe-checkout] unable to start checkout', {
+				errorMessage: error instanceof Error ? error.message : 'unknown',
+			})
+			setStripeCheckoutError(mapStripeCheckoutError(error))
 		} finally {
 			setIsStripeCheckoutPending(false)
 		}
