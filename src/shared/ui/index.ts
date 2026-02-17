@@ -1,6 +1,18 @@
 export { Button, buttonVariants } from './button'
 export { CustomCursor } from './custom-cursor'
 export { DecryptText } from './decrypt-text'
+export {
+	Field,
+	FieldContent,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+	FieldLegend,
+	FieldSeparator,
+	FieldSet,
+	FieldTitle,
+} from './field'
 export { Input } from './input'
 export { Label } from './label'
 export { Marquee } from './marquee'
