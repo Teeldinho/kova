@@ -1,4 +1,4 @@
-import { Scan } from '@phosphor-icons/react'
+import { CreditCard, Scan } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { CartSummary } from '@/entities/cart'
 import {
@@ -7,7 +7,16 @@ import {
 	CheckoutForm,
 	CheckoutSubmitButton,
 } from '@/features/checkout'
-import { Button, Card, CardContent, EmptyState, Magnetic } from '@/shared/ui'
+import {
+	Alert,
+	AlertDescription,
+	AlertTitle,
+	Button,
+	Card,
+	CardContent,
+	EmptyState,
+	Magnetic,
+} from '@/shared/ui'
 
 import { CHECKOUT_PAGE } from '../config/constants'
 import { useCheckoutPage } from '../model/useCheckoutPage'
@@ -27,6 +36,7 @@ export function CheckoutPage() {
 		tax,
 		total,
 	} = useCheckoutPage()
+	const { DEMO_PAYMENT_ALERT: demoPaymentAlert } = CHECKOUT_PAGE
 
 	if (isCartEmpty) {
 		return (
@@ -95,6 +105,28 @@ export function CheckoutPage() {
 						</Card>
 
 						<div className="space-y-6">
+							<Alert className="border-primary/35 bg-primary/5">
+								<CreditCard className="text-primary" weight="bold" />
+								<AlertTitle>{demoPaymentAlert.TITLE}</AlertTitle>
+								<AlertDescription>
+									<p>{demoPaymentAlert.DESCRIPTION}</p>
+
+									<dl className="mt-4 space-y-2 border-t border-primary/20 pt-3">
+										{demoPaymentAlert.FIELDS.map((field) => (
+											<div
+												key={field.label}
+												className="grid grid-cols-[88px_1fr] gap-2"
+											>
+												<dt className="text-primary/70">{field.label}</dt>
+												<dd className="break-words text-foreground">
+													{field.value}
+												</dd>
+											</div>
+										))}
+									</dl>
+								</AlertDescription>
+							</Alert>
+
 							<CheckoutSubmitButton
 								disabled={isSubmitDisabled}
 								isPending={isStripeCheckoutPending}
