@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion'
 import { RelatedProducts } from '@/features/related-products'
+import { Particles } from '@/shared/ui'
 
 import { useProductDetail } from '../model/useProductDetail'
 import { ProductDetailImage } from './ProductDetailImage'
@@ -19,23 +21,41 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 	} = useProductDetail(productId)
 
 	return (
-		<div className="mx-auto max-w-7xl space-y-8 px-4 py-8 md:space-y-10 md:px-6 md:py-10">
-			<div className="grid gap-6 md:grid-cols-2 md:items-start md:gap-8">
-				<ProductDetailImage product={product} />
-				<ProductDetailInfo
-					product={product}
-					projectedRewardSnapshot={projectedRewardSnapshot}
-					quantity={quantity}
-					handleProductQuantityIncrease={handleProductQuantityIncrease}
-					handleProductQuantityDecrease={handleProductQuantityDecrease}
-					handleProductAddToCart={handleProductAddToCart}
-				/>
-			</div>
+		<div className="ambient-surface relative min-h-screen">
+			{/* Specimen Registry Backdrop */}
+			<div className="specimen-grid fixed inset-0 opacity-20 pointer-events-none" />
+			<Particles className="fixed inset-0" count={30} />
 
-			<RelatedProducts
-				currentProductId={product.id}
-				currentProductCategory={product.category}
-			/>
+			<div className="relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-20">
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start lg:gap-20"
+				>
+					<ProductDetailImage product={product} />
+					<ProductDetailInfo
+						product={product}
+						projectedRewardSnapshot={projectedRewardSnapshot}
+						quantity={quantity}
+						handleProductQuantityIncrease={handleProductQuantityIncrease}
+						handleProductQuantityDecrease={handleProductQuantityDecrease}
+						handleProductAddToCart={handleProductAddToCart}
+					/>
+				</motion.div>
+
+				<div className="mt-32">
+					<div className="mb-12 flex items-center gap-6">
+						<h2 className="font-mono text-2xl font-bold uppercase tracking-tighter">
+							Related Specimens
+						</h2>
+						<div className="h-[1px] flex-1 bg-border/50" />
+					</div>
+					<RelatedProducts
+						currentProductId={product.id}
+						currentProductCategory={product.category}
+					/>
+				</div>
+			</div>
 		</div>
 	)
 }

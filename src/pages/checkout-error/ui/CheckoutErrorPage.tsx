@@ -1,6 +1,6 @@
-import { WarningCircle } from '@phosphor-icons/react'
-
-import { Button } from '@/shared/ui'
+import { Warning } from '@phosphor-icons/react'
+import { motion } from 'framer-motion'
+import { Button, Card, CardContent } from '@/shared/ui'
 
 import { CHECKOUT_ERROR } from '../config/constants'
 import { useCheckoutErrorPage } from '../model/useCheckoutErrorPage'
@@ -14,38 +14,75 @@ export function CheckoutErrorPage({ reason }: CheckoutErrorPageProps) {
 		useCheckoutErrorPage({ reason })
 
 	return (
-		<div className="mx-auto flex min-h-[60dvh] max-w-3xl flex-col items-center justify-center gap-4 px-4 text-center">
-			<WarningCircle size={56} weight="duotone" className="text-destructive" />
-			<h1 className="font-mono text-xl font-bold uppercase tracking-wider md:text-2xl">
-				{CHECKOUT_ERROR.TITLE}
-			</h1>
-			<p className="max-w-xl font-mono text-xs uppercase tracking-widest text-muted-foreground">
-				{CHECKOUT_ERROR.DESCRIPTION}
-			</p>
-			<div className="w-full max-w-xl border border-border bg-card p-4 text-left">
-				<p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-					{CHECKOUT_ERROR.REASON_LABEL}
-				</p>
-				<p className="mt-2 font-mono text-xs uppercase tracking-widest">
-					{errorReason}
-				</p>
-			</div>
-			<div className="flex w-full max-w-xl flex-col gap-3 md:flex-row">
-				<Button
-					type="button"
-					onClick={handleCheckoutErrorRetry}
-					className="h-11 flex-1 rounded-none font-mono text-[10px] uppercase tracking-widest"
+		<div className="relative min-h-screen pt-32 md:pt-40">
+			<div className="specimen-grid fixed inset-0 opacity-10 pointer-events-none" />
+
+			<div className="relative mx-auto flex max-w-3xl flex-col items-center justify-center gap-10 px-4 text-center">
+				<motion.div
+					initial={{ rotate: -10, scale: 0.8, opacity: 0 }}
+					animate={{ rotate: 0, scale: 1, opacity: 1 }}
+					className="rounded-none border-4 border-destructive/20 bg-destructive/5 p-8 text-destructive shadow-[0_0_40px_rgba(239,68,68,0.15)]"
 				>
-					{CHECKOUT_ERROR.RETRY_LABEL}
-				</Button>
-				<Button
-					type="button"
-					variant="outline"
-					onClick={handleCheckoutErrorHome}
-					className="h-11 flex-1 rounded-none font-mono text-[10px] uppercase tracking-widest"
+					<Warning size={64} weight="bold" />
+				</motion.div>
+
+				<div className="space-y-4">
+					<motion.h1
+						initial={{ y: 20, opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						className="font-mono text-4xl font-black uppercase tracking-tighter text-foreground md:text-6xl"
+					>
+						{CHECKOUT_ERROR.TITLE}
+					</motion.h1>
+					<motion.p
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						className="max-w-xl font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-destructive"
+					>
+						Protocol_Failure_v1.3 {'//'} Transaction_Aborted
+					</motion.p>
+				</div>
+
+				<motion.div
+					initial={{ y: 20, opacity: 0 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="w-full max-w-xl"
 				>
-					{CHECKOUT_ERROR.HOME_LABEL}
-				</Button>
+					<Card className="border-2 border-destructive/30 py-0 ring-0">
+						<CardContent className="space-y-6 p-8">
+							<div className="flex items-center gap-4 border-b border-border pb-4">
+								<div className="h-2 w-2 animate-pulse rounded-full bg-destructive" />
+								<span className="font-mono text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+									Error Diagnostics
+								</span>
+							</div>
+
+							<p className="font-mono text-xs leading-relaxed tracking-widest text-foreground uppercase">
+								{errorReason}
+							</p>
+						</CardContent>
+					</Card>
+				</motion.div>
+
+				<div className="flex w-full max-w-xl flex-col gap-4 md:flex-row">
+					<Button
+						type="button"
+						size="lg"
+						onClick={handleCheckoutErrorRetry}
+						className="h-14 flex-1 border-2 font-mono text-[11px] font-black uppercase tracking-widest"
+					>
+						{CHECKOUT_ERROR.RETRY_LABEL}
+					</Button>
+					<Button
+						type="button"
+						variant="outline"
+						size="lg"
+						onClick={handleCheckoutErrorHome}
+						className="h-14 flex-1 border-2 font-mono text-[11px] font-black uppercase tracking-widest"
+					>
+						{CHECKOUT_ERROR.HOME_LABEL}
+					</Button>
+				</div>
 			</div>
 		</div>
 	)
