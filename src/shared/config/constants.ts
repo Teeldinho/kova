@@ -23,17 +23,18 @@ export const PAGINATION = {
 } as const
 
 export const ANIMATION = {
-	STAGGER_DELAY: 0.04,
-	FADE_DURATION: 0.6,
-	SPRING_DAMPING: 25,
-	SPRING_STIFFNESS: 700,
-	MARQUEE_DURATION: 20,
+	STAGGER_DELAY: 0.05,
+	FADE_DURATION: 0.4,
+	SPRING_DAMPING: 35,
+	SPRING_STIFFNESS: 600,
+	MARQUEE_DURATION: 25,
 } as const
 
 export const CURSOR = {
-	HOVER_SCALE: 2.5,
+	HOVER_SCALE: 3.5,
 	OFFSET: 16,
-	INTERACTIVE_SELECTOR: 'button, a, [role="button"], input, select',
+	INTERACTIVE_SELECTOR:
+		'button, a, [role="button"], input, select, .interactive',
 } as const
 
 export const ROUTER = {

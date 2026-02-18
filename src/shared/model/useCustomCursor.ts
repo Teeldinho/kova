@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { CURSOR } from '@/shared/config'
 
@@ -12,21 +12,38 @@ const INITIAL_CURSOR_POSITION: CursorPosition = {
 	y: 0,
 }
 
-const getIsInteractiveTarget = (target: EventTarget | null) => {
-	if (!(target instanceof HTMLElement)) {
-		return false
-	}
-
-	return Boolean(target.closest(CURSOR.INTERACTIVE_SELECTOR))
-}
-
 export function useCustomCursor() {
 	const [cursorPosition, setCursorPosition] = useState(INITIAL_CURSOR_POSITION)
 	const [isHovering, setIsHovering] = useState(false)
 	const [isVisible, setIsVisible] = useState(false)
+	const [hoverLabel, setHoverLabel] = useState<string | null>(null)
+	const [motionIntensity, setMotionIntensity] = useState(0)
+	const previousMouseRef = useRef<{
+		x: number
+		y: number
+		timestamp: number
+	} | null>(null)
 
 	useEffect(() => {
 		const handleMouseMove = (event: MouseEvent) => {
+			const timestamp = performance.now()
+			const previousMouse = previousMouseRef.current
+
+			if (previousMouse) {
+				const deltaX = event.clientX - previousMouse.x
+				const deltaY = event.clientY - previousMouse.y
+				const elapsedMs = Math.max(timestamp - previousMouse.timestamp, 1)
+				const velocity = Math.hypot(deltaX, deltaY) / elapsedMs
+
+				setMotionIntensity(Math.min(velocity * 0.8, 1))
+			}
+
+			previousMouseRef.current = {
+				x: event.clientX,
+				y: event.clientY,
+				timestamp,
+			}
+
 			setCursorPosition({
 				x: event.clientX - CURSOR.OFFSET,
 				y: event.clientY - CURSOR.OFFSET,
@@ -35,11 +52,23 @@ export function useCustomCursor() {
 		}
 
 		const handleMouseOver = (event: MouseEvent) => {
-			setIsHovering(getIsInteractiveTarget(event.target))
+			const target = event.target as HTMLElement
+			const interactive = target.closest(
+				CURSOR.INTERACTIVE_SELECTOR,
+			) as HTMLElement
+
+			if (interactive) {
+				setIsHovering(true)
+				setHoverLabel(interactive.getAttribute('data-cursor-label'))
+			} else {
+				setIsHovering(false)
+				setHoverLabel(null)
+			}
 		}
 
 		const handleMouseLeave = () => {
 			setIsVisible(false)
+			setMotionIntensity(0)
 		}
 
 		window.addEventListener('mousemove', handleMouseMove)
@@ -57,5 +86,7 @@ export function useCustomCursor() {
 		cursorPosition,
 		isHovering,
 		isVisible,
+		hoverLabel,
+		motionIntensity,
 	}
 }
