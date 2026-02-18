@@ -1,6 +1,7 @@
 import type { Product } from '@/entities/product'
 import { ProductCard } from '@/entities/product'
 import { QuickAddToCartButton } from '@/features/quick-add-to-cart'
+import { Card, CardContent } from '@/shared/ui'
 
 import { getCatalogGridItemClass } from '../lib/catalogGrid'
 
@@ -15,11 +16,13 @@ const renderQuickAddAction = (product: Product) => (
 export function ProductGrid({ products }: ProductGridProps) {
 	if (products.length === 0) {
 		return (
-			<div className="border border-border bg-card px-6 py-16 text-center">
-				<p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-					No products match your filters.
-				</p>
-			</div>
+			<Card className="border border-border py-0 ring-0">
+				<CardContent className="px-6 py-16 text-center">
+					<p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+						No products match your filters.
+					</p>
+				</CardContent>
+			</Card>
 		)
 	}
 

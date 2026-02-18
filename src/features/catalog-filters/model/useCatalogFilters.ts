@@ -1,8 +1,9 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import type { ChangeEvent } from 'react'
+import { type ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import { PAGINATION } from '@/shared/config'
 
+import { CATALOG_FILTER } from '../config/constants'
 import type { CatalogSearch } from '../config/searchSchema'
 import {
 	getCategoryLabelByValue,
@@ -13,30 +14,54 @@ import { buildCatalogSearch } from '../lib/searchParams'
 export function useCatalogFilters() {
 	const search = useSearch({ from: '/' })
 	const navigate = useNavigate({ from: '/' })
+	const [searchInputValue, setSearchInputValue] = useState(search.q)
 	const selectedCategoryLabel = getCategoryLabelByValue(search.category)
 	const selectedSortLabel = getSortLabelByValue(search.sort)
 
-	const handleCatalogSearchChange = (value: string) => {
-		navigate({
-			search: (previous) => ({
-				...buildCatalogSearch(previous, {
-					q: value,
-					page: PAGINATION.DEFAULT_PAGE,
+	useEffect(() => {
+		setSearchInputValue(search.q)
+	}, [search.q])
+
+	const handleCatalogSearchChange = useCallback(
+		(value: string) => {
+			navigate({
+				resetScroll: false,
+				search: (previous) => ({
+					...buildCatalogSearch(previous, {
+						q: value,
+						page: PAGINATION.DEFAULT_PAGE,
+					}),
 				}),
-			}),
-		})
-	}
+			})
+		},
+		[navigate],
+	)
+
+	useEffect(() => {
+		if (searchInputValue === search.q) {
+			return
+		}
+
+		const timeoutId = window.setTimeout(() => {
+			handleCatalogSearchChange(searchInputValue)
+		}, CATALOG_FILTER.SEARCH_DEBOUNCE_MS)
+
+		return () => {
+			window.clearTimeout(timeoutId)
+		}
+	}, [handleCatalogSearchChange, search.q, searchInputValue])
 
 	const handleCatalogSearchInputChange = (
 		event: ChangeEvent<HTMLInputElement>,
 	) => {
-		handleCatalogSearchChange(event.currentTarget.value)
+		setSearchInputValue(event.currentTarget.value)
 	}
 
 	const handleCatalogCategoryChange = (value: string | null) => {
 		if (!value) return
 
 		navigate({
+			resetScroll: false,
 			search: (previous) => ({
 				...buildCatalogSearch(previous, {
 					category: value,
@@ -50,6 +75,7 @@ export function useCatalogFilters() {
 		if (!value) return
 
 		navigate({
+			resetScroll: false,
 			search: (previous) => ({
 				...buildCatalogSearch(previous, {
 					sort: value,
@@ -61,6 +87,7 @@ export function useCatalogFilters() {
 
 	const handleCatalogPageChange = (page: number) => {
 		navigate({
+			resetScroll: false,
 			search: (previous) => ({
 				...buildCatalogSearch(previous, {
 					page,
@@ -71,6 +98,7 @@ export function useCatalogFilters() {
 
 	return {
 		search,
+		searchInputValue,
 		selectedCategoryLabel,
 		selectedSortLabel,
 		handleCatalogSearchInputChange,

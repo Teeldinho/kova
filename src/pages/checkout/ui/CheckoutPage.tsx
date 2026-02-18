@@ -1,3 +1,5 @@
+import { CreditCard, Scan } from '@phosphor-icons/react'
+import { motion } from 'framer-motion'
 import { CartSummary } from '@/entities/cart'
 import {
 	CHECKOUT_FORM,
@@ -5,7 +7,16 @@ import {
 	CheckoutForm,
 	CheckoutSubmitButton,
 } from '@/features/checkout'
-import { Button } from '@/shared/ui'
+import {
+	Alert,
+	AlertDescription,
+	AlertTitle,
+	Button,
+	Card,
+	CardContent,
+	EmptyState,
+	Magnetic,
+} from '@/shared/ui'
 
 import { CHECKOUT_PAGE } from '../config/constants'
 import { useCheckoutPage } from '../model/useCheckoutPage'
@@ -25,74 +36,133 @@ export function CheckoutPage() {
 		tax,
 		total,
 	} = useCheckoutPage()
+	const { DEMO_PAYMENT_ALERT: demoPaymentAlert } = CHECKOUT_PAGE
 
 	if (isCartEmpty) {
 		return (
-			<div className="mx-auto flex min-h-[60dvh] max-w-3xl flex-col items-center justify-center gap-4 px-4 text-center">
-				<h1 className="font-mono text-xl font-bold uppercase tracking-wider">
-					{CHECKOUT_FORM.TITLE}
-				</h1>
-				<p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-					{CHECKOUT_PAGE.EMPTY_CART_MESSAGE}
-				</p>
-				<Button
-					type="button"
-					onClick={handleCheckoutBackToCart}
-					className="rounded-none font-mono text-[10px] uppercase tracking-widest"
-				>
-					{CHECKOUT_PAGE.BACK_TO_CART_LABEL}
-				</Button>
+			<div className="mx-auto max-w-7xl px-4 py-20 md:px-6">
+				<EmptyState
+					title={CHECKOUT_FORM.TITLE}
+					description={CHECKOUT_PAGE.EMPTY_CART_MESSAGE}
+					icon={<Scan size={40} weight="thin" />}
+					actionLabel={CHECKOUT_PAGE.BACK_TO_CART_LABEL}
+					onAction={handleCheckoutBackToCart}
+				/>
 			</div>
 		)
 	}
 
 	return (
-		<div className="mx-auto max-w-7xl space-y-6 px-4 py-8 md:px-6 md:py-10">
-			<header className="space-y-2">
-				<h1 className="font-mono text-xl font-bold uppercase tracking-wider md:text-2xl">
+		<div className="relative mx-auto max-w-7xl px-4 pt-32 pb-12 md:px-6 md:pt-40 md:pb-20">
+			<div className="specimen-grid absolute inset-0 opacity-5 pointer-events-none" />
+
+			<header className="mb-16 space-y-6 border-b border-border pb-12">
+				<div className="flex items-center gap-4">
+					<div className="h-px w-8 bg-primary" />
+					<span className="font-mono text-[10px] font-bold text-primary uppercase tracking-[0.4em]">
+						Fulfillment Protocol / Checkout
+					</span>
+				</div>
+				<h1 className="font-mono text-5xl font-black uppercase tracking-tighter text-foreground md:text-7xl">
 					{CHECKOUT_FORM.TITLE}
 				</h1>
-				<p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+				<p className="max-w-xl font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground leading-relaxed opacity-80">
 					{CHECKOUT_FORM.DESCRIPTION}
 				</p>
 			</header>
 
 			{stripeCheckoutError ? (
-				<p
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
 					role="alert"
-					className="border border-destructive bg-destructive/10 px-3 py-2 font-mono text-xs uppercase tracking-widest text-destructive"
+					className="mb-12 border border-destructive bg-destructive/5 p-4 font-mono text-xs font-bold uppercase tracking-widest text-destructive"
 				>
-					{stripeCheckoutError}
-				</p>
+					System Error: {stripeCheckoutError}
+				</motion.div>
 			) : null}
 
 			<CheckoutForm handleCheckoutFormSubmit={handleCheckoutPageSubmit}>
-				<CheckoutFields form={form} />
+				<div className="grid gap-20 lg:grid-cols-[1fr_420px]">
+					<div className="space-y-16">
+						<CheckoutFields form={form} />
+					</div>
 
-				<aside className="space-y-4">
-					<h2 className="font-mono text-xs font-bold uppercase tracking-widest">
-						{CHECKOUT_FORM.SUMMARY_TITLE}
-					</h2>
-					<CartSummary
-						discount={discount}
-						rewardSnapshot={rewardSnapshot}
-						subtotal={subtotal}
-						tax={tax}
-						total={total}
-					/>
-					<CheckoutSubmitButton
-						disabled={isSubmitDisabled}
-						isPending={isStripeCheckoutPending}
-					/>
-					<Button
-						type="button"
-						variant="outline"
-						onClick={handleCheckoutBackToCart}
-						className="h-11 w-full rounded-none font-mono text-[10px] uppercase tracking-widest"
-					>
-						{CHECKOUT_PAGE.BACK_TO_CART_LABEL}
-					</Button>
-				</aside>
+					<aside className="space-y-10 lg:sticky lg:top-32">
+						<Card className="border border-border py-0 ring-0">
+							<CardContent className="p-8">
+								<h2 className="mb-8 font-mono text-[11px] font-black uppercase tracking-[0.3em] text-primary">
+									Review Archive
+								</h2>
+								<CartSummary
+									discount={discount}
+									rewardSnapshot={rewardSnapshot}
+									subtotal={subtotal}
+									tax={tax}
+									total={total}
+								/>
+							</CardContent>
+						</Card>
+
+						<div className="space-y-6">
+							<Alert className="border-primary/35 bg-primary/5">
+								<CreditCard className="text-primary" weight="bold" />
+								<AlertTitle>{demoPaymentAlert.TITLE}</AlertTitle>
+								<AlertDescription>
+									<p>{demoPaymentAlert.DESCRIPTION}</p>
+
+									<dl className="mt-4 space-y-2 border-t border-primary/20 pt-3">
+										{demoPaymentAlert.FIELDS.map((field) => (
+											<div
+												key={field.label}
+												className="grid grid-cols-[88px_1fr] gap-2"
+											>
+												<dt className="text-primary/70">{field.label}</dt>
+												<dd className="break-words text-foreground">
+													{field.value}
+												</dd>
+											</div>
+										))}
+									</dl>
+								</AlertDescription>
+							</Alert>
+
+							<CheckoutSubmitButton
+								disabled={isSubmitDisabled}
+								isPending={isStripeCheckoutPending}
+							/>
+
+							<Magnetic strength={0.2}>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={handleCheckoutBackToCart}
+									className="h-12 w-full font-mono text-[10px] uppercase tracking-widest border transition-colors hover:border-primary/50"
+								>
+									{CHECKOUT_PAGE.BACK_TO_CART_LABEL}
+								</Button>
+							</Magnetic>
+						</div>
+
+						<Card className="border border-border/50 bg-secondary/5 py-0 ring-0">
+							<CardContent className="flex flex-col gap-3 p-5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground opacity-70">
+								<div className="flex items-center justify-between">
+									<span>Security Layer</span>
+									<span className="flex items-center gap-1.5 font-bold text-emerald-500">
+										<div className="h-1 w-1 animate-pulse rounded-full bg-current" />
+										AES-256 Verified
+									</span>
+								</div>
+								<div className="flex items-center justify-between">
+									<span>Protocol Status</span>
+									<span className="font-bold text-foreground">
+										Operational_v1.3
+									</span>
+								</div>
+							</CardContent>
+						</Card>
+					</aside>
+				</div>
 			</CheckoutForm>
 		</div>
 	)

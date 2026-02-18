@@ -8,6 +8,7 @@ export function useCartItem(item: CartItem) {
 		displayPrice: formatPrice(item.product.price),
 		imageAlt: item.product.title,
 		imageSrc: item.product.image,
+		productId: String(item.product.id),
 		quantity: item.quantity,
 		title: item.product.title,
 		decreaseQuantityLabel: CART.A11Y.DECREASE_QUANTITY_LABEL,

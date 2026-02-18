@@ -5,6 +5,7 @@ const {
 	getCartRewardSnapshotMock,
 	handleCartItemAddMock,
 	handleCartSheetOpenMock,
+	lenisScrollToMock,
 	toastSuccessMock,
 	useCartMock,
 	useProductMock,
@@ -12,6 +13,7 @@ const {
 	getCartRewardSnapshotMock: vi.fn(),
 	handleCartItemAddMock: vi.fn(),
 	handleCartSheetOpenMock: vi.fn(),
+	lenisScrollToMock: vi.fn(),
 	toastSuccessMock: vi.fn(),
 	useCartMock: vi.fn(),
 	useProductMock: vi.fn(),
@@ -34,6 +36,8 @@ vi.mock('@/shared/model', () => ({
 	useCartSheet: () => ({
 		handleCartSheetOpen: handleCartSheetOpenMock,
 	}),
+	// Mock the Lenis instance returned by useLenis()
+	useLenis: () => ({ scrollTo: lenisScrollToMock }),
 }))
 
 vi.mock('sonner', () => ({
@@ -58,6 +62,7 @@ describe('useProductDetail', () => {
 	beforeEach(() => {
 		handleCartItemAddMock.mockReset()
 		handleCartSheetOpenMock.mockReset()
+		lenisScrollToMock.mockReset()
 		toastSuccessMock.mockReset()
 		getCartRewardSnapshotMock.mockReset()
 		getCartRewardSnapshotMock.mockReturnValue({
@@ -89,6 +94,36 @@ describe('useProductDetail', () => {
 			hasUnlockedReward: false,
 		})
 		expect(getCartRewardSnapshotMock).toHaveBeenCalledWith(120)
+	})
+
+	test('scrolls to top via Lenis immediately on mount', () => {
+		renderHook(() => useProductDetail(1))
+
+		expect(lenisScrollToMock).toHaveBeenCalledWith(0, {
+			immediate: true,
+			force: true,
+		})
+	})
+
+	test('scrolls to top again when product id changes', () => {
+		const { rerender } = renderHook(
+			({ currentProductId }) => useProductDetail(currentProductId),
+			{
+				initialProps: { currentProductId: 1 },
+			},
+		)
+
+		expect(lenisScrollToMock).toHaveBeenCalledTimes(1)
+
+		rerender({ currentProductId: 2 })
+
+		expect(lenisScrollToMock).toHaveBeenCalledTimes(2)
+	})
+
+	test('does not scroll when productId < 1', () => {
+		renderHook(() => useProductDetail(0))
+
+		expect(lenisScrollToMock).not.toHaveBeenCalled()
 	})
 
 	test('increments quantity', () => {

@@ -2,6 +2,7 @@ export const CATALOG_FILTER = {
 	DEFAULT_CATEGORY: 'all',
 	DEFAULT_QUERY: '',
 	DEFAULT_SORT: 'default',
+	SEARCH_DEBOUNCE_MS: 250,
 	CATEGORY_LABEL: 'Category',
 	CATEGORY_PLACEHOLDER: 'Category',
 	IDS: {
