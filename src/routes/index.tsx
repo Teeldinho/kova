@@ -7,13 +7,14 @@ import {
 } from '@/features/catalog-filters'
 import { CatalogError, CatalogPage, CatalogPending } from '@/pages/catalog'
 import { APP_NAME, APP_TAGLINE, SEO } from '@/shared/config'
-import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
+import { getCanonicalUrl, getOgImageUrl, getServerSiteUrl } from '@/shared/lib'
 
 export const Route = createFileRoute('/')({
 	validateSearch: catalogSearchSchema,
-	head: () => {
-		const canonicalUrl = getCanonicalUrl('/')
-		const ogImageUrl = getOgImageUrl()
+	head: async () => {
+		const siteUrl = await getServerSiteUrl()
+		const canonicalUrl = getCanonicalUrl('/', siteUrl)
+		const ogImageUrl = getOgImageUrl(siteUrl)
 
 		return {
 			meta: [

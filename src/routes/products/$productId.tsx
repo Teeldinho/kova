@@ -7,7 +7,7 @@ import {
 	ProductDetailPending,
 } from '@/pages/product-detail'
 import { APP_NAME, SEO } from '@/shared/config'
-import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
+import { getCanonicalUrl, getOgImageUrl, getServerSiteUrl } from '@/shared/lib'
 
 export const Route = createFileRoute('/products/$productId')({
 	loader: async ({ context, params }) => {
@@ -25,9 +25,13 @@ export const Route = createFileRoute('/products/$productId')({
 	},
 	pendingComponent: ProductDetailPending,
 	errorComponent: ProductDetailError,
-	head: ({ params }) => {
-		const canonicalUrl = getCanonicalUrl(`/products/${params.productId}`)
-		const ogImageUrl = getOgImageUrl()
+	head: async ({ params }) => {
+		const siteUrl = await getServerSiteUrl()
+		const canonicalUrl = getCanonicalUrl(
+			`/products/${params.productId}`,
+			siteUrl,
+		)
+		const ogImageUrl = getOgImageUrl(siteUrl)
 
 		return {
 			meta: [

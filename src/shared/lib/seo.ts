@@ -1,3 +1,6 @@
+import { createServerFn } from '@tanstack/react-start'
+import { getRequest } from '@tanstack/react-start/server'
+
 import { SEO } from '@/shared/config'
 
 const normalizePathname = (pathname: string): string => {
@@ -25,25 +28,25 @@ export const getSiteUrl = (): string | undefined => {
 	return normalizeSiteUrl(rawSiteUrl)
 }
 
-export const getCanonicalUrl = (pathname: string): string => {
-	const siteUrl = getSiteUrl()
+export const getCanonicalUrl = (pathname: string, siteUrl?: string): string => {
+	const resolvedSiteUrl = siteUrl ?? getSiteUrl()
 	const normalizedPathname = normalizePathname(pathname)
 
-	if (!siteUrl) {
+	if (!resolvedSiteUrl) {
 		return normalizedPathname
 	}
 
-	return `${siteUrl}${normalizedPathname}`
+	return `${resolvedSiteUrl}${normalizedPathname}`
 }
 
-export const getOgImageUrl = (): string => {
-	const siteUrl = getSiteUrl()
+export const getOgImageUrl = (siteUrl?: string): string => {
+	const resolvedSiteUrl = siteUrl ?? getSiteUrl()
 
-	if (!siteUrl) {
+	if (!resolvedSiteUrl) {
 		return SEO.DEFAULT_OG_IMAGE_PATH
 	}
 
-	return `${siteUrl}${SEO.DEFAULT_OG_IMAGE_PATH}`
+	return `${resolvedSiteUrl}${SEO.DEFAULT_OG_IMAGE_PATH}`
 }
 
 export const getRequestOrigin = (request: Request): string =>
@@ -51,3 +54,11 @@ export const getRequestOrigin = (request: Request): string =>
 
 export const getAbsoluteUrl = (origin: string, pathname: string): string =>
 	`${normalizeSiteUrl(origin)}${normalizePathname(pathname)}`
+
+export const getServerSiteUrl = createServerFn({ method: 'GET' }).handler(
+	async () => {
+		const request = getRequest()
+
+		return getRequestOrigin(request)
+	},
+)

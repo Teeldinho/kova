@@ -10,6 +10,7 @@ export {
 	getCanonicalUrl,
 	getOgImageUrl,
 	getRequestOrigin,
+	getServerSiteUrl,
 	getSiteUrl,
 } from './seo'
 export type { SitemapEntry } from './sitemap'
