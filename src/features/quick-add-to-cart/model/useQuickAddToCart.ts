@@ -25,7 +25,7 @@ export function useQuickAddToCart() {
 	}
 
 	const handleProductQuickAddButtonClick =
-		(product: Product) => (event: MouseEvent<HTMLElement>) => {
+		(product: Product) => (event: MouseEvent<HTMLButtonElement>) => {
 			event.preventDefault()
 			event.stopPropagation()
 			handleProductQuickAdd(product)

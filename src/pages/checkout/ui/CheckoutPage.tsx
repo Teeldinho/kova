@@ -129,6 +129,7 @@ export function CheckoutPage() {
 
 							<CheckoutSubmitButton
 								disabled={isSubmitDisabled}
+								form={form}
 								isPending={isStripeCheckoutPending}
 							/>
 

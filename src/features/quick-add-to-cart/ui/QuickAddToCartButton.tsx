@@ -15,11 +15,10 @@ export function QuickAddToCartButton({ product }: QuickAddToCartButtonProps) {
 
 	return (
 		<Button
-			nativeButton={false}
-			render={<span />}
+			type="button"
 			variant="default"
 			size="sm"
-			className="absolute right-2 bottom-2 z-20 -translate-y-1 cursor-pointer border-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 hover:bg-primary hover:text-primary-foreground"
+			className="-translate-y-1 cursor-pointer border-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100 hover:bg-primary hover:text-primary-foreground"
 			onClick={handleProductQuickAddButtonClick(product)}
 			aria-label={`${QUICK_ADD.BUTTON_ARIA_PREFIX} ${product.title}`}
 			data-cursor-label="QUICK"

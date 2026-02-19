@@ -34,6 +34,9 @@ export function ProductCard({
 	const { handleProductCardFocus, handleProductCardPointerEnter } =
 		useProductCardPrefetch({ productId: product.id })
 
+	const actionNode = renderActions?.(product)
+	const hasActionNode = Boolean(actionNode)
+
 	// Soft 3D Tilt
 	const x = useMotionValue(0)
 	const y = useMotionValue(0)
@@ -43,6 +46,10 @@ export function ProductCard({
 	const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-5deg', '5deg'])
 
 	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+		if (hasActionNode) {
+			return
+		}
+
 		const rect = e.currentTarget.getBoundingClientRect()
 		x.set((e.clientX - rect.left) / rect.width - 0.5)
 		y.set((e.clientY - rect.top) / rect.height - 0.5)
@@ -61,10 +68,18 @@ export function ProductCard({
 			className={`group relative ${layoutClassName}`}
 			onMouseMove={handleMouseMove}
 			onMouseLeave={() => {
+				if (hasActionNode) {
+					return
+				}
+
 				x.set(0)
 				y.set(0)
 			}}
-			style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+			style={
+				hasActionNode
+					? undefined
+					: { rotateX, rotateY, transformStyle: 'preserve-3d' }
+			}
 		>
 			<Link
 				to="/products/$productId"
@@ -90,12 +105,12 @@ export function ProductCard({
 						alt={product.title}
 						className="relative z-10 h-full w-full object-contain p-12 transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110"
 						loading="lazy"
-						style={{ transform: 'translateZ(40px)' }}
+						style={
+							hasActionNode ? undefined : { transform: 'translateZ(40px)' }
+						}
 					/>
 
 					<div className="absolute inset-0 z-10 bg-primary/0 transition-colors duration-500 group-hover:bg-primary/[0.02]" />
-
-					{renderActions?.(product)}
 				</div>
 
 				<div className="relative z-20 space-y-4 border-t border-border bg-card p-6 transition-colors group-hover:bg-background">
@@ -120,6 +135,12 @@ export function ProductCard({
 					</div>
 				</div>
 			</Link>
+
+			{hasActionNode ? (
+				<div className="product-card-action-layer absolute top-0 right-2 z-30 flex h-72 items-end pb-2 md:h-80 lg:h-96">
+					<div>{actionNode}</div>
+				</div>
+			) : null}
 		</motion.div>
 	)
 }
