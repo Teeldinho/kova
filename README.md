@@ -357,6 +357,22 @@ Recent optimization work raised Lighthouse outcomes on the product-detail flow, 
 - Global cache behavior: `src/shared/api/queryClient.ts`
 - Entity-specific stale/cache windows: `src/entities/product/api/queries.ts`
 
+### Search input optimization (debounced URL updates)
+
+Catalog search uses a debounced input pipeline so typing stays responsive without triggering route/search updates on every keystroke.
+
+- Debounce source: `src/features/catalog-filters/config/constants.ts` (`SEARCH_DEBOUNCE_MS = 250`).
+- Search orchestration: `src/features/catalog-filters/model/useCatalogFilters.ts`.
+- The input state updates immediately, while URL search param updates are delayed intentionally.
+
+Why this helps:
+
+- Reduces unnecessary recomputation and navigation churn.
+- Prevents API overfetch patterns when search is backed by a server endpoint.
+- Improves query-cache effectiveness because requests are emitted for stable search terms instead of transient partial input.
+
+When search is API-driven, this same pattern maps cleanly to query keys (for example `['products', { q }]`) and lowers request volume, rate-limit pressure, and UI jitter.
+
 ### TanStack Query Devtools: prefetch on hover
 
 The project uses intent-based prefetching from product cards (`pointerenter` / focus) so product detail data is already warm by the time users navigate.
@@ -485,7 +501,13 @@ Edit `.env.local`:
 ```bash
 STRIPE_SECRET_KEY=sk_test_...
 VITE_STRIPE_PUBLIC_KEY=pk_test_...
+VITE_SITE_URL=http://localhost:3000
 ```
+
+Notes:
+
+- Keep `VITE_SITE_URL=http://localhost:3000` for local testing so canonical/OG URL generation stays consistent.
+- In deployed environments, set `VITE_SITE_URL` to your production domain (for example `https://your-store.com`).
 
 ### 3) Generate API client (when OpenAPI changes)
 
