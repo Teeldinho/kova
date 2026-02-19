@@ -1,7 +1,8 @@
 import type { Button as ButtonPrimitive } from '@base-ui/react/button'
 import type { VariantProps } from 'class-variance-authority'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { m as motion, useMotionValue, useSpring } from 'framer-motion'
 import { useRef } from 'react'
+
 import { Button, type buttonVariants } from './button'
 
 export interface MagneticButtonProps

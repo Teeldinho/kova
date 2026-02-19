@@ -7,7 +7,8 @@ describe('useCustomCursor', () => {
 	test('tracks cursor position and interactive hover state', () => {
 		const { result } = renderHook(() => useCustomCursor())
 
-		expect(result.current.cursorPosition).toEqual({ x: 0, y: 0 })
+		expect(result.current.cursorX.get()).toBe(0)
+		expect(result.current.cursorY.get()).toBe(0)
 		expect(result.current.isHovering).toBe(false)
 		expect(result.current.isVisible).toBe(false)
 
@@ -21,7 +22,8 @@ describe('useCustomCursor', () => {
 			)
 		})
 
-		expect(result.current.cursorPosition).toEqual({ x: 24, y: 36 })
+		expect(result.current.cursorX.get()).toBe(24)
+		expect(result.current.cursorY.get()).toBe(36)
 		expect(result.current.isVisible).toBe(true)
 
 		const interactiveButton = document.createElement('button')

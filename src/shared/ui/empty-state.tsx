@@ -1,5 +1,6 @@
 import { Target } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { Button } from './button'
 
 interface EmptyStateProps {
@@ -18,7 +19,7 @@ export function EmptyState({
 	onAction,
 }: EmptyStateProps) {
 	return (
-		<div className="flex flex-col items-center justify-center border border-dashed border-border py-24 text-center bg-card/10">
+		<div className="flex flex-col items-center justify-center border border-dashed border-border bg-card/10 py-24 text-center">
 			<motion.div
 				initial={{ scale: 0.8, opacity: 0 }}
 				animate={{ scale: 1, opacity: 1 }}

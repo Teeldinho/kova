@@ -1,5 +1,6 @@
 import { ShoppingCart } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { CartItem, CartSummary } from '@/entities/cart'
 import { Button, EmptyState, Magnetic } from '@/shared/ui'
 

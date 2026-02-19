@@ -1,5 +1,6 @@
 import { Warning } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { Button, Card, CardContent } from '@/shared/ui'
 
 import { CHECKOUT_ERROR } from '../config/constants'
@@ -14,7 +15,7 @@ export function CheckoutErrorPage({ reason }: CheckoutErrorPageProps) {
 		useCheckoutErrorPage({ reason })
 
 	return (
-		<div className="relative min-h-screen pt-32 md:pt-40">
+		<div className="relative min-h-dvh pt-32 md:pt-40">
 			<div className="specimen-grid pointer-events-none fixed inset-0 hidden opacity-10 md:block" />
 
 			<div className="relative mx-auto flex max-w-3xl flex-col items-center justify-center gap-10 px-4 text-center">

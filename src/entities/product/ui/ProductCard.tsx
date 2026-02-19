@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 import { PRODUCT } from '../config/constants'
 import type { Product } from '../model/types'
 import { useProductCard } from '../model/useProductCard'
+import { useProductCardMotion } from '../model/useProductCardMotion'
 import { useProductCardPrefetch } from '../model/useProductCardPrefetch'
 import { ProductRating } from './ProductRating'
 
@@ -36,24 +37,8 @@ export function ProductCard({
 
 	const actionNode = renderActions?.(product)
 	const hasActionNode = Boolean(actionNode)
-
-	// Soft 3D Tilt
-	const x = useMotionValue(0)
-	const y = useMotionValue(0)
-	const mouseXSpring = useSpring(x, { stiffness: 100, damping: 20 })
-	const mouseYSpring = useSpring(y, { stiffness: 100, damping: 20 })
-	const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['5deg', '-5deg'])
-	const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-5deg', '5deg'])
-
-	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (hasActionNode) {
-			return
-		}
-
-		const rect = e.currentTarget.getBoundingClientRect()
-		x.set((e.clientX - rect.left) / rect.width - 0.5)
-		y.set((e.clientY - rect.top) / rect.height - 0.5)
-	}
+	const { cardStyle, handleProductCardMouseLeave, handleProductCardMouseMove } =
+		useProductCardMotion({ hasActionNode })
 
 	return (
 		<motion.div
@@ -66,20 +51,9 @@ export function ProductCard({
 				ease: [0.23, 1, 0.32, 1],
 			}}
 			className={`group relative ${layoutClassName}`}
-			onMouseMove={handleMouseMove}
-			onMouseLeave={() => {
-				if (hasActionNode) {
-					return
-				}
-
-				x.set(0)
-				y.set(0)
-			}}
-			style={
-				hasActionNode
-					? undefined
-					: { rotateX, rotateY, transformStyle: 'preserve-3d' }
-			}
+			onMouseMove={handleProductCardMouseMove}
+			onMouseLeave={handleProductCardMouseLeave}
+			style={cardStyle}
 		>
 			<Link
 				to="/products/$productId"

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
 interface ParticlesProps {
@@ -27,22 +27,22 @@ export function Particles({ count = 20, className = '' }: ParticlesProps) {
 		<div
 			className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
 		>
-			{particles.map((p) => (
+			{particles.map((particle) => (
 				<motion.div
-					key={p.id}
+					key={particle.id}
 					className="absolute bg-primary/20"
 					style={{
-						width: p.size,
-						height: p.size,
-						left: `${p.x}%`,
-						top: `${p.y}%`,
+						width: particle.size,
+						height: particle.size,
+						left: `${particle.x}%`,
+						top: `${particle.y}%`,
 					}}
 					animate={{
 						y: [0, -100, 0],
 						opacity: [0.2, 0.5, 0.2],
 					}}
 					transition={{
-						duration: p.duration,
+						duration: particle.duration,
 						repeat: Infinity,
 						ease: 'linear',
 					}}

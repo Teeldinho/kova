@@ -1,5 +1,6 @@
 import { CreditCard, Scan } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { CartSummary } from '@/entities/cart'
 import {
 	CHECKOUT_FORM,

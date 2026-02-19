@@ -1,5 +1,12 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import {
+	AnimatePresence,
+	m as motion,
+	useMotionTemplate,
+	useMotionValue,
+	useTransform,
+} from 'framer-motion'
+import { useRef, useState } from 'react'
+
 import { cn } from '@/shared/lib'
 
 interface ImageMagnifierProps {
@@ -19,36 +26,55 @@ export function ImageMagnifier({
 	magnifierWidth = 150,
 	zoomLevel = 2.5,
 }: ImageMagnifierProps) {
-	const [[x, y], setXY] = useState([0, 0])
-	const [[imgWidth, imgHeight], setSize] = useState([0, 0])
+	const [imgSize, setImgSize] = useState<[number, number]>([0, 0])
 	const [showMagnifier, setShowMagnifier] = useState(false)
+
+	const mouseX = useMotionValue(0)
+	const mouseY = useMotionValue(0)
+
+	const boundsRef = useRef<DOMRect | null>(null)
+
+	const top = useMotionTemplate`${mouseY}px`
+	const left = useMotionTemplate`${mouseX}px`
+	const backgroundPositionX = useTransform(
+		mouseX,
+		(value) => `${-value * zoomLevel + magnifierWidth / 2}px`,
+	)
+	const backgroundPositionY = useTransform(
+		mouseY,
+		(value) => `${-value * zoomLevel + magnifierHeight / 2}px`,
+	)
 
 	return (
 		<div
 			role="button"
 			tabIndex={0}
 			className={cn('relative inline-block overflow-hidden', className)}
-			onMouseEnter={(e) => {
-				const elem = e.currentTarget
-				const { width, height } = elem.getBoundingClientRect()
-				setSize([width, height])
+			onMouseEnter={(event) => {
+				const bounds = event.currentTarget.getBoundingClientRect()
+				boundsRef.current = bounds
+				setImgSize([bounds.width, bounds.height])
 				setShowMagnifier(true)
 			}}
-			onMouseMove={(e) => {
-				const elem = e.currentTarget
-				const { top, left } = elem.getBoundingClientRect()
-				const x = e.pageX - left - window.scrollX
-				const y = e.pageY - top - window.scrollY
-				setXY([x, y])
+			onMouseMove={(event) => {
+				const bounds = boundsRef.current
+
+				if (!bounds) {
+					return
+				}
+
+				mouseX.set(event.clientX - bounds.left)
+				mouseY.set(event.clientY - bounds.top)
 			}}
 			onMouseLeave={() => {
 				setShowMagnifier(false)
+				boundsRef.current = null
 			}}
 		>
 			<img src={src} alt={alt} className="h-full w-full object-contain" />
 
 			<AnimatePresence>
-				{showMagnifier && (
+				{showMagnifier ? (
 					<motion.div
 						initial={{ opacity: 0, scale: 0 }}
 						animate={{ opacity: 1, scale: 1 }}
@@ -57,18 +83,18 @@ export function ImageMagnifier({
 						style={{
 							height: `${magnifierHeight}px`,
 							width: `${magnifierWidth}px`,
-							top: `${y - magnifierHeight / 2}px`,
-							left: `${x - magnifierWidth / 2}px`,
+							top,
+							left,
+							translateX: '-50%',
+							translateY: '-50%',
 							backgroundImage: `url('${src}')`,
 							backgroundRepeat: 'no-repeat',
-							backgroundSize: `${imgWidth * zoomLevel}px ${
-								imgHeight * zoomLevel
-							}px`,
-							backgroundPositionX: `${-x * zoomLevel + magnifierWidth / 2}px`,
-							backgroundPositionY: `${-y * zoomLevel + magnifierHeight / 2}px`,
+							backgroundSize: `${imgSize[0] * zoomLevel}px ${imgSize[1] * zoomLevel}px`,
+							backgroundPositionX,
+							backgroundPositionY,
 						}}
 					/>
-				)}
+				) : null}
 			</AnimatePresence>
 		</div>
 	)

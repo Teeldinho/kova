@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as CheckoutSuccessLegacyRouteImport } from './routes/checkout-success-legacy'
 import { Route as CheckoutErrorLegacyRouteImport } from './routes/checkout-error-legacy'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -19,6 +21,16 @@ import { Route as ProductsProductIdRouteImport } from './routes/products/$produc
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutErrorRouteImport } from './routes/checkout.error'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutSuccessLegacyRoute = CheckoutSuccessLegacyRouteImport.update({
   id: '/checkout-success-legacy',
   path: '/checkout-success-legacy',
@@ -71,6 +83,8 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRouteWithChildren
   '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
   '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/error': typeof CheckoutErrorRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -81,6 +95,8 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
   '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/error': typeof CheckoutErrorRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -93,6 +109,8 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRouteWithChildren
   '/checkout-error-legacy': typeof CheckoutErrorLegacyRoute
   '/checkout-success-legacy': typeof CheckoutSuccessLegacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/error': typeof CheckoutErrorRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$productId': typeof ProductsProductIdRoute
@@ -106,6 +124,8 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/checkout-error-legacy'
     | '/checkout-success-legacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/checkout/error'
     | '/checkout/success'
     | '/products/$productId'
@@ -116,6 +136,8 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout-error-legacy'
     | '/checkout-success-legacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/checkout/error'
     | '/checkout/success'
     | '/products/$productId'
@@ -127,6 +149,8 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/checkout-error-legacy'
     | '/checkout-success-legacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/checkout/error'
     | '/checkout/success'
     | '/products/$productId'
@@ -139,11 +163,27 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRouteWithChildren
   CheckoutErrorLegacyRoute: typeof CheckoutErrorLegacyRoute
   CheckoutSuccessLegacyRoute: typeof CheckoutSuccessLegacyRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProductsProductIdRoute: typeof ProductsProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout-success-legacy': {
       id: '/checkout-success-legacy'
       path: '/checkout-success-legacy'
@@ -232,6 +272,8 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRouteWithChildren,
   CheckoutErrorLegacyRoute: CheckoutErrorLegacyRoute,
   CheckoutSuccessLegacyRoute: CheckoutSuccessLegacyRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProductsProductIdRoute: ProductsProductIdRoute,
 }
 export const routeTree = rootRouteImport

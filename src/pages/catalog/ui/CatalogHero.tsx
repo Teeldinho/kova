@@ -1,5 +1,6 @@
 import { ArrowDown } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { Magnetic } from '@/shared/ui'
 
 import { CATALOG_HERO } from '../config/constants'

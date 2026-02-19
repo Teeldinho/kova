@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import type { Product } from '@/entities/product'
 import { ImageMagnifier } from '@/shared/ui'
 

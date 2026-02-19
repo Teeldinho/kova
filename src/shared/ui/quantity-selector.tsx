@@ -1,5 +1,6 @@
 import { Minus, Plus } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { Button } from './button'
 
 interface QuantitySelectorProps {

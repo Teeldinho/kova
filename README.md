@@ -80,6 +80,32 @@ Lefthook enforces pre-commit quality and branch protection.
 
 Config: `lefthook.yml`
 
+### TanStack Router CLI (generated route tree)
+
+We rely on TanStack's route generation workflow (`npx @tanstack/router-cli generate`) so route typing and registration stay machine-generated in `src/routeTree.gen.ts`.
+
+- Reduces manual route wiring mistakes during rapid iteration.
+- Keeps route IDs/paths in sync with file-based routes.
+- Gives AI agents a deterministic source of truth instead of hand-edited route maps.
+
+### CLI-first delivery (`git` + `gh`)
+
+Daily delivery is CLI-first:
+
+- `git` is used for scoped commits, history inspection, and branch hygiene.
+- `gh` is used to open and manage PRs from feature branches.
+- This keeps release flow scriptable and auditable for both human and agent contributors.
+
+### Editor LSP diagnostics (real-time feedback loop)
+
+LSP (Language Server Protocol) tooling powers in-editor diagnostics from TypeScript, Biome, and other servers while code is being written.
+
+- Surfaces type and lint errors before commit hooks run.
+- Shortens the feedback loop for AI-assisted edits.
+- Reduces late-stage refactor churn by catching boundary violations early.
+
+![Editor LSP Status](./docs/screenshots/editor-lsp-status.png)
+
 Together, these tools form a continuous feedback loop: write -> validate -> fix -> review.
 
 ## Architecture first: Feature-Sliced Design (FSD)
@@ -266,6 +292,12 @@ Checkout submission logic lives in `model/` and is validated in:
 
 The test verifies invalid form data does not submit, and valid data does.
 
+### Test run evidence
+
+Latest full Vitest run confirms broad coverage across `model/` and `lib/` layers, including the SEO/sitemap additions in this optimization cycle.
+
+![Vitest Test Suite Pass Summary](./docs/screenshots/test-suite-pass-summary.png)
+
 ## Checkout reliability: Stripe + Zod
 
 Checkout session creation is implemented as a server function:
@@ -306,6 +338,12 @@ The flow below demonstrates both ends of the sandbox journey: hosted Stripe chec
 
 Storefront UX quality is tightly coupled to performance and intent-based loading.
 
+### Lighthouse evidence after optimization pass
+
+Recent optimization work raised Lighthouse outcomes on the product-detail flow, including a 100 SEO score in the audited run.
+
+![Lighthouse Product Detail Optimization](./docs/screenshots/lighthouse-product-detail-optimization.png)
+
 ### Prefetch and route readiness
 
 - Route loaders pre-warm data with `ensureQueryData`:
@@ -344,6 +382,19 @@ Key files:
 - `src/features/catalog-filters/config/searchSchema.ts`
 - `src/features/catalog-filters/lib/searchParams.ts`
 - `src/routes/index.tsx`
+
+### SEO crawlability: dynamic sitemap and robots
+
+We expose dynamic crawler endpoints from route handlers:
+
+- `src/routes/sitemap[.]xml.ts`
+- `src/routes/robots[.]txt.ts`
+
+Why this matters for SEO:
+
+- `sitemap.xml` helps search engines discover canonical product and core commerce URLs quickly.
+- `robots.txt` advertises the sitemap location and clarifies crawler policy.
+- Both endpoints resolve origin dynamically from the request, so environments stay consistent without hardcoded domains.
 
 ### Scroll control and overlay stability
 
