@@ -6,8 +6,9 @@ import {
 	ProductDetailPage,
 	ProductDetailPending,
 } from '@/pages/product-detail'
+import { getServerSiteUrl } from '@/shared/api'
 import { APP_NAME, SEO } from '@/shared/config'
-import { getCanonicalUrl, getOgImageUrl, getServerSiteUrl } from '@/shared/lib'
+import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
 
 export const Route = createFileRoute('/products/$productId')({
 	loader: async ({ context, params }) => {

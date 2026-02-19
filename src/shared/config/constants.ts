@@ -1,18 +1,6 @@
 export const APP_NAME = 'KOVA' as const
 export const APP_TAGLINE = 'Every detail, considered.' as const
 
-export const SEO = {
-	DEFAULT_DESCRIPTION:
-		'Curated essentials with a sharp silhouette, precise materials, and everyday utility.',
-	DEFAULT_OG_IMAGE_PATH: '/logo512.png',
-	SITE_URL_ENV_KEY: 'VITE_SITE_URL',
-	TWITTER_CARD: 'summary_large_image',
-	DEFAULT_ROBOTS_CONTENT: 'index,follow',
-	SITEMAP_PATH: '/sitemap.xml',
-	SITEMAP_CACHE_CONTROL:
-		'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
-} as const
-
 export const ROUTES = {
 	CART: '/cart',
 	CHECKOUT: '/checkout',
@@ -20,6 +8,51 @@ export const ROUTES = {
 	CHECKOUT_SUCCESS: '/checkout/success',
 	PRODUCT_DETAIL: '/products/$productId',
 	HOME: '/',
+} as const
+
+export const SEO = {
+	DEFAULT_DESCRIPTION:
+		'Curated essentials with a sharp silhouette, precise materials, and everyday utility.',
+	DEFAULT_OG_IMAGE_PATH: '/logo512.png',
+	SITE_URL_ENV_KEY: 'VITE_SITE_URL',
+	TWITTER_CARD: 'summary_large_image',
+	DEFAULT_ROBOTS_CONTENT: 'index,follow',
+} as const
+
+export const SITEMAP = {
+	PATH: '/sitemap.xml',
+	CACHE_CONTROL:
+		'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
+	CONTENT_TYPE: 'application/xml; charset=utf-8',
+	XML_HEADER: '<?xml version="1.0" encoding="UTF-8"?>',
+	URLSET_OPEN: '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+	URLSET_CLOSE: '</urlset>',
+	PRODUCT_ENTRY: {
+		CHANGE_FREQUENCY: 'weekly',
+		PRIORITY: 0.7,
+	},
+	STATIC_ENTRIES: [
+		{
+			pathname: ROUTES.HOME,
+			changeFrequency: 'daily',
+			priority: 1,
+		},
+		{
+			pathname: ROUTES.CART,
+			changeFrequency: 'daily',
+			priority: 0.6,
+		},
+		{
+			pathname: ROUTES.CHECKOUT,
+			changeFrequency: 'daily',
+			priority: 0.5,
+		},
+	],
+} as const
+
+export const ROBOTS = {
+	CONTENT_TYPE: 'text/plain; charset=utf-8',
+	ALLOW_ALL: 'User-agent: *\nDisallow:',
 } as const
 
 export const CURRENCY = {

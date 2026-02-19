@@ -1,6 +1,3 @@
-import { createServerFn } from '@tanstack/react-start'
-import { getRequest } from '@tanstack/react-start/server'
-
 import { SEO } from '@/shared/config'
 
 const normalizePathname = (pathname: string): string => {
@@ -36,7 +33,7 @@ export const getCanonicalUrl = (pathname: string, siteUrl?: string): string => {
 		return normalizedPathname
 	}
 
-	return `${resolvedSiteUrl}${normalizedPathname}`
+	return `${normalizeSiteUrl(resolvedSiteUrl)}${normalizedPathname}`
 }
 
 export const getOgImageUrl = (siteUrl?: string): string => {
@@ -46,7 +43,7 @@ export const getOgImageUrl = (siteUrl?: string): string => {
 		return SEO.DEFAULT_OG_IMAGE_PATH
 	}
 
-	return `${resolvedSiteUrl}${SEO.DEFAULT_OG_IMAGE_PATH}`
+	return `${normalizeSiteUrl(resolvedSiteUrl)}${SEO.DEFAULT_OG_IMAGE_PATH}`
 }
 
 export const getRequestOrigin = (request: Request): string =>
@@ -54,11 +51,3 @@ export const getRequestOrigin = (request: Request): string =>
 
 export const getAbsoluteUrl = (origin: string, pathname: string): string =>
 	`${normalizeSiteUrl(origin)}${normalizePathname(pathname)}`
-
-export const getServerSiteUrl = createServerFn({ method: 'GET' }).handler(
-	async () => {
-		const request = getRequest()
-
-		return getRequestOrigin(request)
-	},
-)

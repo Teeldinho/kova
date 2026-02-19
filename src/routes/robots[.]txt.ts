@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { SEO } from '@/shared/config'
+import { ROBOTS, SITEMAP } from '@/shared/config'
 import { buildRobotsTxt, getAbsoluteUrl, getRequestOrigin } from '@/shared/lib'
 
 export const Route = createFileRoute('/robots.txt')({
@@ -8,12 +8,12 @@ export const Route = createFileRoute('/robots.txt')({
 		handlers: {
 			GET: async ({ request }) => {
 				const origin = getRequestOrigin(request)
-				const sitemapUrl = getAbsoluteUrl(origin, SEO.SITEMAP_PATH)
+				const sitemapUrl = getAbsoluteUrl(origin, SITEMAP.PATH)
 
 				return new Response(buildRobotsTxt(sitemapUrl), {
 					headers: {
-						'Cache-Control': SEO.SITEMAP_CACHE_CONTROL,
-						'Content-Type': 'text/plain; charset=utf-8',
+						'Cache-Control': SITEMAP.CACHE_CONTROL,
+						'Content-Type': ROBOTS.CONTENT_TYPE,
 					},
 				})
 			},

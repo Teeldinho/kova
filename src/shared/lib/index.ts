@@ -10,8 +10,12 @@ export {
 	getCanonicalUrl,
 	getOgImageUrl,
 	getRequestOrigin,
-	getServerSiteUrl,
 	getSiteUrl,
 } from './seo'
-export type { SitemapEntry } from './sitemap'
-export { buildRobotsTxt, buildSitemapXml } from './sitemap'
+export type { SitemapChangeFrequency, SitemapEntry } from './sitemap'
+export {
+	buildProductSitemapEntries,
+	buildRobotsTxt,
+	buildSitemapXml,
+	buildStaticSitemapEntries,
+} from './sitemap'
