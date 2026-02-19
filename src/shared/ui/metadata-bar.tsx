@@ -1,5 +1,5 @@
 import { Cpu, HardDrive, Target } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 
 interface MetadataBarProps {
 	className?: string
