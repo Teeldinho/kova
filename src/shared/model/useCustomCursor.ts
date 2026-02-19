@@ -1,23 +1,17 @@
+import { useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 
 import { CURSOR } from '@/shared/config'
 
-interface CursorPosition {
-	x: number
-	y: number
-}
-
-const INITIAL_CURSOR_POSITION: CursorPosition = {
-	x: 0,
-	y: 0,
-}
-
 export function useCustomCursor() {
-	const [cursorPosition, setCursorPosition] = useState(INITIAL_CURSOR_POSITION)
+	const cursorX = useMotionValue(0)
+	const cursorY = useMotionValue(0)
+	const motionIntensity = useMotionValue(0)
+
 	const [isHovering, setIsHovering] = useState(false)
 	const [isVisible, setIsVisible] = useState(false)
 	const [hoverLabel, setHoverLabel] = useState<string | null>(null)
-	const [motionIntensity, setMotionIntensity] = useState(0)
+
 	const previousMouseRef = useRef<{
 		x: number
 		y: number
@@ -35,7 +29,7 @@ export function useCustomCursor() {
 				const elapsedMs = Math.max(timestamp - previousMouse.timestamp, 1)
 				const velocity = Math.hypot(deltaX, deltaY) / elapsedMs
 
-				setMotionIntensity(Math.min(velocity * 0.8, 1))
+				motionIntensity.set(Math.min(velocity * 0.8, 1))
 			}
 
 			previousMouseRef.current = {
@@ -44,10 +38,8 @@ export function useCustomCursor() {
 				timestamp,
 			}
 
-			setCursorPosition({
-				x: event.clientX - CURSOR.OFFSET,
-				y: event.clientY - CURSOR.OFFSET,
-			})
+			cursorX.set(event.clientX - CURSOR.OFFSET)
+			cursorY.set(event.clientY - CURSOR.OFFSET)
 			setIsVisible(true)
 		}
 
@@ -60,15 +52,16 @@ export function useCustomCursor() {
 			if (interactive) {
 				setIsHovering(true)
 				setHoverLabel(interactive.getAttribute('data-cursor-label'))
-			} else {
-				setIsHovering(false)
-				setHoverLabel(null)
+				return
 			}
+
+			setIsHovering(false)
+			setHoverLabel(null)
 		}
 
 		const handleMouseLeave = () => {
 			setIsVisible(false)
-			setMotionIntensity(0)
+			motionIntensity.set(0)
 		}
 
 		window.addEventListener('mousemove', handleMouseMove)
@@ -80,10 +73,11 @@ export function useCustomCursor() {
 			window.removeEventListener('mouseover', handleMouseOver)
 			document.removeEventListener('mouseleave', handleMouseLeave)
 		}
-	}, [])
+	}, [cursorX, cursorY, motionIntensity])
 
 	return {
-		cursorPosition,
+		cursorX,
+		cursorY,
 		isHovering,
 		isVisible,
 		hoverLabel,
