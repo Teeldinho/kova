@@ -292,6 +292,12 @@ Checkout submission logic lives in `model/` and is validated in:
 
 The test verifies invalid form data does not submit, and valid data does.
 
+### Test run evidence
+
+Latest full Vitest run confirms broad coverage across `model/` and `lib/` layers, including the SEO/sitemap additions in this optimization cycle.
+
+![Vitest Test Suite Pass Summary](./docs/screenshots/test-suite-pass-summary.png)
+
 ## Checkout reliability: Stripe + Zod
 
 Checkout session creation is implemented as a server function:
