@@ -99,14 +99,14 @@ FSD solves common scaling problems:
 
 ### What each top-level layer means in this repo
 
-| Layer | What it is | Example in this repo |
-| --- | --- | --- |
-| `app` | App-wide providers and shell wiring | `src/app/providers/AppProviders.tsx` wires Query + Lenis |
-| `pages` | Route-level screen composition | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen |
-| `widgets` | Large reusable page sections | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx` |
-| `features` | User use-cases and actions | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
-| `entities` | Core domain models and business rules | `src/entities/product`, `src/entities/cart`, `src/entities/order` |
-| `shared` | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config` |
+| Layer      | What it is                                  | Example in this repo                                                                      |
+| ---------- | ------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
+| `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
+| `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
+| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
+| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`, `src/entities/order`                         |
+| `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 
 ### What each slice segment means
 
@@ -165,7 +165,7 @@ Supporting technologies:
 - Framer Motion + Lenis
 - Zod
 - Stripe
-- Vitest + Testing Library (`@testing-library/react`, `@testing-library/user-event`, `@testing-library/dom`) + jsdom
+- Vitest + Testing Library
 
 ## API strategy: OpenAPI + Orval
 
@@ -192,10 +192,7 @@ Why Orval makes our job easier:
 `src/entities/product/api/queries.ts` uses Orval-generated helpers from `src/shared/api`:
 
 ```ts
-import {
-  getGetProductByIdQueryKey,
-  getProductById,
-} from '@/shared/api'
+import { getGetProductByIdQueryKey, getProductById } from "@/shared/api";
 
 export const productQueries = {
   detail: (id: number) =>
@@ -204,7 +201,7 @@ export const productQueries = {
       queryFn: () => getProductById(id),
       select: (response) => response.data,
     }),
-}
+};
 ```
 
 This pattern gives us generated transport safety with domain-level control.
@@ -229,14 +226,14 @@ We avoid placing business logic directly inside components, because logic in hoo
 Test shape (from the repo):
 
 ```ts
-const { result } = renderHook(() => useProductCardPrefetch({ productId: 7 }))
+const { result } = renderHook(() => useProductCardPrefetch({ productId: 7 }));
 
 act(() => {
-  result.current.handleProductCardPointerEnter()
-  result.current.handleProductCardFocus()
-})
+  result.current.handleProductCardPointerEnter();
+  result.current.handleProductCardFocus();
+});
 
-expect(prefetchQueryMock).toHaveBeenCalledTimes(2)
+expect(prefetchQueryMock).toHaveBeenCalledTimes(2);
 ```
 
 Because the handler lives in the hook, we can assert behavior without rendering the full card UI.
@@ -251,11 +248,11 @@ Cart reward math is implemented in `lib/` and tested in:
 Test shape (from the repo):
 
 ```ts
-expect(getRewardDiscountRate(250)).toBe(0.15)
+expect(getRewardDiscountRate(250)).toBe(0.15);
 
-const snapshot = getCartRewardSnapshot(40)
-expect(snapshot.nextTier?.discountRate).toBe(0.05)
-expect(snapshot.progressToNextTier).toBeCloseTo(0.53, 2)
+const snapshot = getCartRewardSnapshot(40);
+expect(snapshot.nextTier?.discountRate).toBe(0.05);
+expect(snapshot.progressToNextTier).toBeCloseTo(0.53, 2);
 ```
 
 This is deterministic and easy to reason about because logic is pure and isolated.
