@@ -1,6 +1,6 @@
 # KOVA Storefront
 
-KOVA is an e-commerce storefront built with a TanStack-first frontend stack, Feature-Sliced Design (FSD), and a contract-first API layer.
+KOVA is an e-commerce storefront built as a React.js application (TanStack Start), with a TanStack-first frontend stack, Feature-Sliced Design (FSD), and a contract-first API layer.
 
 This project is intentionally engineered for maintainability. The goal is not only to ship features quickly, but to keep the codebase readable and predictable months or years later.
 
@@ -33,6 +33,18 @@ Milestone flow:
 5. Human merges only when satisfied.
 
 This keeps velocity high without removing accountability.
+
+## Branching strategy
+
+This repo uses a Tier 2 simplified Git Flow that matches our branch-protection hooks in `lefthook.yml`.
+
+- Protected branches: `main`, `master`, and `develop` (direct commits are blocked).
+- Day-to-day work happens on short-lived branches (`feature/*`, `fix/*`, `refactor/*`).
+- Feature and fix PRs target `develop` as the integration branch.
+- Release happens through a single PR from `develop` to `main` when a milestone is ready.
+- Hotfixes branch from `main`, then are merged back to both `main` and `develop`.
+
+This gives us one controlled promotion path to production while still allowing incremental fixes on `develop`.
 
 ## Guardrails and constant feedback loops
 
@@ -132,7 +144,7 @@ We tried to stay in one ecosystem as much as possible.
 
 ### Core choices
 
-- TanStack Start: full-stack app runtime.
+- TanStack Start: React.js full-stack app runtime.
 - TanStack Router: file-based routing + loaders.
 - TanStack Query: server-state caching/prefetch.
 - TanStack Form: typed checkout form orchestration.
@@ -153,6 +165,7 @@ Supporting technologies:
 - Framer Motion + Lenis
 - Zod
 - Stripe
+- Vitest + Testing Library (`@testing-library/react`, `@testing-library/user-event`, `@testing-library/dom`) + jsdom
 
 ## API strategy: OpenAPI + Orval
 
@@ -322,11 +335,7 @@ If you open TanStack Query Devtools while hovering product cards, you can observ
 
 You can also watch the recorded prefetching flow:
 
-<video src="./docs/videos/prefetching.mp4" controls muted playsinline width="100%"></video>
-
-[Open prefetching video](./docs/videos/prefetching.mp4)
-
-Or, see the video here: https://drive.google.com/file/d/1uIb7raWLlGs2BROWbtKkI0ZD0sUIN8Zb/view?usp=drive_link
+Google Drive Link: [Prefetching walkthrough](https://drive.google.com/file/d/1XQEd68BsV2RafnZJYAgCa2iuYm0v97sQ/view?usp=drive_link)
 
 ### URL-state and canonicalization
 
@@ -465,8 +474,6 @@ Most screenshots are grouped here to keep the documentation readable while still
 ![Landing - Dark](./docs/screenshots/home-dark-products.png)
 
 ![Landing - Dark with Cart Sheet](./docs/screenshots/landing-dark-cart-sheet.png)
-
-![Landing - Light](./docs/screenshots/home-light-products.png)
 
 ![Catalog - Mobile Light](./docs/screenshots/home-mobile-light.png)
 
