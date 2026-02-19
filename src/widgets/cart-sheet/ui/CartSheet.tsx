@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m as motion } from 'framer-motion'
 
 import { CART, CartItem, CartSummary } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'

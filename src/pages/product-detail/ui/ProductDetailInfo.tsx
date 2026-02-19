@@ -1,5 +1,5 @@
 import { Info, ShieldCheck, ShoppingBag, Truck } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
 
 import type { CartRewardSnapshot } from '@/entities/cart'
 import type { Product } from '@/entities/product'

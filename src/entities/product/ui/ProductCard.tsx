@@ -1,5 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import {
+	m as motion,
+	useMotionValue,
+	useSpring,
+	useTransform,
+} from 'framer-motion'
 import type { ReactNode } from 'react'
 
 import { PRODUCT } from '../config/constants'

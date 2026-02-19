@@ -1,5 +1,6 @@
 import { ShieldCheck } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { m as motion } from 'framer-motion'
+
 import { Button, Card, CardContent, Particles } from '@/shared/ui'
 
 import { CHECKOUT_SUCCESS } from '../config/constants'
@@ -14,7 +15,7 @@ export function CheckoutSuccessPage({ sessionId }: CheckoutSuccessPageProps) {
 		useCheckoutSuccessPage({ sessionId })
 
 	return (
-		<div className="relative min-h-screen pt-32 md:pt-40">
+		<div className="relative min-h-dvh pt-32 md:pt-40">
 			<div className="specimen-grid pointer-events-none fixed inset-0 hidden opacity-10 md:block" />
 			<Particles className="fixed inset-0 hidden md:block" count={28} />
 

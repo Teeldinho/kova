@@ -1,5 +1,10 @@
-import { motion } from 'framer-motion'
-import { RelatedProducts } from '@/features/related-products'
+import { m as motion } from 'framer-motion'
+import { Suspense } from 'react'
+
+import {
+	RelatedProducts,
+	RelatedProductsPending,
+} from '@/features/related-products'
 import { Particles } from '@/shared/ui'
 
 import { useProductDetail } from '../model/useProductDetail'
@@ -21,7 +26,7 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 	} = useProductDetail(productId)
 
 	return (
-		<div className="ambient-surface relative min-h-screen">
+		<div className="ambient-surface relative min-h-dvh">
 			{/* Specimen Registry Backdrop */}
 			<div className="specimen-grid pointer-events-none fixed inset-0 hidden opacity-20 md:block" />
 			<Particles className="fixed inset-0 hidden md:block" count={24} />
@@ -50,10 +55,12 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 						</h2>
 						<div className="h-[1px] flex-1 bg-border/50" />
 					</div>
-					<RelatedProducts
-						currentProductId={product.id}
-						currentProductCategory={product.category}
-					/>
+					<Suspense fallback={<RelatedProductsPending />}>
+						<RelatedProducts
+							currentProductId={product.id}
+							currentProductCategory={product.category}
+						/>
+					</Suspense>
 				</div>
 			</div>
 		</div>
