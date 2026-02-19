@@ -26,7 +26,7 @@ export function useCatalogFilters() {
 		(value: string) => {
 			navigate({
 				resetScroll: false,
-				search: (previous) => ({
+				search: (previous: CatalogSearch) => ({
 					...buildCatalogSearch(previous, {
 						q: value,
 						page: PAGINATION.DEFAULT_PAGE,
@@ -62,7 +62,7 @@ export function useCatalogFilters() {
 
 		navigate({
 			resetScroll: false,
-			search: (previous) => ({
+			search: (previous: CatalogSearch) => ({
 				...buildCatalogSearch(previous, {
 					category: value,
 					page: PAGINATION.DEFAULT_PAGE,
@@ -76,7 +76,7 @@ export function useCatalogFilters() {
 
 		navigate({
 			resetScroll: false,
-			search: (previous) => ({
+			search: (previous: CatalogSearch) => ({
 				...buildCatalogSearch(previous, {
 					sort: value,
 					page: PAGINATION.DEFAULT_PAGE,
@@ -88,7 +88,7 @@ export function useCatalogFilters() {
 	const handleCatalogPageChange = (page: number) => {
 		navigate({
 			resetScroll: false,
-			search: (previous) => ({
+			search: (previous: CatalogSearch) => ({
 				...buildCatalogSearch(previous, {
 					page,
 				}),
