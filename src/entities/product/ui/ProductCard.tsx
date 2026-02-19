@@ -34,6 +34,8 @@ export function ProductCard({
 	const { handleProductCardFocus, handleProductCardPointerEnter } =
 		useProductCardPrefetch({ productId: product.id })
 
+	const actionNode = renderActions?.(product)
+
 	// Soft 3D Tilt
 	const x = useMotionValue(0)
 	const y = useMotionValue(0)
@@ -66,60 +68,68 @@ export function ProductCard({
 			}}
 			style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
 		>
-			<Link
-				to="/products/$productId"
-				params={{ productId }}
-				className="relative block border border-border bg-card p-0 transition-all duration-500 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5"
-				preload="intent"
-				preloadDelay={PRODUCT.CARD_PREFETCH_INTENT_DELAY_MS}
-				onFocus={handleProductCardFocus}
-				onPointerEnter={handleProductCardPointerEnter}
-				data-cursor-label="VIEW"
-			>
-				{/* Minimal Label */}
-				<div className="absolute top-4 left-4 z-20 flex items-center gap-2 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors group-hover:text-primary">
-					<div className="h-1 w-1 bg-current" />
-					<span>Archive_#{product.id.toString().padStart(3, '0')}</span>
-				</div>
-
-				<div className="product-image-surface relative flex h-72 items-center justify-center overflow-hidden bg-background md:h-80 lg:h-96">
-					<div className="scanning-line z-20" />
-
-					<motion.img
-						src={product.image}
-						alt={product.title}
-						className="relative z-10 h-full w-full object-contain p-12 transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110"
-						loading="lazy"
-						style={{ transform: 'translateZ(40px)' }}
-					/>
-
-					<div className="absolute inset-0 z-10 bg-primary/0 transition-colors duration-500 group-hover:bg-primary/[0.02]" />
-
-					{renderActions?.(product)}
-				</div>
-
-				<div className="relative z-20 space-y-4 border-t border-border bg-card p-6 transition-colors group-hover:bg-background">
-					<div className="space-y-1">
-						<span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary/60 font-bold">
-							{categoryLabel}
-						</span>
-						<h3 className="font-mono text-sm leading-tight font-black uppercase tracking-tighter text-foreground group-hover:text-primary transition-colors line-clamp-1">
-							{displayTitle}
-						</h3>
+			<div className="relative border border-border bg-card p-0 transition-all duration-500 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
+				<Link
+					to="/products/$productId"
+					params={{ productId }}
+					className="relative block"
+					preload="intent"
+					preloadDelay={PRODUCT.CARD_PREFETCH_INTENT_DELAY_MS}
+					onFocus={handleProductCardFocus}
+					onPointerEnter={handleProductCardPointerEnter}
+					data-cursor-label="VIEW"
+				>
+					{/* Minimal Label */}
+					<div className="absolute top-4 left-4 z-20 flex items-center gap-2 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors group-hover:text-primary">
+						<div className="h-1 w-1 bg-current" />
+						<span>Archive_#{product.id.toString().padStart(3, '0')}</span>
 					</div>
 
-					<div className="flex flex-col gap-3 border-t border-border/40 pt-4 lg:flex-row lg:items-center lg:justify-between">
-						<ProductRating
-							rate={product.rating.rate}
-							count={product.rating.count}
-							className="min-w-0"
+					<div className="product-image-surface relative flex h-72 items-center justify-center overflow-hidden bg-background md:h-80 lg:h-96">
+						<div className="scanning-line z-20" />
+
+						<motion.img
+							src={product.image}
+							alt={product.title}
+							className="relative z-10 h-full w-full object-contain p-12 transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110"
+							loading="lazy"
+							style={{ transform: 'translateZ(40px)' }}
 						/>
-						<p className="font-mono text-sm font-black tracking-tighter text-foreground whitespace-nowrap transition-colors group-hover:text-primary md:text-base">
-							{displayPrice}
-						</p>
+
+						<div className="absolute inset-0 z-10 bg-primary/0 transition-colors duration-500 group-hover:bg-primary/[0.02]" />
 					</div>
-				</div>
-			</Link>
+
+					<div className="relative z-20 space-y-4 border-t border-border bg-card p-6 transition-colors group-hover:bg-background">
+						<div className="space-y-1">
+							<span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary/60 font-bold">
+								{categoryLabel}
+							</span>
+							<h3 className="font-mono text-sm leading-tight font-black uppercase tracking-tighter text-foreground group-hover:text-primary transition-colors line-clamp-1">
+								{displayTitle}
+							</h3>
+						</div>
+
+						<div className="flex flex-col gap-3 border-t border-border/40 pt-4 lg:flex-row lg:items-center lg:justify-between">
+							<ProductRating
+								rate={product.rating.rate}
+								count={product.rating.count}
+								className="min-w-0"
+							/>
+							<p className="font-mono text-sm font-black tracking-tighter text-foreground whitespace-nowrap transition-colors group-hover:text-primary md:text-base">
+								{displayPrice}
+							</p>
+						</div>
+					</div>
+				</Link>
+
+				{actionNode ? (
+					<div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-72 md:h-80 lg:h-96">
+						<div className="pointer-events-auto relative h-full">
+							{actionNode}
+						</div>
+					</div>
+				) : null}
+			</div>
 		</motion.div>
 	)
 }
