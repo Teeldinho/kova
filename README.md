@@ -1,6 +1,6 @@
 # KOVA Storefront
 
-KOVA is an e-commerce storefront built with a TanStack-first frontend stack, Feature-Sliced Design (FSD), and a contract-first API layer.
+KOVA is an e-commerce storefront built as a React.js application (TanStack Start), with a TanStack-first frontend stack, Feature-Sliced Design (FSD), and a contract-first API layer.
 
 This project is intentionally engineered for maintainability. The goal is not only to ship features quickly, but to keep the codebase readable and predictable months or years later.
 
@@ -33,6 +33,18 @@ Milestone flow:
 5. Human merges only when satisfied.
 
 This keeps velocity high without removing accountability.
+
+## Branching strategy
+
+This repo uses a Tier 2 simplified Git Flow that matches our branch-protection hooks in `lefthook.yml`.
+
+- Protected branches: `main`, `master`, and `develop` (direct commits are blocked).
+- Day-to-day work happens on short-lived branches (`feature/*`, `fix/*`, `refactor/*`).
+- Feature and fix PRs target `develop` as the integration branch.
+- Release happens through a single PR from `develop` to `main` when a milestone is ready.
+- Hotfixes branch from `main`, then are merged back to both `main` and `develop`.
+
+This gives us one controlled promotion path to production while still allowing incremental fixes on `develop`.
 
 ## Guardrails and constant feedback loops
 
@@ -87,14 +99,14 @@ FSD solves common scaling problems:
 
 ### What each top-level layer means in this repo
 
-| Layer | What it is | Example in this repo |
-| --- | --- | --- |
-| `app` | App-wide providers and shell wiring | `src/app/providers/AppProviders.tsx` wires Query + Lenis |
-| `pages` | Route-level screen composition | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen |
-| `widgets` | Large reusable page sections | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx` |
-| `features` | User use-cases and actions | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
-| `entities` | Core domain models and business rules | `src/entities/product`, `src/entities/cart`, `src/entities/order` |
-| `shared` | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config` |
+| Layer      | What it is                                  | Example in this repo                                                                      |
+| ---------- | ------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
+| `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
+| `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
+| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
+| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`, `src/entities/order`                         |
+| `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 
 ### What each slice segment means
 
@@ -132,7 +144,7 @@ We tried to stay in one ecosystem as much as possible.
 
 ### Core choices
 
-- TanStack Start: full-stack app runtime.
+- TanStack Start: React.js full-stack app runtime.
 - TanStack Router: file-based routing + loaders.
 - TanStack Query: server-state caching/prefetch.
 - TanStack Form: typed checkout form orchestration.
@@ -153,6 +165,7 @@ Supporting technologies:
 - Framer Motion + Lenis
 - Zod
 - Stripe
+- Vitest + Testing Library
 
 ## API strategy: OpenAPI + Orval
 
@@ -179,10 +192,7 @@ Why Orval makes our job easier:
 `src/entities/product/api/queries.ts` uses Orval-generated helpers from `src/shared/api`:
 
 ```ts
-import {
-  getGetProductByIdQueryKey,
-  getProductById,
-} from '@/shared/api'
+import { getGetProductByIdQueryKey, getProductById } from "@/shared/api";
 
 export const productQueries = {
   detail: (id: number) =>
@@ -191,7 +201,7 @@ export const productQueries = {
       queryFn: () => getProductById(id),
       select: (response) => response.data,
     }),
-}
+};
 ```
 
 This pattern gives us generated transport safety with domain-level control.
@@ -216,14 +226,14 @@ We avoid placing business logic directly inside components, because logic in hoo
 Test shape (from the repo):
 
 ```ts
-const { result } = renderHook(() => useProductCardPrefetch({ productId: 7 }))
+const { result } = renderHook(() => useProductCardPrefetch({ productId: 7 }));
 
 act(() => {
-  result.current.handleProductCardPointerEnter()
-  result.current.handleProductCardFocus()
-})
+  result.current.handleProductCardPointerEnter();
+  result.current.handleProductCardFocus();
+});
 
-expect(prefetchQueryMock).toHaveBeenCalledTimes(2)
+expect(prefetchQueryMock).toHaveBeenCalledTimes(2);
 ```
 
 Because the handler lives in the hook, we can assert behavior without rendering the full card UI.
@@ -238,11 +248,11 @@ Cart reward math is implemented in `lib/` and tested in:
 Test shape (from the repo):
 
 ```ts
-expect(getRewardDiscountRate(250)).toBe(0.15)
+expect(getRewardDiscountRate(250)).toBe(0.15);
 
-const snapshot = getCartRewardSnapshot(40)
-expect(snapshot.nextTier?.discountRate).toBe(0.05)
-expect(snapshot.progressToNextTier).toBeCloseTo(0.53, 2)
+const snapshot = getCartRewardSnapshot(40);
+expect(snapshot.nextTier?.discountRate).toBe(0.05);
+expect(snapshot.progressToNextTier).toBeCloseTo(0.53, 2);
 ```
 
 This is deterministic and easy to reason about because logic is pure and isolated.
@@ -322,11 +332,7 @@ If you open TanStack Query Devtools while hovering product cards, you can observ
 
 You can also watch the recorded prefetching flow:
 
-<video src="./docs/videos/prefetching.mp4" controls muted playsinline width="100%"></video>
-
-[Open prefetching video](./docs/videos/prefetching.mp4)
-
-Or, see the video here: https://drive.google.com/file/d/1uIb7raWLlGs2BROWbtKkI0ZD0sUIN8Zb/view?usp=drive_link
+Google Drive Link: [Prefetching walkthrough](https://drive.google.com/file/d/1XQEd68BsV2RafnZJYAgCa2iuYm0v97sQ/view?usp=drive_link)
 
 ### URL-state and canonicalization
 
@@ -465,8 +471,6 @@ Most screenshots are grouped here to keep the documentation readable while still
 ![Landing - Dark](./docs/screenshots/home-dark-products.png)
 
 ![Landing - Dark with Cart Sheet](./docs/screenshots/landing-dark-cart-sheet.png)
-
-![Landing - Light](./docs/screenshots/home-light-products.png)
 
 ![Catalog - Mobile Light](./docs/screenshots/home-mobile-light.png)
 

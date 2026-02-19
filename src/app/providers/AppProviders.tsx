@@ -3,9 +3,18 @@ import { ReactLenis } from 'lenis/react'
 import type { ReactNode } from 'react'
 
 import { queryClient } from '@/shared/api'
+import { useRouteScrollTop } from '@/shared/model'
 
 interface AppProvidersProps {
 	children: ReactNode
+}
+
+function AppProvidersContent({ children }: AppProvidersProps) {
+	useRouteScrollTop()
+
+	return (
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	)
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
@@ -18,10 +27,10 @@ export function AppProviders({ children }: AppProvidersProps) {
 				 * is clicked — prevents the "landing mid-page" bug on SPA navigation.
 				 */
 				stopInertiaOnNavigate: true,
-				wheelMultiplier: 1.2,
+				wheelMultiplier: 1,
 			}}
 		>
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+			<AppProvidersContent>{children}</AppProvidersContent>
 		</ReactLenis>
 	)
 }

@@ -11,7 +11,7 @@ export function Header() {
 	const { navigation, itemCount, handleHeaderCartOpen } = useHeader()
 
 	return (
-		<header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-lg">
+		<header className="sticky top-0 z-40 border-b border-border bg-background/95 md:bg-background/90 md:backdrop-blur-lg">
 			<div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
 			<div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">

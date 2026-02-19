@@ -15,8 +15,8 @@ export function CheckoutSuccessPage({ sessionId }: CheckoutSuccessPageProps) {
 
 	return (
 		<div className="relative min-h-screen pt-32 md:pt-40">
-			<div className="specimen-grid fixed inset-0 opacity-10 pointer-events-none" />
-			<Particles className="fixed inset-0" count={40} />
+			<div className="specimen-grid pointer-events-none fixed inset-0 hidden opacity-10 md:block" />
+			<Particles className="fixed inset-0 hidden md:block" count={28} />
 
 			<div className="relative mx-auto flex max-w-3xl flex-col items-center justify-center gap-10 px-4 text-center">
 				<motion.div

@@ -18,6 +18,8 @@ export const CHECKOUT_FORM = {
 		POSTAL_CODE: '0001',
 	},
 	SUBMIT_LABEL: 'Pay Securely',
+	SUBMIT_INVALID_MESSAGE:
+		'Please review the highlighted checkout details and try again.',
 	SUBMIT_PENDING_LABEL: 'Redirecting To Stripe...',
 	SUMMARY_TITLE: 'Payment Summary',
 	TITLE: 'Checkout',

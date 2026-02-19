@@ -23,8 +23,8 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
 	return (
 		<div className="ambient-surface relative min-h-screen">
 			{/* Specimen Registry Backdrop */}
-			<div className="specimen-grid fixed inset-0 opacity-20 pointer-events-none" />
-			<Particles className="fixed inset-0" count={30} />
+			<div className="specimen-grid pointer-events-none fixed inset-0 hidden opacity-20 md:block" />
+			<Particles className="fixed inset-0 hidden md:block" count={24} />
 
 			<div className="relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-20">
 				<motion.div
