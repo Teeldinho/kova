@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 
 import { queryClient } from '@/shared/api'
 import { useRouteScrollTop } from '@/shared/model'
+import { MotionProvider } from './MotionProvider'
 
 interface AppProvidersProps {
 	children: ReactNode
@@ -13,7 +14,9 @@ function AppProvidersContent({ children }: AppProvidersProps) {
 	useRouteScrollTop()
 
 	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>
+			<MotionProvider>{children}</MotionProvider>
+		</QueryClientProvider>
 	)
 }
 

@@ -1,4 +1,5 @@
 import { Moon, Sun } from '@phosphor-icons/react'
+import { useHydrated } from '@tanstack/react-router'
 
 import { Button } from '@/shared/ui'
 
@@ -7,6 +8,7 @@ import { useTheme } from '../model/useTheme'
 
 export function ThemeToggle() {
 	const { isDarkMode, handleThemeToggle } = useTheme()
+	const isHydrated = useHydrated()
 
 	return (
 		<Button
@@ -17,7 +19,7 @@ export function ThemeToggle() {
 			onClick={handleThemeToggle}
 			aria-label={THEME.TOGGLE_ARIA_LABEL}
 		>
-			{isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+			{isHydrated && isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
 		</Button>
 	)
 }
