@@ -6,6 +6,8 @@ import {
 	ProductDetailPage,
 	ProductDetailPending,
 } from '@/pages/product-detail'
+import { APP_NAME, SEO } from '@/shared/config'
+import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
 
 export const Route = createFileRoute('/products/$productId')({
 	loader: async ({ context, params }) => {
@@ -16,11 +18,65 @@ export const Route = createFileRoute('/products/$productId')({
 		}
 
 		await context.queryClient.ensureQueryData(productQueries.detail(productId))
-		await context.queryClient.ensureQueryData(productQueries.list())
+
+		void context.queryClient.prefetchQuery(productQueries.list())
+
 		return null
 	},
 	pendingComponent: ProductDetailPending,
 	errorComponent: ProductDetailError,
+	head: ({ params }) => {
+		const canonicalUrl = getCanonicalUrl(`/products/${params.productId}`)
+		const ogImageUrl = getOgImageUrl()
+
+		return {
+			meta: [
+				{
+					title: `Product #${params.productId} - ${APP_NAME}`,
+				},
+				{
+					name: 'description',
+					content: SEO.DEFAULT_DESCRIPTION,
+				},
+				{
+					property: 'og:type',
+					content: 'product',
+				},
+				{
+					property: 'og:title',
+					content: `Product #${params.productId} - ${APP_NAME}`,
+				},
+				{
+					property: 'og:description',
+					content: SEO.DEFAULT_DESCRIPTION,
+				},
+				{
+					property: 'og:url',
+					content: canonicalUrl,
+				},
+				{
+					name: 'twitter:url',
+					content: canonicalUrl,
+				},
+				...(ogImageUrl
+					? [
+							{
+								property: 'og:image',
+								content: ogImageUrl,
+							},
+						]
+					: []),
+			],
+			links: canonicalUrl
+				? [
+						{
+							rel: 'canonical',
+							href: canonicalUrl,
+						},
+					]
+				: [],
+		}
+	},
 	component: ProductDetailRoute,
 })
 

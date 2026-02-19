@@ -8,5 +8,6 @@ export {
 	PAGINATION,
 	ROUTER,
 	ROUTES,
+	SEO,
 	SORT_OPTIONS,
 } from './constants'

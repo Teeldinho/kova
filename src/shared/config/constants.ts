@@ -1,11 +1,24 @@
 export const APP_NAME = 'KOVA' as const
 export const APP_TAGLINE = 'Every detail, considered.' as const
 
+export const SEO = {
+	DEFAULT_DESCRIPTION:
+		'Curated essentials with a sharp silhouette, precise materials, and everyday utility.',
+	DEFAULT_OG_IMAGE_PATH: '/logo512.png',
+	SITE_URL_ENV_KEY: 'VITE_SITE_URL',
+	TWITTER_CARD: 'summary_large_image',
+	DEFAULT_ROBOTS_CONTENT: 'index,follow',
+	SITEMAP_PATH: '/sitemap.xml',
+	SITEMAP_CACHE_CONTROL:
+		'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
+} as const
+
 export const ROUTES = {
 	CART: '/cart',
 	CHECKOUT: '/checkout',
 	CHECKOUT_ERROR: '/checkout/error',
 	CHECKOUT_SUCCESS: '/checkout/success',
+	PRODUCT_DETAIL: '/products/$productId',
 	HOME: '/',
 } as const
 
