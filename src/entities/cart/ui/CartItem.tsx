@@ -1,0 +1,118 @@
+import { Minus, Plus, Trash } from '@phosphor-icons/react'
+import { Link } from '@tanstack/react-router'
+import { Button } from '@/shared/ui'
+import type { CartItem as CartItemType } from '../model/types'
+import { useCartItem } from '../model/useCartItem'
+
+interface CartItemProps {
+	item: CartItemType
+	handleCartItemIncrease: () => void
+	handleCartItemDecrease: () => void
+	handleCartItemRemove: () => void
+	/**
+	 * Called when the user navigates to the product detail page via the image
+	 * or title link. Use this to close a parent sheet/drawer, for example.
+	 * Optional — omit when no side-effect is needed (e.g. CartPage).
+	 */
+	onNavigate?: () => void
+}
+
+export function CartItem({
+	item,
+	handleCartItemIncrease,
+	handleCartItemDecrease,
+	handleCartItemRemove,
+	onNavigate,
+}: CartItemProps) {
+	const {
+		decreaseQuantityLabel,
+		displayPrice,
+		imageAlt,
+		imageSrc,
+		increaseQuantityLabel,
+		productId,
+		quantity,
+		removeLabel,
+		title,
+	} = useCartItem(item)
+
+	return (
+		<article className="flex gap-6 py-6">
+			{/* Image — links to product detail page */}
+			<Link
+				to="/products/$productId"
+				params={{ productId }}
+				onClick={onNavigate}
+				className="block h-24 w-24 shrink-0 overflow-hidden border border-border bg-muted/30 p-3 transition-opacity hover:opacity-80"
+				aria-label={`View ${title}`}
+			>
+				<img
+					src={imageSrc}
+					alt={imageAlt}
+					className="h-full w-full object-contain"
+					loading="lazy"
+				/>
+			</Link>
+
+			<div className="min-w-0 flex-1 space-y-3">
+				{/* Title — also links to product detail page */}
+				<Link
+					to="/products/$productId"
+					params={{ productId }}
+					onClick={onNavigate}
+					className="block"
+				>
+					<h3 className="line-clamp-2 font-mono text-sm font-bold uppercase tracking-tight text-foreground transition-colors hover:text-primary">
+						{title}
+					</h3>
+				</Link>
+
+				{/* Quantity controls — separate from any Link, zero propagation risk */}
+				<div className="flex items-center justify-between gap-4">
+					<p className="font-mono text-base font-black text-primary">
+						{displayPrice}
+					</p>
+
+					<div className="flex items-center bg-background">
+						<Button
+							type="button"
+							variant="outline"
+							size="icon-sm"
+							className="h-9 w-9 rounded-none border-2 border-r-0 border-border hover:bg-primary hover:text-background hover:border-primary"
+							onClick={handleCartItemDecrease}
+							aria-label={decreaseQuantityLabel}
+						>
+							<Minus size={12} weight="bold" />
+						</Button>
+						<div className="flex h-9 w-14 items-center justify-center border-y-2 border-border bg-background">
+							<span className="font-mono text-xs font-bold">
+								{quantity.toString().padStart(2, '0')}
+							</span>
+						</div>
+						<Button
+							type="button"
+							variant="outline"
+							size="icon-sm"
+							className="h-9 w-9 rounded-none border-2 border-l-0 border-border hover:bg-primary hover:text-background hover:border-primary"
+							onClick={handleCartItemIncrease}
+							aria-label={increaseQuantityLabel}
+						>
+							<Plus size={12} weight="bold" />
+						</Button>
+					</div>
+				</div>
+
+				<Button
+					type="button"
+					variant="ghost"
+					size="sm"
+					className="h-8 px-0 font-mono text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:bg-transparent hover:text-destructive"
+					onClick={handleCartItemRemove}
+				>
+					<Trash size={12} className="mr-1.5" />
+					{removeLabel}
+				</Button>
+			</div>
+		</article>
+	)
+}

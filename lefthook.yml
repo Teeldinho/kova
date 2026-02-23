@@ -1,0 +1,16 @@
+pre-commit:
+  commands:
+    protect-branches:
+      run: |
+        BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ] || [ "$BRANCH" = "develop" ]; then
+          echo "ERROR: Direct commits to $BRANCH are not allowed."
+          echo "Create a feature branch: git checkout -b feature/your-feature"
+          exit 1
+        fi
+    biome-check:
+      glob: "*.{ts,tsx,js,jsx,json}"
+      run: npx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+    typecheck:
+      run: npx tsc --noEmit
