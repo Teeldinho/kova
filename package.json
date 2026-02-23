@@ -2,6 +2,10 @@
 	"name": "kova-store",
 	"private": true,
 	"type": "module",
+	"packageManager": "npm@11.5.1",
+	"engines": {
+		"node": ">=22.18.0"
+	},
 	"scripts": {
 		"dev": "vite dev --port 3000",
 		"build": "vite build",
