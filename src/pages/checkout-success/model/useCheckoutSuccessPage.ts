@@ -1,8 +1,8 @@
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 
-import { useCart } from '@/entities/cart'
+import { clearCart } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'
 
 import { CHECKOUT_SUCCESS } from '../config/constants'
@@ -15,16 +15,24 @@ export function useCheckoutSuccessPage({
 	sessionId,
 }: UseCheckoutSuccessPageParams) {
 	const navigate = useNavigate()
-	const { handleCartClear } = useCart()
+	const processedSessionIdsRef = useRef<Set<string>>(new Set())
 
 	useEffect(() => {
 		if (!sessionId) {
 			return
 		}
 
-		handleCartClear()
-		toast.success(CHECKOUT_SUCCESS.TOAST.TITLE)
-	}, [handleCartClear, sessionId])
+		if (processedSessionIdsRef.current.has(sessionId)) {
+			return
+		}
+
+		processedSessionIdsRef.current.add(sessionId)
+
+		clearCart()
+		toast.success(CHECKOUT_SUCCESS.TOAST.TITLE, {
+			id: CHECKOUT_SUCCESS.TOAST.ID,
+		})
+	}, [sessionId])
 
 	const handleCheckoutSuccessContinue = () => {
 		navigate({ to: ROUTES.HOME })

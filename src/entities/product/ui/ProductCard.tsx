@@ -28,7 +28,6 @@ export function ProductCard({
 		displayTitle,
 		motionDelay,
 		motionDuration,
-		motionOffsetY,
 		productId,
 	} = useProductCard({ index, product })
 
@@ -42,8 +41,8 @@ export function ProductCard({
 
 	return (
 		<motion.div
-			initial={{ opacity: 0, y: motionOffsetY }}
-			whileInView={{ opacity: 1, y: 0 }}
+			initial={{ opacity: 0.85 }}
+			whileInView={{ opacity: 1 }}
 			viewport={{ once: true, margin: '-100px' }}
 			transition={{
 				duration: motionDuration,

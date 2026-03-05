@@ -1,11 +1,10 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 
-import { productQueries } from '@/entities/product'
 import {
 	CATALOG_SEARCH_DEFAULTS,
 	catalogSearchSchema,
 } from '@/features/catalog-filters'
-import { CatalogError, CatalogPage, CatalogPending } from '@/pages/catalog'
+import { CatalogError, CatalogPage } from '@/pages/catalog'
 import { getServerSiteUrl } from '@/shared/api'
 import { APP_NAME, APP_TAGLINE, SEO } from '@/shared/config'
 import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
@@ -64,11 +63,7 @@ export const Route = createFileRoute('/')({
 	search: {
 		middlewares: [stripSearchParams(CATALOG_SEARCH_DEFAULTS)],
 	},
-	loader: async ({ context }) => {
-		await context.queryClient.ensureQueryData(productQueries.list())
-		return null
-	},
-	pendingComponent: CatalogPending,
+	loader: () => null,
 	errorComponent: CatalogError,
 	component: CatalogPage,
 })

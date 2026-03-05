@@ -25,6 +25,5 @@ export function useProductCard({ product, index }: UseProductCardParams) {
 		motionDelay: index * ANIMATION.STAGGER_DELAY,
 		motionDuration: ANIMATION.FADE_DURATION,
 		productId: String(product.id),
-		motionOffsetY: PRODUCT.CARD_ANIMATION_OFFSET_Y,
 	}
 }

@@ -2,6 +2,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router'
 import { type ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import { PAGINATION } from '@/shared/config'
+import { SCROLL_EASING, useLenis } from '@/shared/model'
 
 import { CATALOG_FILTER } from '../config/constants'
 import type { CatalogSearch } from '../config/searchSchema'
@@ -9,14 +10,24 @@ import {
 	getCategoryLabelByValue,
 	getSortLabelByValue,
 } from '../lib/catalogFilterLabels'
+import { scrollCatalogProductsSection } from '../lib/scrollCatalogProductsSection'
 import { buildCatalogSearch } from '../lib/searchParams'
 
 export function useCatalogFilters() {
 	const search = useSearch({ from: '/' })
 	const navigate = useNavigate({ from: '/' })
+	const lenis = useLenis()
 	const [searchInputValue, setSearchInputValue] = useState(search.q)
 	const selectedCategoryLabel = getCategoryLabelByValue(search.category)
 	const selectedSortLabel = getSortLabelByValue(search.sort)
+	const pageChangeScrollOptions = {
+		duration:
+			SCROLL_EASING.DURATION *
+			CATALOG_FILTER.PAGE_CHANGE_SCROLL_DURATION_MULTIPLIER,
+		easing: SCROLL_EASING.EASING,
+		force: true,
+		offset: CATALOG_FILTER.PAGE_CHANGE_SCROLL_OFFSET_PX,
+	} as const
 
 	useEffect(() => {
 		setSearchInputValue(search.q)
@@ -93,6 +104,11 @@ export function useCatalogFilters() {
 					page,
 				}),
 			}),
+		})
+
+		scrollCatalogProductsSection({
+			lenis,
+			scrollOptions: pageChangeScrollOptions,
 		})
 	}
 
