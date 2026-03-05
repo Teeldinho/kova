@@ -116,12 +116,12 @@ export function ProductCard({
 
 				<div className="relative z-20 space-y-4 border-t border-border bg-card p-6 transition-colors group-hover:bg-background">
 					<div className="space-y-1">
-						<span className="font-mono text-[9px] uppercase tracking-[0.3em] text-primary/60 font-bold">
+						<span className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-foreground">
 							{categoryLabel}
 						</span>
-						<h3 className="font-mono text-sm leading-tight font-black uppercase tracking-tighter text-foreground group-hover:text-primary transition-colors line-clamp-1">
+						<h2 className="line-clamp-1 font-mono text-sm leading-tight font-black tracking-tighter text-foreground uppercase transition-colors group-hover:text-primary">
 							{displayTitle}
-						</h3>
+						</h2>
 					</div>
 
 					<div className="flex flex-col gap-3 border-t border-border/40 pt-4 lg:flex-row lg:items-center lg:justify-between">
