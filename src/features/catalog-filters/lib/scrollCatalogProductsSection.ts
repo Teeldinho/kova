@@ -5,7 +5,29 @@ const SCROLL_BEHAVIOR = {
 	block: 'start',
 } as const
 
-export function scrollCatalogProductsSection() {
+interface LenisScrollToOptions {
+	duration: number
+	easing: (value: number) => number
+	force: boolean
+	offset: number
+}
+
+interface LenisController {
+	scrollTo: (
+		target: HTMLElement,
+		options?: Partial<LenisScrollToOptions>,
+	) => void
+}
+
+interface ScrollCatalogProductsSectionOptions {
+	lenis?: LenisController
+	scrollOptions?: LenisScrollToOptions
+}
+
+export function scrollCatalogProductsSection({
+	lenis,
+	scrollOptions,
+}: ScrollCatalogProductsSectionOptions = {}) {
 	if (typeof window === 'undefined') {
 		return
 	}
@@ -15,6 +37,11 @@ export function scrollCatalogProductsSection() {
 	)
 
 	if (!productsSection) {
+		return
+	}
+
+	if (lenis && scrollOptions) {
+		lenis.scrollTo(productsSection, scrollOptions)
 		return
 	}
 

@@ -4,8 +4,18 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { CATALOG_FILTER } from '../config/constants'
 
-const { navigateMock, useNavigateMock, useSearchMock } = vi.hoisted(() => ({
+const {
+	lenisMock,
+	navigateMock,
+	useLenisMock,
+	useNavigateMock,
+	useSearchMock,
+} = vi.hoisted(() => ({
+	lenisMock: {
+		scrollTo: vi.fn(),
+	},
 	navigateMock: vi.fn(),
+	useLenisMock: vi.fn(),
 	useNavigateMock: vi.fn(),
 	useSearchMock: vi.fn(),
 }))
@@ -13,6 +23,14 @@ const { navigateMock, useNavigateMock, useSearchMock } = vi.hoisted(() => ({
 vi.mock('@tanstack/react-router', () => ({
 	useNavigate: useNavigateMock,
 	useSearch: useSearchMock,
+}))
+
+vi.mock('@/shared/model', () => ({
+	SCROLL_EASING: {
+		DURATION: 1.35,
+		EASING: vi.fn(),
+	},
+	useLenis: useLenisMock,
 }))
 
 import { useCatalogFilters } from './useCatalogFilters'
@@ -24,12 +42,15 @@ describe('useCatalogFilters', () => {
 
 	afterEach(() => {
 		vi.useRealTimers()
+		lenisMock.scrollTo.mockReset()
 		navigateMock.mockReset()
+		useLenisMock.mockReset()
 		useNavigateMock.mockReset()
 		useSearchMock.mockReset()
 	})
 
 	test('updates search params through handlers', () => {
+		useLenisMock.mockReturnValue(lenisMock)
 		useSearchMock.mockReturnValue({
 			category: 'all',
 			limit: 12,
@@ -77,6 +98,7 @@ describe('useCatalogFilters', () => {
 	})
 
 	test('debounces input search updates and keeps local search value', () => {
+		useLenisMock.mockReturnValue(lenisMock)
 		useSearchMock.mockReturnValue({
 			category: 'all',
 			limit: 12,
@@ -117,6 +139,7 @@ describe('useCatalogFilters', () => {
 	})
 
 	test('returns placeholders when selected values are unknown', () => {
+		useLenisMock.mockReturnValue(lenisMock)
 		useSearchMock.mockReturnValue({
 			category: 'unknown',
 			limit: 12,
@@ -132,6 +155,7 @@ describe('useCatalogFilters', () => {
 	})
 
 	test('scrolls to catalog section when page changes', () => {
+		useLenisMock.mockReturnValue(lenisMock)
 		useSearchMock.mockReturnValue({
 			category: 'all',
 			limit: 12,
@@ -141,12 +165,10 @@ describe('useCatalogFilters', () => {
 		})
 		useNavigateMock.mockReturnValue(navigateMock)
 
-		const scrollIntoViewMock = vi.fn()
+		const productsSectionElement = document.createElement('section')
 		const getElementByIdMock = vi
 			.spyOn(document, 'getElementById')
-			.mockReturnValue({
-				scrollIntoView: scrollIntoViewMock,
-			} as unknown as HTMLElement)
+			.mockReturnValue(productsSectionElement)
 
 		const { result } = renderHook(() => useCatalogFilters())
 
@@ -157,9 +179,11 @@ describe('useCatalogFilters', () => {
 		expect(getElementByIdMock).toHaveBeenCalledWith(
 			CATALOG_FILTER.IDS.PRODUCTS_SECTION,
 		)
-		expect(scrollIntoViewMock).toHaveBeenCalledWith({
-			behavior: 'smooth',
-			block: 'start',
+		expect(lenisMock.scrollTo).toHaveBeenCalledWith(productsSectionElement, {
+			duration: 0.945,
+			easing: expect.any(Function),
+			force: true,
+			offset: CATALOG_FILTER.PAGE_CHANGE_SCROLL_OFFSET_PX,
 		})
 
 		getElementByIdMock.mockRestore()
