@@ -4,7 +4,12 @@ export const CATALOG_HERO = {
 	TITLE: 'THE EDIT',
 	DESCRIPTION:
 		'Curated essentials with a sharp silhouette, precise materials, and everyday utility.',
-	TOTAL_ITEMS_SUFFIX: 'products',
+	ARCHIVE_INDEX_LABEL: 'Archive Index',
+	ARCHIVE_INDEX_VALUE: 'LIVE',
+	STATUS_LABEL: 'Status',
+	STATUS_VALUE: 'Active_Archive',
+	REGISTRY_CIRCLE_TEXT: 'Registry • Specimen • Archive • ',
+	PROTOCOL_VERSION: 'Sync_Protocol_v4.0.6',
 } as const
 
 export const CATALOG_GRID_DESKTOP_CLASS_PATTERN = [
