@@ -1,10 +1,24 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useLenis } from 'lenis/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useCart, useCartLineItems } from '@/entities/cart'
 import { ROUTES } from '@/shared/config'
+import { formatPrice } from '@/shared/lib'
 import { useCartSheet } from '@/shared/model'
+
+import { CART_SHEET } from '../config/constants'
+
+const getSummaryExpandedDefault = (): boolean => {
+	if (
+		typeof window === 'undefined' ||
+		typeof window.matchMedia !== 'function'
+	) {
+		return true
+	}
+
+	return window.matchMedia(CART_SHEET.SUMMARY.DESKTOP_MEDIA_QUERY).matches
+}
 
 export function useCartSheetWidget() {
 	const {
@@ -21,6 +35,9 @@ export function useCartSheetWidget() {
 		useCartSheet()
 	const navigate = useNavigate()
 	const lenis = useLenis()
+	const [isSummaryExpanded, setIsSummaryExpanded] = useState(
+		getSummaryExpandedDefault,
+	)
 
 	const cartItems = useCartLineItems({
 		handleCartItemQuantityUpdate,
@@ -39,11 +56,16 @@ export function useCartSheetWidget() {
 	 */
 	useEffect(() => {
 		if (isOpen) {
+			setIsSummaryExpanded(getSummaryExpandedDefault())
 			lenis?.stop()
 		} else {
 			lenis?.start()
 		}
 	}, [isOpen, lenis])
+
+	const handleCartSummaryToggle = () => {
+		setIsSummaryExpanded((current) => !current)
+	}
 
 	const handleCartStartShopping = () => {
 		handleCartSheetClose()
@@ -68,17 +90,23 @@ export function useCartSheetWidget() {
 	}
 
 	return {
+		compactSummaryLabel: CART_SHEET.SUMMARY.TITLE,
+		compactSummaryTotalLabel: `Total ${formatPrice(total)}`,
 		discount,
+		expandSummaryLabel: CART_SHEET.SUMMARY.EXPAND_LABEL,
 		isOpen,
+		isSummaryExpanded,
 		items,
 		rewardSnapshot,
 		cartItems,
+		handleCartSummaryToggle,
 		handleCartCheckoutNavigate,
 		handleCartViewNavigate,
 		handleCartItemNavigate,
 		subtotal,
 		tax,
 		total,
+		collapseSummaryLabel: CART_SHEET.SUMMARY.COLLAPSE_LABEL,
 		handleCartStartShopping,
 		handleCartSheetOpenChange,
 	}
