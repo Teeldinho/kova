@@ -9,6 +9,7 @@ import {
 	getCategoryLabelByValue,
 	getSortLabelByValue,
 } from '../lib/catalogFilterLabels'
+import { scrollCatalogProductsSection } from '../lib/scrollCatalogProductsSection'
 import { buildCatalogSearch } from '../lib/searchParams'
 
 export function useCatalogFilters() {
@@ -94,6 +95,8 @@ export function useCatalogFilters() {
 				}),
 			}),
 		})
+
+		scrollCatalogProductsSection()
 	}
 
 	return {

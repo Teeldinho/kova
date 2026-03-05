@@ -7,6 +7,7 @@ export const CATALOG_FILTER = {
 	CATEGORY_PLACEHOLDER: 'Category',
 	IDS: {
 		CATEGORY: 'catalog-category',
+		PRODUCTS_SECTION: 'catalog-products-section',
 		SEARCH: 'catalog-search',
 		SORT: 'catalog-sort',
 	},

@@ -130,4 +130,38 @@ describe('useCatalogFilters', () => {
 
 		expect(result.current.selectedCategoryLabel).toBe('Category')
 	})
+
+	test('scrolls to catalog section when page changes', () => {
+		useSearchMock.mockReturnValue({
+			category: 'all',
+			limit: 12,
+			page: 1,
+			q: '',
+			sort: 'default',
+		})
+		useNavigateMock.mockReturnValue(navigateMock)
+
+		const scrollIntoViewMock = vi.fn()
+		const getElementByIdMock = vi
+			.spyOn(document, 'getElementById')
+			.mockReturnValue({
+				scrollIntoView: scrollIntoViewMock,
+			} as unknown as HTMLElement)
+
+		const { result } = renderHook(() => useCatalogFilters())
+
+		act(() => {
+			result.current.handleCatalogPageChange(2)
+		})
+
+		expect(getElementByIdMock).toHaveBeenCalledWith(
+			CATALOG_FILTER.IDS.PRODUCTS_SECTION,
+		)
+		expect(scrollIntoViewMock).toHaveBeenCalledWith({
+			behavior: 'smooth',
+			block: 'start',
+		})
+
+		getElementByIdMock.mockRestore()
+	})
 })
