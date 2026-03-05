@@ -364,6 +364,17 @@ This follows Partial Prerendering (PPR) principles: prioritize immediate renderi
 
 ![Homepage Progressive Loading State](./docs/screenshots/home-progressive-rendering.png)
 
+### Image delivery optimization
+
+KOVA currently optimizes remote product media through a URL-based transformation endpoint.
+
+- Responsive image variants are served with `srcset`.
+- Images are delivered as WebP with tuned quality settings.
+- Loading placeholders keep product and cart layouts stable while assets resolve.
+- Public assets are precompressed with gzip and brotli.
+
+In Next.js terms, this differs from the default `next/image` optimization path (`/_next/image`), which commonly uses Sharp in production. We intentionally keep optimization at the remote endpoint instead of running an in-app image processing service.
+
 ### Prefetch and route readiness
 
 - Product-detail navigation is pre-warmed so transitions feel immediate.
