@@ -11,7 +11,6 @@ const checkoutSuccessSearchSchema = z.object({
 })
 
 export const Route = createFileRoute('/checkout/success')({
-	ssr: false,
 	validateSearch: checkoutSuccessSearchSchema,
 	head: () => {
 		const canonicalUrl = getCanonicalUrl('/checkout/success')
