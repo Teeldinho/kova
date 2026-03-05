@@ -1,6 +1,9 @@
-import { Minus, Plus, Trash } from '@phosphor-icons/react'
+import { ImageSquare, Minus, Plus, Trash } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
+import { cn } from '@/shared/lib'
+import { useImageLoadState } from '@/shared/model'
 import { Button } from '@/shared/ui'
+import { CART } from '../config/constants'
 import type { CartItem as CartItemType } from '../model/types'
 import { useCartItem } from '../model/useCartItem'
 
@@ -15,6 +18,7 @@ interface CartItemProps {
 	 * Optional — omit when no side-effect is needed (e.g. CartPage).
 	 */
 	onNavigate?: () => void
+	className?: string
 }
 
 export function CartItem({
@@ -23,34 +27,54 @@ export function CartItem({
 	handleCartItemDecrease,
 	handleCartItemRemove,
 	onNavigate,
+	className,
 }: CartItemProps) {
 	const {
 		decreaseQuantityLabel,
 		displayPrice,
 		imageAlt,
+		imageSizes,
 		imageSrc,
+		imageSrcSet,
 		increaseQuantityLabel,
 		productId,
 		quantity,
 		removeLabel,
 		title,
 	} = useCartItem(item)
+	const { handleImageError, handleImageLoad, isImageLoaded } =
+		useImageLoadState(imageSrc)
 
 	return (
-		<article className="flex gap-4 py-6 sm:gap-6">
+		<article className={cn('flex gap-4 py-6 sm:gap-6', className)}>
 			{/* Image — links to product detail page */}
 			<Link
 				to="/products/$productId"
 				params={{ productId }}
 				onClick={onNavigate}
-				className="block h-24 w-24 shrink-0 overflow-hidden border border-border bg-muted/30 p-3 transition-opacity hover:opacity-80"
+				className="relative block h-24 w-24 shrink-0 overflow-hidden border border-border bg-muted/30 p-3 transition-opacity hover:opacity-80"
 				aria-label={`View ${title}`}
 			>
+				{!isImageLoaded ? (
+					<div className="absolute inset-0 z-10 flex items-center justify-center bg-muted/50 text-primary/60">
+						<ImageSquare size={20} weight="duotone" />
+					</div>
+				) : null}
 				<img
 					src={imageSrc}
 					alt={imageAlt}
-					className="h-full w-full object-contain"
+					srcSet={imageSrcSet}
+					sizes={imageSizes}
+					className={cn(
+						'h-full w-full object-contain transition-opacity duration-200',
+						isImageLoaded ? 'opacity-100' : 'opacity-0',
+					)}
 					loading="lazy"
+					decoding="async"
+					width={CART.IMAGE.SIZE_PX}
+					height={CART.IMAGE.SIZE_PX}
+					onLoad={handleImageLoad}
+					onError={handleImageError}
 				/>
 			</Link>
 
