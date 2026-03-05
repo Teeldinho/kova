@@ -30,22 +30,6 @@ vi.mock('@tanstack/react-router', () => ({
 
 import { useCartSheetWidget } from './useCartSheetWidget'
 
-const setMatchMedia = (matches: boolean) => {
-	Object.defineProperty(window, 'matchMedia', {
-		writable: true,
-		value: vi.fn((query: string) => ({
-			matches,
-			media: query,
-			onchange: null,
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
-			dispatchEvent: vi.fn(),
-			addListener: vi.fn(),
-			removeListener: vi.fn(),
-		})),
-	})
-}
-
 const setupHookMocks = () => {
 	const handleCartItemQuantityUpdate = vi.fn()
 	const handleCartItemRemove = vi.fn()
@@ -118,7 +102,6 @@ const setupHookMocks = () => {
 
 describe('useCartSheetWidget', () => {
 	test('returns mapped line item handlers', () => {
-		setMatchMedia(true)
 		const {
 			handleCartItemQuantityUpdate,
 			handleCartItemRemove,
@@ -168,12 +151,11 @@ describe('useCartSheetWidget', () => {
 		expect(navigateMock).toHaveBeenNthCalledWith(2, { to: '/checkout' })
 	})
 
-	test('defaults summary to collapsed on mobile viewport', () => {
-		setMatchMedia(false)
+	test('defaults summary to expanded on all viewports', () => {
 		setupHookMocks()
 
 		const { result } = renderHook(() => useCartSheetWidget())
 
-		expect(result.current.isSummaryExpanded).toBe(false)
+		expect(result.current.isSummaryExpanded).toBe(true)
 	})
 })

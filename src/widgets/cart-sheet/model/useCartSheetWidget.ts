@@ -9,16 +9,8 @@ import { useCartSheet } from '@/shared/model'
 
 import { CART_SHEET } from '../config/constants'
 
-const getSummaryExpandedDefault = (): boolean => {
-	if (
-		typeof window === 'undefined' ||
-		typeof window.matchMedia !== 'function'
-	) {
-		return true
-	}
-
-	return window.matchMedia(CART_SHEET.SUMMARY.DESKTOP_MEDIA_QUERY).matches
-}
+const getSummaryExpandedDefault = (): boolean =>
+	CART_SHEET.SUMMARY.DEFAULT_EXPANDED
 
 export function useCartSheetWidget() {
 	const {
@@ -35,7 +27,7 @@ export function useCartSheetWidget() {
 		useCartSheet()
 	const navigate = useNavigate()
 	const lenis = useLenis()
-	const [isSummaryExpanded, setIsSummaryExpanded] = useState(
+	const [isSummaryExpanded, setIsSummaryExpanded] = useState<boolean>(
 		getSummaryExpandedDefault,
 	)
 
