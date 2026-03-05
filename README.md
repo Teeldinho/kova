@@ -338,19 +338,47 @@ The flow below demonstrates both ends of the sandbox journey: hosted Stripe chec
 
 Storefront UX quality is tightly coupled to performance and intent-based loading.
 
-### Lighthouse evidence after optimization pass
+### Lighthouse benchmark (latest run)
 
-Recent optimization work raised Lighthouse outcomes on the product-detail flow, including a 100 SEO score in the audited run.
+In the latest landing-page audit, KOVA reached a full Lighthouse score:
 
-![Lighthouse Product Detail Optimization](./docs/screenshots/lighthouse-product-detail-optimization.png)
+- Performance: 100
+- Accessibility: 100
+- Best Practices: 100
+- SEO: 100
+
+We treat this as a benchmark snapshot and continue tuning from there as features evolve.
+
+![Lighthouse 100 Across All Categories](./docs/screenshots/lighthouse-landing-perfect-100.png)
+
+### Progressive rendering architecture
+
+KOVA uses a Server-Side Rendering (SSR) first architecture with progressive region loading on the landing page.
+
+- The initial document renders core structure and above-the-fold context immediately.
+- High-priority UI surfaces (layout shell and hero) are shown first.
+- Product-heavy regions resolve progressively with stable placeholders, reducing visual instability while data is loading.
+- Query prewarming and intent-based prefetch improve continuity when moving from listing to product detail pages.
+
+This follows Partial Prerendering (PPR) principles: prioritize immediate rendering of the critical path, then progressively resolve secondary regions as data becomes available.
+
+![Homepage Progressive Loading State](./docs/screenshots/home-progressive-rendering.png)
+
+### Image delivery optimization
+
+KOVA currently optimizes remote product media through a URL-based transformation endpoint.
+
+- Responsive image variants are served with `srcset`.
+- Images are delivered as WebP with tuned quality settings.
+- Loading placeholders keep product and cart layouts stable while assets resolve.
+- Public assets are precompressed with gzip and brotli.
+
+In Next.js terms, this differs from the default `next/image` optimization path (`/_next/image`), which commonly uses Sharp in production. We intentionally keep optimization at the remote endpoint instead of running an in-app image processing service.
 
 ### Prefetch and route readiness
 
-- Route loaders pre-warm data with `ensureQueryData`:
-  - `src/routes/index.tsx`
-  - `src/routes/products/$productId.tsx`
-- Product-card intent handlers prefetch detail data on hover/focus:
-  - `src/entities/product/model/useProductCardPrefetch.ts`
+- Product-detail navigation is pre-warmed so transitions feel immediate.
+- Product-card intent handlers prefetch detail data on hover/focus.
 
 ### Query caching strategy
 
@@ -438,6 +466,20 @@ Key files:
 - `src/entities/order/lib/buildCheckoutLineItems.ts`
 
 The goal is simple: reduce purchase hesitation by making progress visible and actionable.
+
+### Reward visibility at checkout decision points
+
+Gamification is most effective when shoppers can see progress at the exact moment they decide whether to continue browsing or checkout.
+
+In the cart-sheet flow:
+
+- Reward and summary details are visible by default so progress context is immediate.
+- Shoppers can collapse details when they want a cleaner view.
+- `Go To Checkout` remains visible at all times, even when summary details are collapsed.
+
+This keeps reward momentum visible while preserving a clear path to purchase.
+
+![Landing - Dark with Cart Sheet](./docs/screenshots/landing-dark-cart-sheet.png)
 
 ## Motion and interaction language
 
@@ -542,8 +584,6 @@ Most screenshots are grouped here to keep the documentation readable while still
 ### Landing and catalog
 
 ![Landing - Dark](./docs/screenshots/home-dark-products.png)
-
-![Landing - Dark with Cart Sheet](./docs/screenshots/landing-dark-cart-sheet.png)
 
 ![Catalog - Mobile Light](./docs/screenshots/home-mobile-light.png)
 

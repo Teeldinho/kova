@@ -38,10 +38,10 @@ export function Footer() {
 					</nav>
 
 					<div className="flex items-center justify-between gap-6 border-t border-border/50 pt-6">
-						<p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60">
+						<p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
 							© {currentYear} {appName}
 						</p>
-						<p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60">
+						<p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
 							Archive_v4.0.6
 						</p>
 					</div>

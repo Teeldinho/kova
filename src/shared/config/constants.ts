@@ -92,6 +92,12 @@ export const QUERY = {
 	REFETCH_ON_WINDOW_FOCUS: false,
 } as const
 
+export const IMAGE = {
+	CDN_BASE_URL: 'https://wsrv.nl/',
+	DEFAULT_QUALITY: 70,
+	DEFAULT_FORMAT: 'webp',
+} as const
+
 export const SORT_OPTIONS = [
 	{ label: 'Default', value: 'default' },
 	{ label: 'Price: Low to High', value: 'price-asc' },

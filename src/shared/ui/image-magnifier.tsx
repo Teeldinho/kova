@@ -1,3 +1,4 @@
+import { ImageSquare } from '@phosphor-icons/react'
 import {
 	AnimatePresence,
 	m as motion,
@@ -8,6 +9,7 @@ import {
 import { useRef, useState } from 'react'
 
 import { cn } from '@/shared/lib'
+import { useImageLoadState } from '@/shared/model'
 
 interface ImageMagnifierProps {
 	src: string
@@ -28,6 +30,8 @@ export function ImageMagnifier({
 }: ImageMagnifierProps) {
 	const [imgSize, setImgSize] = useState<[number, number]>([0, 0])
 	const [showMagnifier, setShowMagnifier] = useState(false)
+	const { handleImageError, handleImageLoad, isImageLoaded } =
+		useImageLoadState(src)
 
 	const mouseX = useMotionValue(0)
 	const mouseY = useMotionValue(0)
@@ -71,7 +75,23 @@ export function ImageMagnifier({
 				boundsRef.current = null
 			}}
 		>
-			<img src={src} alt={alt} className="h-full w-full object-contain" />
+			{!isImageLoaded ? (
+				<div className="absolute inset-0 z-10 flex items-center justify-center bg-muted/40 text-primary/70">
+					<ImageSquare size={40} weight="duotone" />
+				</div>
+			) : null}
+
+			<img
+				src={src}
+				alt={alt}
+				className={cn(
+					'h-full w-full object-contain transition-opacity duration-300',
+					isImageLoaded ? 'opacity-100' : 'opacity-0',
+				)}
+				decoding="async"
+				onLoad={handleImageLoad}
+				onError={handleImageError}
+			/>
 
 			<AnimatePresence>
 				{showMagnifier ? (

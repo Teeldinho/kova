@@ -1,5 +1,6 @@
 export { useCartSheet } from './useCartSheet'
 export { useCustomCursor } from './useCustomCursor'
 export { useDecryptText } from './useDecryptText'
+export { useImageLoadState } from './useImageLoadState'
 export { SCROLL_EASING, useLenis } from './useLenis'
 export { useRouteScrollTop } from './useRouteScrollTop'

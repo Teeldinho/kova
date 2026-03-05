@@ -9,6 +9,11 @@ import {
 	getRequestOrigin,
 } from '@/shared/lib'
 
+const getSitemapHeaders = () => ({
+	'Cache-Control': SITEMAP.CACHE_CONTROL,
+	'Content-Type': SITEMAP.CONTENT_TYPE,
+})
+
 export const Route = createFileRoute('/sitemap.xml')({
 	server: {
 		handlers: {
@@ -23,10 +28,12 @@ export const Route = createFileRoute('/sitemap.xml')({
 				])
 
 				return new Response(sitemapXml, {
-					headers: {
-						'Cache-Control': SITEMAP.CACHE_CONTROL,
-						'Content-Type': SITEMAP.CONTENT_TYPE,
-					},
+					headers: getSitemapHeaders(),
+				})
+			},
+			HEAD: async () => {
+				return new Response(null, {
+					headers: getSitemapHeaders(),
 				})
 			},
 		},

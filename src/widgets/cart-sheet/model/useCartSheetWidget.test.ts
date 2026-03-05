@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 
 const {
@@ -30,74 +30,97 @@ vi.mock('@tanstack/react-router', () => ({
 
 import { useCartSheetWidget } from './useCartSheetWidget'
 
+const setupHookMocks = () => {
+	const handleCartItemQuantityUpdate = vi.fn()
+	const handleCartItemRemove = vi.fn()
+	const handleCartSheetClose = vi.fn()
+	const cartLineItems = [
+		{
+			item: {
+				product: {
+					id: 1,
+					title: 'Test Product',
+					price: 10,
+					description: 'desc',
+					category: 'electronics',
+					image: '/product.jpg',
+					rating: { rate: 4.2, count: 10 },
+				},
+				quantity: 2,
+			},
+			handleCartItemDecrease: vi.fn(),
+			handleCartItemIncrease: vi.fn(),
+			handleCartItemRemove: vi.fn(),
+		},
+	]
+
+	useCartMock.mockReturnValue({
+		discount: 1,
+		items: [
+			{
+				product: {
+					id: 1,
+					title: 'Test Product',
+					price: 10,
+					description: 'desc',
+					category: 'electronics',
+					image: '/product.jpg',
+					rating: { rate: 4.2, count: 10 },
+				},
+				quantity: 2,
+			},
+		],
+		subtotal: 20,
+		tax: 0,
+		total: 20,
+		rewardSnapshot: {
+			activeTier: null,
+			nextTier: null,
+			amountToNextTierInZar: 0,
+			progressToNextTier: 1,
+			discountRate: 0,
+			hasUnlockedReward: false,
+		},
+		handleCartItemQuantityUpdate,
+		handleCartItemRemove,
+	})
+
+	useCartSheetMock.mockReturnValue({
+		isOpen: true,
+		handleCartSheetOpenChange: vi.fn(),
+		handleCartSheetClose,
+	})
+	useCartLineItemsMock.mockReturnValue(cartLineItems)
+	useNavigateMock.mockReturnValue(navigateMock)
+
+	return {
+		handleCartItemQuantityUpdate,
+		handleCartItemRemove,
+		handleCartSheetClose,
+	}
+}
+
 describe('useCartSheetWidget', () => {
 	test('returns mapped line item handlers', () => {
-		const handleCartItemQuantityUpdate = vi.fn()
-		const handleCartItemRemove = vi.fn()
-		const handleCartSheetClose = vi.fn()
-		const cartLineItems = [
-			{
-				item: {
-					product: {
-						id: 1,
-						title: 'Test Product',
-						price: 10,
-						description: 'desc',
-						category: 'electronics',
-						image: '/product.jpg',
-						rating: { rate: 4.2, count: 10 },
-					},
-					quantity: 2,
-				},
-				handleCartItemDecrease: vi.fn(),
-				handleCartItemIncrease: vi.fn(),
-				handleCartItemRemove: vi.fn(),
-			},
-		]
-
-		useCartMock.mockReturnValue({
-			discount: 1,
-			items: [
-				{
-					product: {
-						id: 1,
-						title: 'Test Product',
-						price: 10,
-						description: 'desc',
-						category: 'electronics',
-						image: '/product.jpg',
-						rating: { rate: 4.2, count: 10 },
-					},
-					quantity: 2,
-				},
-			],
-			subtotal: 20,
-			tax: 0,
-			total: 20,
-			rewardSnapshot: {
-				activeTier: null,
-				nextTier: null,
-				amountToNextTierInZar: 0,
-				progressToNextTier: 1,
-				discountRate: 0,
-				hasUnlockedReward: false,
-			},
+		const {
 			handleCartItemQuantityUpdate,
 			handleCartItemRemove,
-		})
-
-		useCartSheetMock.mockReturnValue({
-			isOpen: true,
-			handleCartSheetOpenChange: vi.fn(),
 			handleCartSheetClose,
-		})
-		useCartLineItemsMock.mockReturnValue(cartLineItems)
-		useNavigateMock.mockReturnValue(navigateMock)
+		} = setupHookMocks()
 
 		const { result } = renderHook(() => useCartSheetWidget())
 
 		expect(result.current.cartItems).toHaveLength(1)
 		expect(result.current.discount).toBe(1)
+		expect(result.current.isSummaryExpanded).toBe(true)
+		expect(result.current.compactSummaryLabel).toBe('Summary')
+		expect(result.current.compactSummaryTotalLabel).toContain('R')
+
+		act(() => {
+			result.current.handleCartSummaryToggle()
+		})
+
+		expect(result.current.isSummaryExpanded).toBe(false)
 		result.current.cartItems[0]?.handleCartItemIncrease()
 		result.current.cartItems[0]?.handleCartItemDecrease()
 		result.current.cartItems[0]?.handleCartItemRemove()
@@ -126,5 +149,13 @@ describe('useCartSheetWidget', () => {
 		expect(handleCartSheetClose).toHaveBeenCalled()
 		expect(navigateMock).toHaveBeenNthCalledWith(1, { to: '/cart' })
 		expect(navigateMock).toHaveBeenNthCalledWith(2, { to: '/checkout' })
+	})
+
+	test('defaults summary to expanded on all viewports', () => {
+		setupHookMocks()
+
+		const { result } = renderHook(() => useCartSheetWidget())
+
+		expect(result.current.isSummaryExpanded).toBe(true)
 	})
 })

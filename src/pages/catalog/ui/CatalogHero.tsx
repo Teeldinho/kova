@@ -1,11 +1,43 @@
 import { ArrowDown } from '@phosphor-icons/react'
 import { m as motion } from 'framer-motion'
+import { useMemo } from 'react'
 
 import { Magnetic } from '@/shared/ui'
 
 import { CATALOG_HERO } from '../config/constants'
+import { createHeroTitleCharacters } from '../lib/heroTitle'
+
+const heroTitleContainerVariants = {
+	hidden: {},
+	visible: {
+		transition: {
+			delayChildren: 0.06,
+			staggerChildren: CATALOG_HERO.TITLE_LETTER_STAGGER_SEC,
+		},
+	},
+}
+
+const heroTitleLetterVariants = {
+	hidden: {
+		opacity: 0,
+		y: CATALOG_HERO.TITLE_LETTER_Y_OFFSET_PX,
+	},
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: {
+			duration: CATALOG_HERO.TITLE_LETTER_DURATION_SEC,
+			ease: [0.16, 1, 0.3, 1] as const,
+		},
+	},
+}
 
 export function CatalogHero() {
+	const titleCharacters = useMemo(
+		() => createHeroTitleCharacters(CATALOG_HERO.TITLE),
+		[],
+	)
+
 	return (
 		<section className="ambient-surface relative overflow-hidden border-b border-border bg-background pb-12 pt-32 md:pb-32 md:pt-48">
 			<div className="specimen-grid absolute inset-0" />
@@ -21,9 +53,35 @@ export function CatalogHero() {
 				</div>
 
 				<div className="relative mb-12 overflow-hidden py-4">
-					<h1 className="hero-enter-up font-mono text-7xl font-black uppercase tracking-tighter text-foreground leading-none md:text-9xl lg:text-[12rem]">
-						{CATALOG_HERO.TITLE}
-					</h1>
+					<motion.h1
+						className="font-mono text-7xl font-black uppercase tracking-tighter text-foreground leading-none md:text-9xl lg:text-[12rem]"
+						aria-label={CATALOG_HERO.TITLE}
+						initial="hidden"
+						animate="visible"
+						variants={heroTitleContainerVariants}
+					>
+						{titleCharacters.map((letter) =>
+							letter.isSpace ? (
+								<span
+									key={letter.id}
+									className="inline-block"
+									aria-hidden="true"
+									style={{ width: `${CATALOG_HERO.TITLE_WORD_GAP_EM}em` }}
+								>
+									{'\u00A0'}
+								</span>
+							) : (
+								<motion.span
+									key={letter.id}
+									className="inline-block"
+									aria-hidden="true"
+									variants={heroTitleLetterVariants}
+								>
+									{letter.character}
+								</motion.span>
+							),
+						)}
+					</motion.h1>
 					<div className="hero-enter-line mt-6 h-1.5 w-full bg-primary origin-left" />
 				</div>
 

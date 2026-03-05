@@ -28,5 +28,7 @@ describe('useCartItem', () => {
 		expect(result.displayPrice).toContain('R')
 		expect(result.decreaseQuantityLabel).toBe('Decrease quantity')
 		expect(result.increaseQuantityLabel).toBe('Increase quantity')
+		expect(result.imageSrc).toBe('/test.jpg')
+		expect(result.imageSrcSet).toBeUndefined()
 	})
 })
