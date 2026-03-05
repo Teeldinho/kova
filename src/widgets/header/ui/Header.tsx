@@ -56,7 +56,7 @@ export function Header() {
 							>
 								<ShoppingBag size={18} weight="bold" />
 								{itemCount > 0 && (
-									<span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center bg-primary px-1 font-mono text-[8px] font-black text-foreground dark:text-primary-foreground">
+									<span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center bg-primary px-1 font-mono text-[8px] font-black text-black">
 										{itemCount.toString().padStart(2, '0')}
 									</span>
 								)}
