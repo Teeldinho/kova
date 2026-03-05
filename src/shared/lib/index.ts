@@ -6,6 +6,10 @@ export {
 } from './decryptText'
 export { formatPrice } from './formatCurrency'
 export {
+	getOptimizedImageSrcSet,
+	getOptimizedImageUrl,
+} from './getOptimizedImage'
+export {
 	getAbsoluteUrl,
 	getCanonicalUrl,
 	getOgImageUrl,
