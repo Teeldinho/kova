@@ -11,6 +11,13 @@ export const PRODUCT = {
 	QUERY_LIST_STALE_TIME_MS: 1000 * 60 * 5,
 	MAX_RATING: 5,
 	DESCRIPTION_TRUNCATE_LENGTH: 100,
+	IMAGE: {
+		DEFAULT_WIDTH: 480,
+		HEIGHT: 640,
+		WIDTH: 640,
+		SIZES: '(max-width: 768px) 92vw, (max-width: 1280px) 45vw, 30vw',
+		SRCSET_WIDTHS: [240, 320, 480, 640],
+	},
 } as const
 
 export const PRODUCT_CATEGORIES = [

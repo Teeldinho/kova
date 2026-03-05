@@ -10,11 +10,7 @@ export function CheckoutForm({
 	handleCheckoutFormSubmit,
 }: CheckoutFormProps) {
 	return (
-		<form
-			className="grid gap-6 lg:grid-cols-[1fr_320px]"
-			onSubmit={handleCheckoutFormSubmit}
-			noValidate
-		>
+		<form className="space-y-6" onSubmit={handleCheckoutFormSubmit} noValidate>
 			{children}
 		</form>
 	)

@@ -1,6 +1,10 @@
+import { ImageSquare } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 import { m as motion } from 'framer-motion'
 import type { ReactNode } from 'react'
+
+import { cn } from '@/shared/lib'
+import { useImageLoadState } from '@/shared/model'
 
 import { PRODUCT } from '../config/constants'
 import type { Product } from '../model/types'
@@ -26,9 +30,14 @@ export function ProductCard({
 		categoryLabel,
 		displayPrice,
 		displayTitle,
+		imageAlt,
+		imageSizes,
+		imageSrc,
+		imageSrcSet,
 		motionDelay,
 		motionDuration,
 		productId,
+		shouldPrioritizeImage,
 	} = useProductCard({ index, product })
 
 	const { handleProductCardFocus, handleProductCardPointerEnter } =
@@ -38,6 +47,8 @@ export function ProductCard({
 	const hasActionNode = Boolean(actionNode)
 	const { cardStyle, handleProductCardMouseLeave, handleProductCardMouseMove } =
 		useProductCardMotion({ hasActionNode })
+	const { handleImageError, handleImageLoad, isImageLoaded } =
+		useImageLoadState(imageSrc)
 
 	return (
 		<motion.div
@@ -73,11 +84,28 @@ export function ProductCard({
 				<div className="product-image-surface relative flex h-72 items-center justify-center overflow-hidden bg-background md:h-80 lg:h-96">
 					<div className="scanning-line z-20" />
 
+					{!isImageLoaded ? (
+						<div className="absolute inset-0 z-10 flex items-center justify-center bg-muted/40 text-primary/70">
+							<ImageSquare size={34} weight="duotone" />
+						</div>
+					) : null}
+
 					<motion.img
-						src={product.image}
-						alt={product.title}
-						className="relative z-10 h-full w-full object-contain p-12 transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110"
-						loading="lazy"
+						src={imageSrc}
+						alt={imageAlt}
+						srcSet={imageSrcSet}
+						sizes={imageSizes}
+						className={cn(
+							'relative z-10 h-full w-full object-contain p-12 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-110',
+							isImageLoaded ? 'opacity-100' : 'opacity-0',
+						)}
+						fetchPriority={shouldPrioritizeImage ? 'high' : 'auto'}
+						loading={shouldPrioritizeImage ? 'eager' : 'lazy'}
+						decoding="async"
+						width={PRODUCT.IMAGE.WIDTH}
+						height={PRODUCT.IMAGE.HEIGHT}
+						onLoad={handleImageLoad}
+						onError={handleImageError}
 						style={
 							hasActionNode ? undefined : { transform: 'translateZ(40px)' }
 						}

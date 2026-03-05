@@ -65,6 +65,7 @@ export function CartPage() {
 								handleCartItemIncrease={cartItem.handleCartItemIncrease}
 								handleCartItemDecrease={cartItem.handleCartItemDecrease}
 								handleCartItemRemove={cartItem.handleCartItemRemove}
+								className="py-2"
 							/>
 						</motion.div>
 					))}

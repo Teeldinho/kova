@@ -35,4 +35,9 @@ export const CART = {
 	START_SHOPPING_LABEL: 'Start Shopping',
 	SHIPPING_PLACEHOLDER: 'Free',
 	TAX_RATE: 0,
+	IMAGE: {
+		SIZE_PX: 96,
+		SIZES: '96px',
+		SRCSET_WIDTHS: [96, 192],
+	},
 } as const

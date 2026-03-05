@@ -10,7 +10,7 @@ const MOCK_PRODUCT: Product = {
 	price: 10,
 	description: 'A product used for testing',
 	category: "men's clothing",
-	image: '/item.png',
+	image: 'https://cdn.example.com/item.png',
 	rating: {
 		rate: 4.4,
 		count: 14,
@@ -29,5 +29,17 @@ describe('useProductCard', () => {
 		expect(result.displayTitle).toContain('...')
 		expect(result.displayPrice).toContain('R')
 		expect(result.motionDelay).toBeGreaterThan(0)
+		expect(result.imageSrc).toContain('https://wsrv.nl/?')
+		expect(result.imageSrcSet).toContain('320w')
+		expect(result.shouldPrioritizeImage).toBe(false)
+	})
+
+	test('prioritizes first card image loading', () => {
+		const result = useProductCard({
+			index: 0,
+			product: MOCK_PRODUCT,
+		})
+
+		expect(result.shouldPrioritizeImage).toBe(true)
 	})
 })

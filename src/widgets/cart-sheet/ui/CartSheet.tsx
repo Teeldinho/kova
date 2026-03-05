@@ -1,3 +1,4 @@
+import { CaretDown } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 import { AnimatePresence, m as motion } from 'framer-motion'
 
@@ -19,13 +20,19 @@ import { useCartSheetWidget } from '../model/useCartSheetWidget'
 export function CartSheet() {
 	const {
 		cartItems,
+		collapseSummaryLabel,
+		compactSummaryLabel,
+		compactSummaryTotalLabel,
 		discount,
+		expandSummaryLabel,
 		handleCartCheckoutNavigate,
 		handleCartItemNavigate,
+		handleCartSummaryToggle,
 		handleCartStartShopping,
 		handleCartViewNavigate,
 		handleCartSheetOpenChange,
 		isOpen,
+		isSummaryExpanded,
 		items,
 		rewardSnapshot,
 		subtotal,
@@ -57,76 +64,119 @@ export function CartSheet() {
 				 * allow native overflow-y scroll to work even while lenis.stop() blocks
 				 * background page scroll.
 				 */}
-				<div className="flex-1 overflow-y-auto px-8 py-6" data-lenis-prevent>
-					<AnimatePresence mode="popLayout">
-						{items.length === 0 ? (
-							<motion.div
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								className="flex h-full flex-col items-center justify-center gap-8 text-center"
-							>
-								<div className="h-16 w-16 rounded-full border-2 border-dashed border-border flex items-center justify-center">
-									<div className="h-2 w-2 rounded-full bg-border" />
-								</div>
-								<p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-									{CART.EMPTY_LABEL}
-								</p>
-								<Link
-									to={ROUTES.HOME}
-									onClick={handleCartStartShopping}
-									className={cn(
-										buttonVariants({ variant: 'outline' }),
-										'font-mono text-[10px] uppercase tracking-widest border-2',
-									)}
+				<div className="flex min-h-0 flex-1 flex-col" data-lenis-prevent>
+					<div className="flex-1 overflow-y-auto px-8 py-6">
+						<AnimatePresence mode="popLayout">
+							{items.length === 0 ? (
+								<motion.div
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									className="flex h-full flex-col items-center justify-center gap-8 text-center"
 								>
-									{CART.START_SHOPPING_LABEL}
-								</Link>
-							</motion.div>
-						) : (
-							<div className="space-y-1">
-								{cartItems.map((cartItem, index) => (
-									<motion.div
-										key={`cart-item-${cartItem.item.product.id}`}
-										initial={{ x: 20, opacity: 0 }}
-										animate={{ opacity: 1, x: 0 }}
-										exit={{ x: 20, opacity: 0 }}
-										transition={{
-											delay: index * 0.05,
-											ease: [0.23, 1, 0.32, 1],
-										}}
-										className="border-b border-border last:border-0"
+									<div className="h-16 w-16 rounded-full border-2 border-dashed border-border flex items-center justify-center">
+										<div className="h-2 w-2 rounded-full bg-border" />
+									</div>
+									<p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+										{CART.EMPTY_LABEL}
+									</p>
+									<Link
+										to={ROUTES.HOME}
+										onClick={handleCartStartShopping}
+										className={cn(
+											buttonVariants({ variant: 'outline' }),
+											'font-mono text-[10px] uppercase tracking-widest border-2',
+										)}
 									>
-										<CartItem
-											item={cartItem.item}
-											handleCartItemIncrease={cartItem.handleCartItemIncrease}
-											handleCartItemDecrease={cartItem.handleCartItemDecrease}
-											handleCartItemRemove={cartItem.handleCartItemRemove}
-											onNavigate={handleCartItemNavigate}
-										/>
+										{CART.START_SHOPPING_LABEL}
+									</Link>
+								</motion.div>
+							) : (
+								<div className="space-y-1">
+									{cartItems.map((cartItem, index) => (
+										<motion.div
+											key={`cart-item-${cartItem.item.product.id}`}
+											initial={{ x: 20, opacity: 0 }}
+											animate={{ opacity: 1, x: 0 }}
+											exit={{ x: 20, opacity: 0 }}
+											transition={{
+												delay: index * 0.05,
+												ease: [0.23, 1, 0.32, 1],
+											}}
+											className="border-b border-border last:border-0"
+										>
+											<CartItem
+												item={cartItem.item}
+												handleCartItemIncrease={cartItem.handleCartItemIncrease}
+												handleCartItemDecrease={cartItem.handleCartItemDecrease}
+												handleCartItemRemove={cartItem.handleCartItemRemove}
+												onNavigate={handleCartItemNavigate}
+											/>
+										</motion.div>
+									))}
+								</div>
+							)}
+						</AnimatePresence>
+					</div>
+
+					{items.length > 0 ? (
+						<div className="mt-auto border-t border-border bg-card/30 px-8 py-6">
+							<button
+								type="button"
+								onClick={handleCartSummaryToggle}
+								aria-expanded={isSummaryExpanded}
+								aria-label={
+									isSummaryExpanded ? collapseSummaryLabel : expandSummaryLabel
+								}
+								className="flex w-full items-center justify-between border border-border bg-background px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-widest"
+							>
+								<div className="flex items-center gap-2">
+									<span>{compactSummaryLabel}</span>
+									<div className="h-1 w-1 bg-border" />
+									<span>{compactSummaryTotalLabel}</span>
+								</div>
+								<CaretDown
+									size={14}
+									className={cn(
+										'text-primary transition-transform duration-300',
+										isSummaryExpanded ? 'rotate-180' : 'rotate-0',
+									)}
+								/>
+							</button>
+
+							<AnimatePresence initial={false}>
+								{isSummaryExpanded ? (
+									<motion.div
+										initial={{ height: 0, opacity: 0 }}
+										animate={{ height: 'auto', opacity: 1 }}
+										exit={{ height: 0, opacity: 0 }}
+										transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
+										className="overflow-hidden"
+									>
+										<div className="pt-4">
+											<CartSummary
+												discount={discount}
+												rewardSnapshot={rewardSnapshot}
+												subtotal={subtotal}
+												tax={tax}
+												total={total}
+												handleCheckoutStart={handleCartCheckoutNavigate}
+												checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
+											/>
+										</div>
 									</motion.div>
-								))}
-							</div>
-						)}
-					</AnimatePresence>
+								) : null}
+							</AnimatePresence>
+						</div>
+					) : null}
 				</div>
 
 				<div className="border-t border-border p-8 bg-card/30">
-					<CartSummary
-						discount={discount}
-						rewardSnapshot={rewardSnapshot}
-						subtotal={subtotal}
-						tax={tax}
-						total={total}
-						handleCheckoutStart={handleCartCheckoutNavigate}
-						checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
-					/>
-
 					{items.length > 0 ? (
 						<Button
 							type="button"
 							variant="outline"
 							onClick={handleCartViewNavigate}
-							className="mt-4 h-12 w-full font-mono text-[10px] uppercase tracking-widest border-2 hover:bg-background"
+							className="h-12 w-full font-mono text-[10px] uppercase tracking-widest border-2 hover:bg-background"
 						>
 							{CART.VIEW_CART_LABEL}
 						</Button>

@@ -4,6 +4,10 @@ export const CATALOG_HERO = {
 	TITLE: 'THE EDIT',
 	DESCRIPTION:
 		'Curated essentials with a sharp silhouette, precise materials, and everyday utility.',
+	TITLE_LETTER_DURATION_SEC: 0.42,
+	TITLE_LETTER_STAGGER_SEC: 0.045,
+	TITLE_LETTER_Y_OFFSET_PX: 18,
+	TITLE_WORD_GAP_EM: 0.36,
 	ARCHIVE_INDEX_LABEL: 'Archive Index',
 	ARCHIVE_INDEX_VALUE: 'LIVE',
 	STATUS_LABEL: 'Status',
