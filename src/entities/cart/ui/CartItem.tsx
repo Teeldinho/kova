@@ -37,7 +37,7 @@ export function CartItem({
 	} = useCartItem(item)
 
 	return (
-		<article className="flex gap-6 py-6">
+		<article className="flex gap-4 py-6 sm:gap-6">
 			{/* Image — links to product detail page */}
 			<Link
 				to="/products/$productId"
@@ -68,23 +68,23 @@ export function CartItem({
 				</Link>
 
 				{/* Quantity controls — separate from any Link, zero propagation risk */}
-				<div className="flex items-center justify-between gap-4">
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
 					<p className="font-mono text-base font-black text-primary">
 						{displayPrice}
 					</p>
 
-					<div className="flex items-center bg-background">
+					<div className="flex w-fit items-center bg-background sm:ml-auto">
 						<Button
 							type="button"
 							variant="outline"
 							size="icon-sm"
-							className="h-9 w-9 rounded-none border-2 border-r-0 border-border hover:bg-primary hover:text-background hover:border-primary"
+							className="h-8 w-8 rounded-none border-2 border-r-0 border-border hover:bg-primary hover:text-background hover:border-primary sm:h-9 sm:w-9"
 							onClick={handleCartItemDecrease}
 							aria-label={decreaseQuantityLabel}
 						>
 							<Minus size={12} weight="bold" />
 						</Button>
-						<div className="flex h-9 w-14 items-center justify-center border-y-2 border-border bg-background">
+						<div className="flex h-8 w-12 items-center justify-center border-y-2 border-border bg-background sm:h-9 sm:w-14">
 							<span className="font-mono text-xs font-bold">
 								{quantity.toString().padStart(2, '0')}
 							</span>
@@ -93,7 +93,7 @@ export function CartItem({
 							type="button"
 							variant="outline"
 							size="icon-sm"
-							className="h-9 w-9 rounded-none border-2 border-l-0 border-border hover:bg-primary hover:text-background hover:border-primary"
+							className="h-8 w-8 rounded-none border-2 border-l-0 border-border hover:bg-primary hover:text-background hover:border-primary sm:h-9 sm:w-9"
 							onClick={handleCartItemIncrease}
 							aria-label={increaseQuantityLabel}
 						>
