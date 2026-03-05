@@ -6,4 +6,4 @@ export {
 } from './generated/fakestore'
 export { getServerSiteUrl } from './getServerSiteUrl'
 export { getSitemapProductIds } from './getSitemapProductIds'
-export { queryClient } from './queryClient'
+export { createQueryClient } from './queryClient'

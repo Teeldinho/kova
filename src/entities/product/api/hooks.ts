@@ -1,6 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
 
 import { productQueries } from './queries'
+
+export const useProductsQuery = () => useQuery(productQueries.list())
 
 export const useProducts = () => useSuspenseQuery(productQueries.list())
 

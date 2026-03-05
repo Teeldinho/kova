@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 
-const { useCatalogFiltersMock, useProductsMock } = vi.hoisted(() => ({
+const { useCatalogFiltersMock, useProductsQueryMock } = vi.hoisted(() => ({
 	useCatalogFiltersMock: vi.fn(),
-	useProductsMock: vi.fn(),
+	useProductsQueryMock: vi.fn(),
 }))
 
 vi.mock('@/entities/product', async () => {
@@ -14,7 +14,7 @@ vi.mock('@/entities/product', async () => {
 
 	return {
 		...actual,
-		useProducts: useProductsMock,
+		useProductsQuery: useProductsQueryMock,
 	}
 })
 
@@ -33,7 +33,7 @@ import { useCatalogPage } from './useCatalogPage'
 
 describe('useCatalogPage', () => {
 	test('returns filtered, sorted, and paginated products', () => {
-		useProductsMock.mockReturnValue({
+		useProductsQueryMock.mockReturnValue({
 			data: [
 				{
 					id: 1,
@@ -54,6 +54,7 @@ describe('useCatalogPage', () => {
 					rating: { count: 20, rate: 4.8 },
 				},
 			],
+			isPending: false,
 		})
 
 		useCatalogFiltersMock.mockReturnValue({

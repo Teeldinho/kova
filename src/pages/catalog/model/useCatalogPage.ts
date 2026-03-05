@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useProducts } from '@/entities/product'
+import { useProductsQuery } from '@/entities/product'
 import {
 	filterProducts,
 	paginateProducts,
@@ -9,7 +9,8 @@ import {
 } from '@/features/catalog-filters'
 
 export function useCatalogPage() {
-	const { data: products } = useProducts()
+	const { data: productsData, isPending } = useProductsQuery()
+	const products = productsData ?? []
 	const {
 		search,
 		handleCatalogCategoryChange,
@@ -42,6 +43,7 @@ export function useCatalogPage() {
 	)
 
 	return {
+		isProductsPending: isPending && productsData === undefined,
 		products: paginatedProducts.items,
 		totalItems: paginatedProducts.totalItems,
 		totalPages: paginatedProducts.totalPages,

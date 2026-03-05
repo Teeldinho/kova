@@ -8,6 +8,7 @@ export const CHECKOUT_SUCCESS = {
 	ORDER_ID_LABEL: 'Order ID',
 	ORDER_ID_PREFIX: 'ORD',
 	TOAST: {
+		ID: 'checkout-success-order-confirmed',
 		TITLE: 'Order confirmed',
 	},
 	STATUS_LABEL: 'Status',

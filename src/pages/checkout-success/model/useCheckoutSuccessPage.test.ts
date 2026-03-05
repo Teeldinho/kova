@@ -1,22 +1,16 @@
 import { renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-const {
-	handleCartClearMock,
-	navigateMock,
-	toastSuccessMock,
-	useCartMock,
-	useNavigateMock,
-} = vi.hoisted(() => ({
-	handleCartClearMock: vi.fn(),
-	navigateMock: vi.fn(),
-	toastSuccessMock: vi.fn(),
-	useCartMock: vi.fn(),
-	useNavigateMock: vi.fn(),
-}))
+const { clearCartMock, navigateMock, toastSuccessMock, useNavigateMock } =
+	vi.hoisted(() => ({
+		clearCartMock: vi.fn(),
+		navigateMock: vi.fn(),
+		toastSuccessMock: vi.fn(),
+		useNavigateMock: vi.fn(),
+	}))
 
 vi.mock('@/entities/cart', () => ({
-	useCart: useCartMock,
+	clearCart: clearCartMock,
 }))
 
 vi.mock('@tanstack/react-router', () => ({
@@ -32,18 +26,14 @@ vi.mock('sonner', () => ({
 import { useCheckoutSuccessPage } from './useCheckoutSuccessPage'
 
 beforeEach(() => {
-	handleCartClearMock.mockReset()
+	clearCartMock.mockReset()
 	navigateMock.mockReset()
 	toastSuccessMock.mockReset()
-	useCartMock.mockReset()
 	useNavigateMock.mockReset()
 })
 
 describe('useCheckoutSuccessPage', () => {
 	test('clears cart and exposes continue handler', () => {
-		useCartMock.mockReturnValue({
-			handleCartClear: handleCartClearMock,
-		})
 		useNavigateMock.mockReturnValue(navigateMock)
 
 		const { result } = renderHook(() =>
@@ -52,8 +42,10 @@ describe('useCheckoutSuccessPage', () => {
 
 		result.current.handleCheckoutSuccessContinue()
 
-		expect(handleCartClearMock).toHaveBeenCalled()
-		expect(toastSuccessMock).toHaveBeenCalledWith('Order confirmed')
+		expect(clearCartMock).toHaveBeenCalled()
+		expect(toastSuccessMock).toHaveBeenCalledWith('Order confirmed', {
+			id: 'checkout-success-order-confirmed',
+		})
 		expect(result.current.orderDetails).toEqual([
 			{ label: 'Order ID', value: 'ORD-34567890' },
 			{ label: 'Status', value: 'Confirmed' },
@@ -63,14 +55,28 @@ describe('useCheckoutSuccessPage', () => {
 	})
 
 	test('does not clear cart when session id is missing', () => {
-		useCartMock.mockReturnValue({
-			handleCartClear: handleCartClearMock,
-		})
 		useNavigateMock.mockReturnValue(navigateMock)
 
 		renderHook(() => useCheckoutSuccessPage({ sessionId: undefined }))
 
-		expect(handleCartClearMock).not.toHaveBeenCalled()
+		expect(clearCartMock).not.toHaveBeenCalled()
 		expect(toastSuccessMock).not.toHaveBeenCalled()
+	})
+
+	test('handles rerender with same session id without duplicate side effects', () => {
+		useNavigateMock.mockReturnValue(navigateMock)
+
+		const { rerender } = renderHook(
+			({ sessionId }: { sessionId: string }) =>
+				useCheckoutSuccessPage({ sessionId }),
+			{
+				initialProps: { sessionId: 'cs_test_1234567890' },
+			},
+		)
+
+		rerender({ sessionId: 'cs_test_1234567890' })
+
+		expect(clearCartMock).toHaveBeenCalledTimes(1)
+		expect(toastSuccessMock).toHaveBeenCalledTimes(1)
 	})
 })

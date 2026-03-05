@@ -87,6 +87,11 @@ export const ROUTER = {
 	PRELOAD_STALE_TIME_MS: 1000 * 60 * 2,
 } as const
 
+export const QUERY = {
+	DEFAULT_STALE_TIME_MS: 1000 * 60 * 5,
+	REFETCH_ON_WINDOW_FOCUS: false,
+} as const
+
 export const SORT_OPTIONS = [
 	{ label: 'Default', value: 'default' },
 	{ label: 'Price: Low to High', value: 'price-asc' },
