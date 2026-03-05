@@ -159,8 +159,6 @@ export function CartSheet() {
 												subtotal={subtotal}
 												tax={tax}
 												total={total}
-												handleCheckoutStart={handleCartCheckoutNavigate}
-												checkoutLabel={CART.CHECKOUT_SHEET_LABEL}
 											/>
 										</div>
 									</motion.div>
@@ -172,14 +170,24 @@ export function CartSheet() {
 
 				<div className="border-t border-border p-8 bg-card/30">
 					{items.length > 0 ? (
-						<Button
-							type="button"
-							variant="outline"
-							onClick={handleCartViewNavigate}
-							className="h-12 w-full font-mono text-[10px] uppercase tracking-widest border-2 hover:bg-background"
-						>
-							{CART.VIEW_CART_LABEL}
-						</Button>
+						<div className="space-y-3">
+							<Button
+								type="button"
+								onClick={handleCartCheckoutNavigate}
+								className="h-11 w-full rounded-none font-mono text-[10px] uppercase tracking-widest"
+							>
+								{CART.CHECKOUT_SHEET_LABEL}
+							</Button>
+
+							<Button
+								type="button"
+								variant="outline"
+								onClick={handleCartViewNavigate}
+								className="h-12 w-full font-mono text-[10px] uppercase tracking-widest border-2 hover:bg-background"
+							>
+								{CART.VIEW_CART_LABEL}
+							</Button>
+						</div>
 					) : null}
 
 					<div className="mt-6 flex justify-center gap-2">
