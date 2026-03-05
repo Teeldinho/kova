@@ -1,3 +1,4 @@
+import jetbrainsMonoLatinWoff2 from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext } from '@tanstack/react-router'
 
@@ -86,6 +87,13 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 					: []),
 			],
 			links: [
+				{
+					rel: 'preload',
+					href: jetbrainsMonoLatinWoff2,
+					as: 'font',
+					type: 'font/woff2',
+					crossOrigin: 'anonymous',
+				},
 				{
 					rel: 'stylesheet',
 					href: appCss,
