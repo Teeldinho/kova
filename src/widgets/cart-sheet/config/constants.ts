@@ -1,7 +1,7 @@
 export const CART_SHEET = {
 	SUMMARY: {
 		COLLAPSE_LABEL: 'Collapse summary',
-		DESKTOP_MEDIA_QUERY: '(min-width: 768px)',
+		DEFAULT_EXPANDED: true,
 		EXPAND_LABEL: 'Expand summary',
 		TITLE: 'Summary',
 	},
