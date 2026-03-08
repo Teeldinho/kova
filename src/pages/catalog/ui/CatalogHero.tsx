@@ -39,7 +39,7 @@ export function CatalogHero() {
 	)
 
 	return (
-		<section className="ambient-surface relative overflow-hidden border-b border-border bg-background pb-12 pt-32 md:pb-32 md:pt-48">
+		<section className="ambient-surface relative overflow-hidden border-b border-border bg-background pb-16 pt-32 md:pb-32 md:pt-48">
 			<div className="specimen-grid absolute inset-0" />
 			<div className="scanning-line absolute inset-x-0 top-0 w-full" />
 
@@ -148,10 +148,10 @@ export function CatalogHero() {
 
 			<div className="absolute top-10 left-10 h-10 w-10 border-t border-l border-primary/20" />
 			<div className="absolute top-10 right-10 h-10 w-10 border-t border-r border-primary/20" />
-			<div className="absolute bottom-10 left-10 h-10 w-10 border-b border-l border-primary/20" />
-			<div className="absolute bottom-10 right-10 h-10 w-10 border-b border-r border-primary/20" />
+			<div className="absolute bottom-10 left-10 hidden h-10 w-10 border-b border-l border-primary/20 md:block" />
+			<div className="absolute bottom-10 right-10 hidden h-10 w-10 border-b border-r border-primary/20 md:block" />
 
-			<div className="absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground opacity-30">
+			<div className="mt-10 w-full text-center font-mono text-[9px] uppercase tracking-[0.4em] text-muted-foreground opacity-30 md:absolute md:bottom-10 md:left-1/2 md:mt-0 md:w-auto md:-translate-x-1/2">
 				{CATALOG_HERO.PROTOCOL_VERSION}
 			</div>
 		</section>
