@@ -44,10 +44,10 @@ export function CartSheet() {
 		<Sheet open={isOpen} onOpenChange={handleCartSheetOpenChange}>
 			<SheetContent
 				side="right"
-				className="flex h-full w-full flex-col p-0 border-l border-border bg-background sm:max-w-md"
+				className="flex h-full w-full flex-col border-l border-border bg-background p-0 sm:max-w-md"
 			>
-				<SheetHeader className="relative border-b border-border px-8 py-10 text-left bg-card/30">
-					<div className="absolute top-4 left-8 font-mono text-[8px] uppercase tracking-[0.3em] text-primary/60 font-bold">
+				<SheetHeader className="relative border-b border-border bg-card/30 px-6 py-8 text-left sm:px-8 sm:py-10">
+					<div className="absolute top-4 left-6 font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-primary/60 sm:left-8">
 						Specimen_Archive_v4.0
 					</div>
 					<SheetTitle className="font-mono text-3xl font-black uppercase tracking-tighter">
@@ -65,7 +65,7 @@ export function CartSheet() {
 				 * background page scroll.
 				 */}
 				<div className="flex min-h-0 flex-1 flex-col" data-lenis-prevent>
-					<div className="flex-1 overflow-y-auto px-8 py-6">
+					<div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8">
 						<AnimatePresence mode="popLayout">
 							{items.length === 0 ? (
 								<motion.div
@@ -116,59 +116,63 @@ export function CartSheet() {
 								</div>
 							)}
 						</AnimatePresence>
+
+						{items.length > 0 ? (
+							<div className="mt-6 border-t border-border bg-card/30 pt-6">
+								<button
+									type="button"
+									onClick={handleCartSummaryToggle}
+									aria-expanded={isSummaryExpanded}
+									aria-label={
+										isSummaryExpanded
+											? collapseSummaryLabel
+											: expandSummaryLabel
+									}
+									className="flex w-full items-center justify-between border border-border bg-background px-4 py-3 font-mono text-[9px] font-bold uppercase tracking-widest sm:text-[10px]"
+								>
+									<div className="flex min-w-0 items-center gap-2">
+										<span className="shrink-0">{compactSummaryLabel}</span>
+										<div className="h-1 w-1 shrink-0 bg-border" />
+										<span className="truncate text-left">
+											{compactSummaryTotalLabel}
+										</span>
+									</div>
+									<CaretDown
+										size={14}
+										className={cn(
+											'text-primary transition-transform duration-300',
+											isSummaryExpanded ? 'rotate-180' : 'rotate-0',
+										)}
+									/>
+								</button>
+
+								<AnimatePresence initial={false}>
+									{isSummaryExpanded ? (
+										<motion.div
+											initial={{ height: 0, opacity: 0 }}
+											animate={{ height: 'auto', opacity: 1 }}
+											exit={{ height: 0, opacity: 0 }}
+											transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
+											className="overflow-hidden"
+										>
+											<div className="pt-4">
+												<CartSummary
+													discount={discount}
+													rewardSnapshot={rewardSnapshot}
+													subtotal={subtotal}
+													tax={tax}
+													total={total}
+												/>
+											</div>
+										</motion.div>
+									) : null}
+								</AnimatePresence>
+							</div>
+						) : null}
 					</div>
-
-					{items.length > 0 ? (
-						<div className="mt-auto border-t border-border bg-card/30 px-8 py-6">
-							<button
-								type="button"
-								onClick={handleCartSummaryToggle}
-								aria-expanded={isSummaryExpanded}
-								aria-label={
-									isSummaryExpanded ? collapseSummaryLabel : expandSummaryLabel
-								}
-								className="flex w-full items-center justify-between border border-border bg-background px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-widest"
-							>
-								<div className="flex items-center gap-2">
-									<span>{compactSummaryLabel}</span>
-									<div className="h-1 w-1 bg-border" />
-									<span>{compactSummaryTotalLabel}</span>
-								</div>
-								<CaretDown
-									size={14}
-									className={cn(
-										'text-primary transition-transform duration-300',
-										isSummaryExpanded ? 'rotate-180' : 'rotate-0',
-									)}
-								/>
-							</button>
-
-							<AnimatePresence initial={false}>
-								{isSummaryExpanded ? (
-									<motion.div
-										initial={{ height: 0, opacity: 0 }}
-										animate={{ height: 'auto', opacity: 1 }}
-										exit={{ height: 0, opacity: 0 }}
-										transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
-										className="overflow-hidden"
-									>
-										<div className="pt-4">
-											<CartSummary
-												discount={discount}
-												rewardSnapshot={rewardSnapshot}
-												subtotal={subtotal}
-												tax={tax}
-												total={total}
-											/>
-										</div>
-									</motion.div>
-								) : null}
-							</AnimatePresence>
-						</div>
-					) : null}
 				</div>
 
-				<div className="border-t border-border p-8 bg-card/30">
+				<div className="border-t border-border bg-card/30 px-6 pt-6 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-8 sm:pb-8">
 					{items.length > 0 ? (
 						<div className="space-y-3">
 							<Button
