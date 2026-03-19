@@ -1,8 +1,7 @@
-import { Pagination } from '@/features/catalog-filters'
-
 import { useCatalogPage } from '../model/useCatalogPage'
 import { CatalogPending } from './CatalogPending'
 import { CatalogResultsMeta } from './CatalogResultsMeta'
+import { Pagination } from './Pagination'
 import { ProductGrid } from './ProductGrid'
 
 export function CatalogProductsSection() {

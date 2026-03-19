@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 
 import { useProductsQuery } from '@/entities/product'
+
 import {
 	filterProducts,
 	paginateProducts,
 	sortProducts,
-	useCatalogFilters,
-} from '@/features/catalog-filters'
+} from '../lib/catalogFilters'
+import { useCatalogFilters } from './useCatalogFilters'
 
 export function useCatalogPage() {
 	const { data: productsData, isPending } = useProductsQuery()

@@ -1,10 +1,10 @@
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
-
 import {
 	CATALOG_SEARCH_DEFAULTS,
+	CatalogError,
+	CatalogPage,
 	catalogSearchSchema,
-} from '@/features/catalog-filters'
-import { CatalogError, CatalogPage } from '@/pages/catalog'
+} from '@/pages/catalog'
 import { getServerSiteUrl } from '@/shared/api'
 import { APP_NAME, APP_TAGLINE, SEO } from '@/shared/config'
 import { getCanonicalUrl, getOgImageUrl } from '@/shared/lib'
