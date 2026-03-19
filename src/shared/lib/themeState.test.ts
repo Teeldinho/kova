@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-import { THEME } from '../config/constants'
+import { THEME } from '../config/theme'
 import {
 	getStoredTheme,
 	isValidTheme,
+	persistTheme,
 	resolveNextTheme,
 	resolveThemeFromMediaMatch,
 } from './themeState'
@@ -57,5 +58,47 @@ describe('resolveNextTheme', () => {
 	test('toggles to opposite theme', () => {
 		expect(resolveNextTheme(THEME.LIGHT)).toBe(THEME.DARK)
 		expect(resolveNextTheme(THEME.DARK)).toBe(THEME.LIGHT)
+	})
+})
+
+describe('storage safety', () => {
+	test('returns null when localStorage API is unavailable', () => {
+		const originalLocalStorage = globalThis.localStorage
+
+		Object.defineProperty(globalThis, 'localStorage', {
+			configurable: true,
+			writable: true,
+			value: {},
+		})
+
+		try {
+			expect(getStoredTheme()).toBeNull()
+		} finally {
+			Object.defineProperty(globalThis, 'localStorage', {
+				configurable: true,
+				writable: true,
+				value: originalLocalStorage,
+			})
+		}
+	})
+
+	test('does not throw when localStorage API is unavailable', () => {
+		const originalLocalStorage = globalThis.localStorage
+
+		Object.defineProperty(globalThis, 'localStorage', {
+			configurable: true,
+			writable: true,
+			value: {},
+		})
+
+		try {
+			expect(() => persistTheme(THEME.DARK)).not.toThrow()
+		} finally {
+			Object.defineProperty(globalThis, 'localStorage', {
+				configurable: true,
+				writable: true,
+				value: originalLocalStorage,
+			})
+		}
 	})
 })

@@ -130,8 +130,8 @@ FSD solves common scaling problems:
 | `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
 | `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
 | `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
-| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
-| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`, `src/entities/order`                         |
+| `features` | User use-cases and actions                  | *(currently empty; reserved for reusable multi-page flows)* |
+| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`                         |
 | `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 
 ### What each slice segment means
@@ -287,8 +287,8 @@ This is deterministic and easy to reason about because logic is pure and isolate
 
 Checkout submission logic lives in `model/` and is validated in:
 
-- `src/features/checkout/model/useCheckoutForm.ts`
-- `src/features/checkout/model/useCheckoutForm.test.ts`
+- `src/pages/checkout/model/useCheckoutForm.ts`
+- `src/pages/checkout/model/useCheckoutForm.test.ts`
 
 The test verifies invalid form data does not submit, and valid data does.
 
@@ -296,13 +296,16 @@ The test verifies invalid form data does not submit, and valid data does.
 
 Latest full Vitest run confirms broad coverage across `model/` and `lib/` layers, including the SEO/sitemap additions in this optimization cycle.
 
+- Test files: `57 passed (57)`
+- Tests: `206 passed (206)`
+
 ![Vitest Test Suite Pass Summary](./docs/screenshots/test-suite-pass-summary.png)
 
 ## Checkout reliability: Stripe + Zod
 
 Checkout session creation is implemented as a server function:
 
-- `src/features/stripe/api/createCheckoutSession.ts`
+- `src/pages/checkout/api/createCheckoutSession.ts`
 
 Reliability protections in this boundary:
 
@@ -312,8 +315,8 @@ Reliability protections in this boundary:
 
 Client orchestration:
 
-- `src/features/stripe/model/useStripeCheckout.ts`
-- `src/features/stripe/lib/mapStripeCheckoutError.ts`
+- `src/pages/checkout/model/useStripeCheckout.ts`
+- `src/pages/checkout/lib/mapStripeCheckoutError.ts`
 
 This keeps payment flow strict at input boundaries and explicit in failure behavior.
 
@@ -389,8 +392,8 @@ In Next.js terms, this differs from the default `next/image` optimization path (
 
 Catalog search uses a debounced input pipeline so typing stays responsive without triggering route/search updates on every keystroke.
 
-- Debounce source: `src/features/catalog-filters/config/constants.ts` (`SEARCH_DEBOUNCE_MS = 250`).
-- Search orchestration: `src/features/catalog-filters/model/useCatalogFilters.ts`.
+- Debounce source: `src/pages/catalog/config/constants.ts` (`SEARCH_DEBOUNCE_MS = 250`).
+- Search orchestration: `src/pages/catalog/model/useCatalogFilters.ts`.
 - The input state updates immediately, while URL search param updates are delayed intentionally.
 
 Why this helps:
@@ -423,8 +426,8 @@ Google Drive Link: [Prefetching walkthrough](https://drive.google.com/file/d/1XQ
 
 Key files:
 
-- `src/features/catalog-filters/config/searchSchema.ts`
-- `src/features/catalog-filters/lib/searchParams.ts`
+- `src/pages/catalog/config/searchSchema.ts`
+- `src/pages/catalog/lib/searchParams.ts`
 - `src/routes/index.tsx`
 
 ### SEO crawlability: dynamic sitemap and robots
@@ -463,7 +466,7 @@ Key files:
 - `src/entities/cart/lib/cartRewards.ts`
 - `src/entities/cart/ui/CartSummary.tsx`
 - `src/pages/product-detail/lib/rewardPreview.ts`
-- `src/entities/order/lib/buildCheckoutLineItems.ts`
+- `src/pages/checkout/lib/buildCheckoutLineItems.ts`
 
 The goal is simple: reduce purchase hesitation by making progress visible and actionable.
 

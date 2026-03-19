@@ -1,9 +1,9 @@
 import type { Product } from '@/entities/product'
 import { ProductCard } from '@/entities/product'
-import { QuickAddToCartButton } from '@/features/quick-add-to-cart'
 import { Card, CardContent } from '@/shared/ui'
 
 import { getCatalogGridItemClass } from '../lib/catalogGrid'
+import { QuickAddToCartButton } from './QuickAddToCartButton'
 
 interface ProductGridProps {
 	products: Product[]

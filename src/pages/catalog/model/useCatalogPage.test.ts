@@ -18,10 +18,10 @@ vi.mock('@/entities/product', async () => {
 	}
 })
 
-vi.mock('@/features/catalog-filters', async () => {
-	const actual = await vi.importActual<
-		typeof import('@/features/catalog-filters')
-	>('@/features/catalog-filters')
+vi.mock('./useCatalogFilters', async () => {
+	const actual = await vi.importActual<typeof import('./useCatalogFilters')>(
+		'./useCatalogFilters',
+	)
 
 	return {
 		...actual,

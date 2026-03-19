@@ -52,3 +52,4 @@ export {
 } from './sheet'
 export { Skeleton } from './skeleton'
 export { Toaster } from './sonner'
+export { ThemeToggle } from './ThemeToggle'

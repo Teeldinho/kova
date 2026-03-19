@@ -23,3 +23,10 @@ export const PRODUCT_DETAIL_ERROR = {
 	RETRY_LABEL: 'Retry',
 	TITLE: 'Product unavailable',
 } as const
+
+export const RELATED_PRODUCTS = {
+	MAX_COUNT: 4,
+	TITLE: 'Pair with this item',
+	DESCRIPTION: 'More from the same category',
+	COUNT_SUFFIX: 'options',
+} as const

@@ -3,12 +3,6 @@ import { m as motion } from 'framer-motion'
 
 import { CartSummary } from '@/entities/cart'
 import {
-	CHECKOUT_FORM,
-	CheckoutFields,
-	CheckoutForm,
-	CheckoutSubmitButton,
-} from '@/features/checkout'
-import {
 	Alert,
 	AlertDescription,
 	AlertTitle,
@@ -19,9 +13,12 @@ import {
 	Magnetic,
 } from '@/shared/ui'
 
-import { CHECKOUT_PAGE } from '../config/constants'
+import { CHECKOUT_FORM, CHECKOUT_PAGE } from '../config/constants'
 import { useCheckoutPage } from '../model/useCheckoutPage'
+import { CheckoutFields } from './CheckoutFields'
+import { CheckoutForm } from './CheckoutForm'
 import { CheckoutShell, CheckoutShellContent } from './CheckoutShell'
+import { CheckoutSubmitButton } from './CheckoutSubmitButton'
 
 export function CheckoutPage() {
 	const {

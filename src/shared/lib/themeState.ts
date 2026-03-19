@@ -1,4 +1,4 @@
-import { THEME, type Theme } from '../config/constants'
+import { THEME, type Theme } from '../config/theme'
 
 export const isValidTheme = (value: string | null): value is Theme =>
 	value === THEME.LIGHT || value === THEME.DARK
@@ -11,9 +11,17 @@ export const getStoredTheme = (): Theme | null => {
 		return null
 	}
 
-	const storedTheme = localStorage.getItem(THEME.STORAGE_KEY)
+	try {
+		if (typeof localStorage.getItem !== 'function') {
+			return null
+		}
 
-	return isValidTheme(storedTheme) ? storedTheme : null
+		const storedTheme = localStorage.getItem(THEME.STORAGE_KEY)
+
+		return isValidTheme(storedTheme) ? storedTheme : null
+	} catch {
+		return null
+	}
 }
 
 export const getSystemTheme = (): Theme => {
@@ -54,7 +62,15 @@ export const persistTheme = (theme: Theme): void => {
 		return
 	}
 
-	localStorage.setItem(THEME.STORAGE_KEY, theme)
+	try {
+		if (typeof localStorage.setItem !== 'function') {
+			return
+		}
+
+		localStorage.setItem(THEME.STORAGE_KEY, theme)
+	} catch {
+		// Storage can be unavailable in restricted environments.
+	}
 }
 
 export const resolveNextTheme = (currentTheme: Theme): Theme =>
