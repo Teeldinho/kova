@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
 const { createCheckoutSessionMock } = vi.hoisted(() => ({
 	createCheckoutSessionMock: vi.fn(),
@@ -7,6 +7,10 @@ const { createCheckoutSessionMock } = vi.hoisted(() => ({
 
 const { toastErrorMock } = vi.hoisted(() => ({
 	toastErrorMock: vi.fn(),
+}))
+
+const { consoleErrorMock } = vi.hoisted(() => ({
+	consoleErrorMock: vi.fn(),
 }))
 
 vi.mock('../api/createCheckoutSession', () => ({
@@ -23,8 +27,14 @@ import { useStripeCheckout } from './useStripeCheckout'
 
 describe('useStripeCheckout', () => {
 	beforeEach(() => {
+		vi.spyOn(console, 'error').mockImplementation(consoleErrorMock)
 		createCheckoutSessionMock.mockReset()
 		toastErrorMock.mockReset()
+		consoleErrorMock.mockReset()
+	})
+
+	afterEach(() => {
+		vi.restoreAllMocks()
 	})
 
 	test('redirects to stripe checkout URL on success', async () => {
@@ -73,6 +83,7 @@ describe('useStripeCheckout', () => {
 		)
 		expect(result.current.stripeCheckoutError).toBeNull()
 		expect(toastErrorMock).not.toHaveBeenCalled()
+		expect(consoleErrorMock).not.toHaveBeenCalled()
 
 		Object.defineProperty(window, 'location', {
 			configurable: true,
@@ -114,6 +125,10 @@ describe('useStripeCheckout', () => {
 		expect(toastErrorMock).toHaveBeenCalledWith('Checkout failed', {
 			description: 'Unable to start secure checkout. Please retry.',
 		})
+		expect(consoleErrorMock).toHaveBeenCalledWith(
+			'[stripe-checkout] unable to start checkout',
+			{ errorMessage: 'Stripe error' },
+		)
 	})
 
 	test('sets configuration error when secret key is unavailable', async () => {
@@ -153,5 +168,9 @@ describe('useStripeCheckout', () => {
 			description:
 				'Secure checkout is currently unavailable. Please contact support.',
 		})
+		expect(consoleErrorMock).toHaveBeenCalledWith(
+			'[stripe-checkout] unable to start checkout',
+			{ errorMessage: 'STRIPE_CHECKOUT_MISSING_SECRET_KEY' },
+		)
 	})
 })
