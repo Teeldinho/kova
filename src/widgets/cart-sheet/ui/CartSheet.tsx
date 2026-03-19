@@ -187,7 +187,7 @@ export function CartSheet() {
 								type="button"
 								variant="outline"
 								onClick={handleCartViewNavigate}
-								className="h-12 w-full font-mono text-[10px] uppercase tracking-widest border-2 hover:bg-background"
+								className="h-12 w-full border-2 font-mono text-[10px] uppercase tracking-widest"
 							>
 								{CART.VIEW_CART_LABEL}
 							</Button>
