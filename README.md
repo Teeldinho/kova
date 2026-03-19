@@ -296,6 +296,9 @@ The test verifies invalid form data does not submit, and valid data does.
 
 Latest full Vitest run confirms broad coverage across `model/` and `lib/` layers, including the SEO/sitemap additions in this optimization cycle.
 
+- Test files: `57 passed (57)`
+- Tests: `206 passed (206)`
+
 ![Vitest Test Suite Pass Summary](./docs/screenshots/test-suite-pass-summary.png)
 
 ## Checkout reliability: Stripe + Zod
