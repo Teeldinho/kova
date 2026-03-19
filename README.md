@@ -130,7 +130,7 @@ FSD solves common scaling problems:
 | `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
 | `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
 | `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
-| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/catalog-filters`, `src/features/quick-add-to-cart` |
+| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/stripe`, `src/features/theme` |
 | `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`, `src/entities/order`                         |
 | `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 
@@ -389,8 +389,8 @@ In Next.js terms, this differs from the default `next/image` optimization path (
 
 Catalog search uses a debounced input pipeline so typing stays responsive without triggering route/search updates on every keystroke.
 
-- Debounce source: `src/features/catalog-filters/config/constants.ts` (`SEARCH_DEBOUNCE_MS = 250`).
-- Search orchestration: `src/features/catalog-filters/model/useCatalogFilters.ts`.
+- Debounce source: `src/pages/catalog/config/constants.ts` (`SEARCH_DEBOUNCE_MS = 250`).
+- Search orchestration: `src/pages/catalog/model/useCatalogFilters.ts`.
 - The input state updates immediately, while URL search param updates are delayed intentionally.
 
 Why this helps:
@@ -423,8 +423,8 @@ Google Drive Link: [Prefetching walkthrough](https://drive.google.com/file/d/1XQ
 
 Key files:
 
-- `src/features/catalog-filters/config/searchSchema.ts`
-- `src/features/catalog-filters/lib/searchParams.ts`
+- `src/pages/catalog/config/searchSchema.ts`
+- `src/pages/catalog/lib/searchParams.ts`
 - `src/routes/index.tsx`
 
 ### SEO crawlability: dynamic sitemap and robots
