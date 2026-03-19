@@ -15,3 +15,5 @@ export {
 	SITEMAP,
 	SORT_OPTIONS,
 } from './constants'
+export type { Theme } from './theme'
+export { THEME } from './theme'

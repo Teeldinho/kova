@@ -1,6 +1,8 @@
 import { HeadContent, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
+import { THEME } from '@/shared/config'
+
 interface RootDocumentProps {
 	children: ReactNode
 }
@@ -8,10 +10,10 @@ interface RootDocumentProps {
 const THEME_INIT_SCRIPT = `
 (function(){
   try {
-    var t = localStorage.getItem('kova-theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var isDark = t === 'dark' || (!t && prefersDark);
-    document.documentElement.classList.toggle('dark', isDark);
+    var t = localStorage.getItem('${THEME.STORAGE_KEY}');
+    var prefersDark = window.matchMedia('${THEME.MEDIA_QUERY}').matches;
+    var isDark = t === '${THEME.DARK}' || (!t && prefersDark);
+    document.documentElement.classList.toggle('${THEME.DARK_CLASS}', isDark);
   } catch(e) {}
 })();
 `

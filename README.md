@@ -130,7 +130,7 @@ FSD solves common scaling problems:
 | `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
 | `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
 | `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
-| `features` | User use-cases and actions                  | `src/features/theme` |
+| `features` | User use-cases and actions                  | *(currently empty; reserved for reusable multi-page flows)* |
 | `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`                         |
 | `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 

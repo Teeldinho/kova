@@ -1,9 +1,8 @@
 import { ShoppingBag } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 
-import { ThemeToggle } from '@/features/theme'
 import { APP_NAME } from '@/shared/config'
-import { Button, Magnetic } from '@/shared/ui'
+import { Button, Magnetic, ThemeToggle } from '@/shared/ui'
 
 import { useHeader } from '../model/useHeader'
 
