@@ -1,12 +1,11 @@
 import { useForm } from '@tanstack/react-form'
 import type { FormEvent } from 'react'
 
-import type { CheckoutCustomer } from '@/entities/order'
-
 import {
 	checkoutCustomerSchema,
 	getCheckoutDefaultValues,
 } from '../lib/checkoutValidation'
+import type { CheckoutCustomer } from './types'
 
 interface UseCheckoutFormParams {
 	handleCheckoutSubmit: (customer: CheckoutCustomer) => Promise<void>

@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import type { FormEvent } from 'react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-import type { CheckoutCustomer } from '@/entities/order'
+import type { CheckoutCustomer } from './types'
 
 const {
 	buildCheckoutLineItemsMock,
@@ -28,15 +28,15 @@ vi.mock('@/entities/cart', () => ({
 	useCart: useCartMock,
 }))
 
-vi.mock('@/entities/order', () => ({
+vi.mock('../lib/buildCheckoutLineItems', () => ({
 	buildCheckoutLineItems: buildCheckoutLineItemsMock,
 }))
 
-vi.mock('@/features/checkout', () => ({
+vi.mock('./useCheckoutForm', () => ({
 	useCheckoutForm: useCheckoutFormMock,
 }))
 
-vi.mock('@/features/stripe', () => ({
+vi.mock('./useStripeCheckout', () => ({
 	useStripeCheckout: useStripeCheckoutMock,
 }))
 

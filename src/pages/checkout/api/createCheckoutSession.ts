@@ -2,9 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import Stripe from 'stripe'
 import { z } from 'zod'
 
-import { ORDER } from '@/entities/order'
-
-import { STRIPE_CHECKOUT } from '../config/constants'
+import { ORDER, STRIPE_CHECKOUT } from '../config/constants'
 import {
 	buildCheckoutCancelUrl,
 	buildCheckoutSuccessUrl,

@@ -16,3 +16,57 @@ export const CHECKOUT_PAGE = {
 		],
 	},
 } as const
+
+export const CHECKOUT_FORM = {
+	DESCRIPTION:
+		'Complete your shipping details to continue to secure Stripe checkout.',
+	LABELS: {
+		ADDRESS: 'Address',
+		CITY: 'City',
+		COUNTRY: 'Country',
+		EMAIL: 'Email',
+		FULL_NAME: 'Full Name',
+		POSTAL_CODE: 'Postal Code',
+	},
+	PLACEHOLDERS: {
+		ADDRESS: 'Street address',
+		CITY: 'City',
+		COUNTRY: 'Country',
+		EMAIL: 'name@example.com',
+		FULL_NAME: 'Jane Doe',
+		POSTAL_CODE: '0001',
+	},
+	SUBMIT_LABEL: 'Pay Securely',
+	SUBMIT_INVALID_MESSAGE:
+		'Please review the highlighted checkout details and try again.',
+	SUBMIT_PENDING_LABEL: 'Redirecting To Stripe...',
+	SUMMARY_TITLE: 'Payment Summary',
+	TITLE: 'Checkout',
+} as const
+
+export const STRIPE_CHECKOUT = {
+	MODE: 'payment',
+	SESSION_QUERY_KEY: 'session_id',
+	ERROR_REASON_QUERY_KEY: 'reason',
+	ERROR_REASONS: {
+		PAYMENT_CANCELED: 'payment_canceled',
+	},
+	ERROR_CODES: {
+		MISSING_SECRET_KEY: 'STRIPE_CHECKOUT_MISSING_SECRET_KEY',
+		SESSION_CREATION_FAILED: 'STRIPE_CHECKOUT_SESSION_CREATION_FAILED',
+		SESSION_URL_UNAVAILABLE: 'STRIPE_CHECKOUT_SESSION_URL_UNAVAILABLE',
+	},
+	ERROR_MESSAGES: {
+		DEFAULT: 'Unable to start secure checkout. Please retry.',
+		MISSING_SECRET_KEY:
+			'Secure checkout is currently unavailable. Please contact support.',
+	},
+	TOAST: {
+		ERROR_TITLE: 'Checkout failed',
+	},
+} as const
+
+export const ORDER = {
+	CURRENCY: 'zar',
+	MIN_UNIT_AMOUNT: 50,
+} as const

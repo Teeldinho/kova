@@ -2,10 +2,12 @@ import { useNavigate } from '@tanstack/react-router'
 import type { FormEvent } from 'react'
 
 import { useCart } from '@/entities/cart'
-import { buildCheckoutLineItems, type CheckoutCustomer } from '@/entities/order'
-import { useCheckoutForm } from '@/features/checkout'
-import { useStripeCheckout } from '@/features/stripe'
 import { ROUTES } from '@/shared/config'
+
+import { buildCheckoutLineItems } from '../lib/buildCheckoutLineItems'
+import type { CheckoutCustomer } from './types'
+import { useCheckoutForm } from './useCheckoutForm'
+import { useStripeCheckout } from './useStripeCheckout'
 
 export function useCheckoutPage() {
 	const { isCartEmpty, items, subtotal, tax, discount, rewardSnapshot, total } =

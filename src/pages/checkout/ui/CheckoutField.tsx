@@ -1,6 +1,5 @@
-import type { CheckoutCustomer } from '@/entities/order'
 import { Field, FieldError, FieldLabel, Input } from '@/shared/ui'
-
+import type { CheckoutCustomer } from '../model/types'
 import type { CheckoutFormApi } from '../model/useCheckoutForm'
 
 interface CheckoutFieldProps {

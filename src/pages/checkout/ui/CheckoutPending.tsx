@@ -1,7 +1,6 @@
 import type { FormEvent } from 'react'
 
 import { CART } from '@/entities/cart'
-import { CheckoutForm } from '@/features/checkout'
 import {
 	Alert,
 	AlertDescription,
@@ -12,6 +11,7 @@ import {
 } from '@/shared/ui'
 
 import { CHECKOUT_PAGE } from '../config/constants'
+import { CheckoutForm } from './CheckoutForm'
 import { CheckoutShell, CheckoutShellContent } from './CheckoutShell'
 
 export function CheckoutPending() {
