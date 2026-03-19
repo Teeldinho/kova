@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { STRIPE_CHECKOUT } from '@/features/stripe'
+import { STRIPE_CHECKOUT } from '@/pages/checkout'
 import { ROUTES } from '@/shared/config'
 
 const legacyCheckoutSuccessSearchSchema = z.object({

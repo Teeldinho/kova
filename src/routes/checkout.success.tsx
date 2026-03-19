@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { STRIPE_CHECKOUT } from '@/features/stripe'
+import { STRIPE_CHECKOUT } from '@/pages/checkout'
 import { CheckoutSuccessPage } from '@/pages/checkout-success'
 import { APP_NAME, SEO } from '@/shared/config'
 import { getCanonicalUrl } from '@/shared/lib'

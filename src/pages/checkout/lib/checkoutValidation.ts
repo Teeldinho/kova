@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { CheckoutCustomer } from '@/entities/order'
+import type { CheckoutCustomer } from '../model/types'
 
 export const checkoutCustomerSchema = z.object({
 	address: z.string().trim().min(2, 'Address is required.'),

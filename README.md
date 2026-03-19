@@ -130,8 +130,8 @@ FSD solves common scaling problems:
 | `app`      | App-wide providers and shell wiring         | `src/app/providers/AppProviders.tsx` wires Query + Lenis                                  |
 | `pages`    | Route-level screen composition              | `src/pages/catalog/ui/CatalogPage.tsx` composes catalog screen                            |
 | `widgets`  | Large reusable page sections                | `src/widgets/header/ui/Header.tsx`, `src/widgets/cart-sheet/ui/CartSheet.tsx`             |
-| `features` | User use-cases and actions                  | `src/features/checkout`, `src/features/stripe`, `src/features/theme` |
-| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`, `src/entities/order`                         |
+| `features` | User use-cases and actions                  | `src/features/theme` |
+| `entities` | Core domain models and business rules       | `src/entities/product`, `src/entities/cart`                         |
 | `shared`   | Cross-cutting infra and reusable primitives | `src/shared/ui`, `src/shared/lib`, `src/shared/api`, `src/shared/config`                  |
 
 ### What each slice segment means
@@ -287,8 +287,8 @@ This is deterministic and easy to reason about because logic is pure and isolate
 
 Checkout submission logic lives in `model/` and is validated in:
 
-- `src/features/checkout/model/useCheckoutForm.ts`
-- `src/features/checkout/model/useCheckoutForm.test.ts`
+- `src/pages/checkout/model/useCheckoutForm.ts`
+- `src/pages/checkout/model/useCheckoutForm.test.ts`
 
 The test verifies invalid form data does not submit, and valid data does.
 
@@ -302,7 +302,7 @@ Latest full Vitest run confirms broad coverage across `model/` and `lib/` layers
 
 Checkout session creation is implemented as a server function:
 
-- `src/features/stripe/api/createCheckoutSession.ts`
+- `src/pages/checkout/api/createCheckoutSession.ts`
 
 Reliability protections in this boundary:
 
@@ -312,8 +312,8 @@ Reliability protections in this boundary:
 
 Client orchestration:
 
-- `src/features/stripe/model/useStripeCheckout.ts`
-- `src/features/stripe/lib/mapStripeCheckoutError.ts`
+- `src/pages/checkout/model/useStripeCheckout.ts`
+- `src/pages/checkout/lib/mapStripeCheckoutError.ts`
 
 This keeps payment flow strict at input boundaries and explicit in failure behavior.
 
@@ -463,7 +463,7 @@ Key files:
 - `src/entities/cart/lib/cartRewards.ts`
 - `src/entities/cart/ui/CartSummary.tsx`
 - `src/pages/product-detail/lib/rewardPreview.ts`
-- `src/entities/order/lib/buildCheckoutLineItems.ts`
+- `src/pages/checkout/lib/buildCheckoutLineItems.ts`
 
 The goal is simple: reduce purchase hesitation by making progress visible and actionable.
 

@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import type { CheckoutPayload } from '@/entities/order'
-
 import { createCheckoutSession } from '../api/createCheckoutSession'
 import { STRIPE_CHECKOUT } from '../config/constants'
 import { mapStripeCheckoutError } from '../lib/mapStripeCheckoutError'
+import type { CheckoutPayload } from './types'
 
 export function useStripeCheckout() {
 	const [isStripeCheckoutPending, setIsStripeCheckoutPending] = useState(false)
