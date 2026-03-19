@@ -1,15 +1,13 @@
 import { m as motion } from 'framer-motion'
 import { Suspense } from 'react'
 
-import {
-	RelatedProducts,
-	RelatedProductsPending,
-} from '@/features/related-products'
 import { Particles } from '@/shared/ui'
 
 import { useProductDetail } from '../model/useProductDetail'
 import { ProductDetailImage } from './ProductDetailImage'
 import { ProductDetailInfo } from './ProductDetailInfo'
+import { RelatedProducts } from './RelatedProducts'
+import { RelatedProductsPending } from './RelatedProductsPending'
 
 interface ProductDetailPageProps {
 	productId: number
