@@ -1,10 +1,9 @@
 import { Moon, Sun } from '@phosphor-icons/react'
 import { useHydrated } from '@tanstack/react-router'
 
-import { Button } from '@/shared/ui'
-
-import { THEME } from '../config/constants'
+import { THEME } from '../config/theme'
 import { useTheme } from '../model/useTheme'
+import { Button } from './button'
 
 export function ThemeToggle() {
 	const { isDarkMode, handleThemeToggle } = useTheme()

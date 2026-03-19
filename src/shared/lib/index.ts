@@ -23,3 +23,14 @@ export {
 	buildSitemapXml,
 	buildStaticSitemapEntries,
 } from './sitemap'
+export {
+	applyThemeClass,
+	getStoredTheme,
+	getSystemTheme,
+	getThemeFromDocument,
+	isValidTheme,
+	persistTheme,
+	resolveNextTheme,
+	resolveTheme,
+	resolveThemeFromMediaMatch,
+} from './themeState'

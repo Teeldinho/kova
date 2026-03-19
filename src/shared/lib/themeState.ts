@@ -1,4 +1,4 @@
-import { THEME, type Theme } from '../config/constants'
+import { THEME, type Theme } from '../config/theme'
 
 export const isValidTheme = (value: string | null): value is Theme =>
 	value === THEME.LIGHT || value === THEME.DARK

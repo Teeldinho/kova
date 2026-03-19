@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-import { THEME } from '../config/constants'
+import { THEME } from '../config/theme'
 import {
 	getStoredTheme,
 	isValidTheme,

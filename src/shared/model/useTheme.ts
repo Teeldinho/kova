@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { THEME, type Theme } from '../config/constants'
+import { THEME, type Theme } from '../config/theme'
 import {
 	applyThemeClass,
 	getStoredTheme,
