@@ -1,4 +1,6 @@
-import { CATALOG_FILTER, CatalogFilters } from '@/features/catalog-filters'
+import { CATALOG_FILTER } from '../config/constants'
+
+import { CatalogFilters } from './CatalogFilters'
 
 import { CatalogHero } from './CatalogHero'
 import { CatalogProductsSection } from './CatalogProductsSection'
