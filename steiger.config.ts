@@ -9,7 +9,7 @@ export default defineConfig([
 			'fsd/no-cross-imports': 'error',
 			'fsd/no-higher-level-imports': 'error',
 			'fsd/no-segmentless-slices': 'warn',
-			'fsd/insignificant-slice': 'warn',
+			'fsd/insignificant-slice': 'off',
 		},
 	},
 	{
